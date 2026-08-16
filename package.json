@@ -1,0 +1,22 @@
+{
+  "name": "redux-watchface",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Pixel-perfect Redux watchface layouts for Pebble Time 2.",
+  "author": "Lyle Morris",
+  "license": "UNLICENSED",
+  "dependencies": {},
+  "devDependencies": {},
+  "keywords": [
+    "pebble",
+    "watchface",
+    "rebble",
+    "emery",
+    "pebble-time-2",
+    "redux"
+  ],
+  "pebble": {
+    "enableMultiJS": false
+  }
+}
+

@@ -1,0 +1,46 @@
+{
+  "uuid": "4ec6607e-f315-4a0f-8da8-9add93c5f195",
+  "shortName": "Redux",
+  "longName": "Redux",
+  "companyName": "Lyle Morris",
+  "versionLabel": "0.1.0",
+  "sdkVersion": "3",
+  "targetPlatforms": [
+    "emery"
+  ],
+  "watchapp": {
+    "watchface": true
+  },
+  "resources": {
+    "media": [
+      {
+        "type": "font",
+        "name": "FONT_ROBOTO_FLEX_EXTRABOLD_93",
+        "file": "fonts/RobotoFlex-ExtraBold-93.ttf",
+        "characterRegex": "[0-9]"
+      },
+      {
+        "type": "font",
+        "name": "FONT_ROBOTO_FLEX_EXTRABOLD_18",
+        "file": "fonts/RobotoFlex-ExtraBold-18.ttf",
+        "characterRegex": "[0-9A-Za-z .,:;%°-]"
+      },
+      {
+        "type": "png",
+        "name": "IMAGE_CALENDAR_52X44",
+        "file": "images/icons/52x44/calendar/white_calendar_52x44.png"
+      },
+      {
+        "type": "png",
+        "name": "IMAGE_WEATHER_CLOUDY_NIGHT_52X44",
+        "file": "images/icons/52x44/weather/white_weather_cloudy_night_52x44.png"
+      },
+      {
+        "type": "png",
+        "name": "IMAGE_STEPS_52X44",
+        "file": "images/icons/52x44/activity/white_steps_52x44.png"
+      }
+    ]
+  }
+}
+

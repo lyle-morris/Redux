@@ -2,6 +2,12 @@
 
 Pebble Time 2 watchface project for the Redux layouts.
 
+## Current build
+
+The first runnable QA target is the Figma-specified `vertical_3` layout. It intentionally renders static reference values so geometry can be approved with an emulator overlay before live data and configuration are connected.
+
+See [`docs/vertical-3-layout.md`](docs/vertical-3-layout.md) for the exact pixel contract.
+
 ## Target layouts
 
 - `horizontal_2`
@@ -16,9 +22,9 @@ Pixel-perfect layout development is performed on `dev/pixel-perfect-layouts`.
 
 ## Icon uploads
 
-Upload production PNG exports to the matching folder under `resources/images/icons/`:
+Production icons live under `resources/images/icons/`, grouped by canvas size and metric. Redux uses paired `white_` and `reverse_` monochrome artwork; panel color comes from the theme.
 
-- `52x44/color`, `52x44/black`, and `52x44/white` for vertical and horizontal 3-slot layouts
-- `64x64/color`, `64x64/black`, and `64x64/white` for the horizontal 2-slot layout
+- `52x44/` is shared by the vertical and horizontal three-slot layouts.
+- `64x64/` is used by the horizontal two-slot layout.
 
 Vector masters belong in `assets/icons/source/`.

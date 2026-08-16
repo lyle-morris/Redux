@@ -1,6 +1,6 @@
 # Redux Font Upload Guide
 
-Upload the original Roboto Flex font file to this directory:
+The original Roboto Flex variable font is stored in this directory:
 
 ```text
 resources/fonts/
@@ -12,11 +12,22 @@ resources/fonts/
 - Roboto Flex license file, if supplied with the download
 - Keep the original font filename until validation is complete
 
-A clear preferred filename is:
+Source filename:
 
 ```text
-RobotoFlex-VariableFont.ttf
+RobotoFlex-Variable.ttf
 ```
+
+## Generated production instances
+
+The vertical three-slot QA build uses pinned ExtraBold instances generated from the source font:
+
+| File | Optical size | Weight | Width | Usage |
+| --- | ---: | ---: | ---: | --- |
+| `RobotoFlex-ExtraBold-18.ttf` | 18 | 800 | 100 | Tray values and date |
+| `RobotoFlex-ExtraBold-93.ttf` | 93 | 800 | 100 | Stacked time |
+
+All remaining Roboto Flex axes are pinned to their defaults. These production files are static TrueType fonts; the Pebble manifest applies a character regex to each font resource to limit bundled glyphs.
 
 ## Validation after upload
 
