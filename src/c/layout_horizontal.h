@@ -4,6 +4,12 @@
 
 // Figma content source: Redux Racer, node 334:8203
 // All measurements are native Pebble Time 2 pixels on the 200 x 228 Emery canvas.
+//
+// GEOMETRY LOCKED: revision 1, approved 2026-08-16.
+// Any coordinate, dimension, font size, or icon-canvas change requires a lock
+// revision increment, validator update, and new emulator/Figma overlay approval.
+
+#define HORIZONTAL_LAYOUT_LOCK_REVISION 1
 
 #define HORIZONTAL_CANVAS_W 200
 #define HORIZONTAL_CANVAS_H 228

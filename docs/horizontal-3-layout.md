@@ -1,6 +1,11 @@
 # Horizontal Three-Slot Layout
 
-Status: first static pixel-QA build
+Status: **approved and geometry locked**
+
+- Lock revision: `1`
+- Approved: August 16, 2026
+- Approved stress overlay:
+  [`qa/goldens/horizontal_3/approved-stress-overlay.png`](../qa/goldens/horizontal_3/approved-stress-overlay.png)
 
 Figma source: Redux Racer, node `334:8203` (`Calendar + Steps + Battery`)
 
@@ -60,10 +65,19 @@ approximately x=19.23, preserving the Figma position without truncation. The
 y=120 input compensates for the custom font's baseline metrics. The first full
 stress overlay placed the emulator glyphs approximately 3 px below the Figma
 reference, so the renderer-only input frame was raised from y=123 to y=120.
-This adjustment still needs a final emulator/Figma overlay before lock.
+The final emulator/Figma overlay confirmed this adjustment and the complete
+horizontal geometry.
 
 ## QA scope
 
-This build intentionally uses static worst-case values. Approve the geometry
-with a Pebble Time 2 emulator overlay before connecting live data, configuration,
-themes, or the optional bottom battery indicator.
+The horizontal three-slot geometry is locked. Live time, date, weather, health,
+battery, localization, theme, and configuration logic may be connected without
+changing the approved frames.
+
+Any coordinate, dimension, font size, icon canvas, or panel geometry change
+must:
+
+1. Increment `HORIZONTAL_LAYOUT_LOCK_REVISION`.
+2. Update `tests/validate_horizontal_layout.py`.
+3. Pass a Pebble Time 2 emulator build.
+4. Receive a new emulator/Figma overlay approval.

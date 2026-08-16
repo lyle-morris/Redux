@@ -43,6 +43,7 @@ def sfnt_tables(path):
 def main():
     d = load_defines()
 
+    assert d["HORIZONTAL_LAYOUT_LOCK_REVISION"] == 1
     assert d["HORIZONTAL_CANVAS_W"] == 200
     assert d["HORIZONTAL_CANVAS_H"] == 228
     assert d["HORIZONTAL_TRAY_H"] == 116
@@ -108,6 +109,11 @@ def main():
 
     golden = ROOT / "qa/goldens/horizontal_3/figma-334-8203.png"
     assert png_dimensions(golden) == (200, 228), golden
+
+    approved_capture = (
+        ROOT / "qa/goldens/horizontal_3/approved-stress-overlay.png"
+    )
+    assert png_dimensions(approved_capture) == (200, 228), approved_capture
 
     font_path = ROOT / "resources/fonts/RobotoFlex-ExtraBold-62.ttf"
     tables = sfnt_tables(font_path)
