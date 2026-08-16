@@ -96,7 +96,7 @@ def main():
         d["HORIZONTAL_TIME_Y"],
         d["HORIZONTAL_TIME_W"],
         d["HORIZONTAL_TIME_H"],
-    ] == [0, 123, 200, 64]
+    ] == [0, 120, 200, 64]
 
     icon_paths = [
         ROOT / "resources/images/icons/52x44/calendar/white_calendar_52x44.png",

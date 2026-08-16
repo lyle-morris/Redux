@@ -49,7 +49,7 @@ approved vertical layout. The day `30` is rendered in the local frame
 - Font size and line height: 62 px
 - Alignment: centered
 - Figma text frame: `x=19, y=131, w=162, h=62`
-- Pebble input frame: `x=0, y=123, w=200, h=64`
+- Pebble input frame: `x=0, y=120, w=200, h=64`
 - Stress value: `23:59`
 
 The static 62 px font measures `23:59` at approximately 161.54 px, leaving
@@ -57,8 +57,10 @@ only 0.46 px inside Figma's 162 px frame. Pebble reserves enough internal text
 space to ellipsize that frame, so the transparent TextLayer spans the full
 panel. Centering the 161.54 px string in 200 px places its visible left edge at
 approximately x=19.23, preserving the Figma position without truncation. The
-y=123 input compensates for the custom font's baseline metrics and still needs
-emulator/Figma overlay confirmation before this layout is locked.
+y=120 input compensates for the custom font's baseline metrics. The first full
+stress overlay placed the emulator glyphs approximately 3 px below the Figma
+reference, so the renderer-only input frame was raised from y=123 to y=120.
+This adjustment still needs a final emulator/Figma overlay before lock.
 
 ## QA scope
 

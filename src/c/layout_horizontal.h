@@ -67,7 +67,7 @@
 // stress value inside Figma's 162 px frame. Centering the transparent 200 px
 // layer preserves the intended visible x position (approximately 19.23 px).
 #define HORIZONTAL_TIME_X 0
-#define HORIZONTAL_TIME_Y 123
+#define HORIZONTAL_TIME_Y 120
 #define HORIZONTAL_TIME_W 200
 #define HORIZONTAL_TIME_H 64
 
