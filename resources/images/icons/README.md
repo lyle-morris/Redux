@@ -1,42 +1,96 @@
-# Redux Icon Upload Guide
+# Redux Icon Asset Guide
+
+Redux uses monochrome icon artwork. Separate color icon variants are intentionally out of scope so the asset count remains manageable across metrics, states, sizes, and layouts.
 
 ## Production PNG folders
 
-### 52 x 44 px
+### 52 × 44 px
 
-Shared by the vertical 3-slot and horizontal 3-slot layouts:
+Shared by the Essential Redux three-slot layouts:
 
-- `52x44/color/`
-- `52x44/black/`
-- `52x44/white/`
+- Vertical three-slot
+- Horizontal three-slot
 
-### 64 x 64 px
+```text
+52x44/
+├── activity/
+├── battery/
+├── calendar/
+└── weather/
+```
 
-Used by the horizontal 2-slot layout:
+### 64 × 64 px
 
-- `64x64/color/`
-- `64x64/black/`
-- `64x64/white/`
+Used by the Essential Redux two-slot layout.
+
+```text
+64x64/
+├── activity/
+├── battery/
+├── calendar/
+└── weather/
+```
+
+## Variants
+
+Each icon has two monochrome treatments:
+
+- `white_`: white-filled artwork with black details or outlines.
+- `reverse_`: white outline artwork for dark or black panels.
+
+Panel colors come from the watchface theme rather than from separate color icon files.
 
 ## Naming
 
-Use lowercase metric names and include the dimensions and variant:
+Use lowercase snake case with the variant first and canvas dimensions last:
 
 ```text
-weather_52x44_color.png
-weather_52x44_black.png
-weather_52x44_white.png
-weather_64x64_color.png
-weather_64x64_black.png
-weather_64x64_white.png
+{variant}_{metric_or_condition}_{width}x{height}.png
 ```
 
-Use the same naming pattern for calendar, steps, calories, heart rate, battery, activity time, sleep, and future metrics.
+Examples:
 
-## Rules
+```text
+white_steps_52x44.png
+reverse_steps_52x44.png
+white_weather_partly_cloudy_64x64.png
+reverse_weather_partly_cloudy_64x64.png
+```
 
-- Export each PNG at its exact runtime size.
-- Do not upscale a 52 x 44 PNG for the 64 x 64 layout.
-- Do not stretch square artwork into the 52 x 44 surface.
+Corresponding 52 × 44 and 64 × 64 assets must use the same base name.
+
+## Battery states and mapping
+
+Each size and variant includes:
+
+```text
+0, 10, 20, 30, 40, 50, 60, 70, 80, 100, charging
+```
+
+Runtime mapping follows the battery indicator's floor-based behavior:
+
+| Battery percentage | Asset |
+| --- | --- |
+| 0–9% | `battery_0` |
+| 10–19% | `battery_10` |
+| 20–29% | `battery_20` |
+| 30–39% | `battery_30` |
+| 40–49% | `battery_40` |
+| 50–59% | `battery_50` |
+| 60–69% | `battery_60` |
+| 70–79% | `battery_70` |
+| 80–99% | `battery_80` |
+| 100% | `battery_100` |
+| Charging | `battery_charging` |
+
+Charging state overrides the percentage asset. A separate 90% asset is intentionally not required.
+
+## Export rules
+
+- Export every PNG at its exact runtime canvas size.
+- Preserve the approved transparent padding.
+- Preserve RGBA transparency.
+- Do not upscale a 52 × 44 PNG for the 64 × 64 layout.
+- Do not stretch square artwork into the 52 × 44 canvas.
+- Keep the white and reverse asset sets paired.
 - Keep vector masters in `assets/icons/source/`.
-- Preserve transparent padding from the approved Figma artwork.
