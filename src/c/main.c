@@ -156,7 +156,7 @@ static void main_window_load(Window *window) {
     s_calendar_bitmap
   );
   s_calendar_day_layer = create_text_layer(
-    root_layer,
+    bitmap_layer_get_layer(s_calendar_icon_layer),
     GRect(
       VERTICAL_CALENDAR_DAY_X,
       VERTICAL_CALENDAR_DAY_Y,
