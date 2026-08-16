@@ -57,6 +57,12 @@ def main():
     )
     assert d["VERTICAL_ICON_W"] == 52
     assert d["VERTICAL_ICON_H"] == 44
+    assert [
+        d["VERTICAL_CALENDAR_DAY_X"],
+        d["VERTICAL_CALENDAR_DAY_Y"],
+        d["VERTICAL_CALENDAR_DAY_W"],
+        d["VERTICAL_CALENDAR_DAY_H"],
+    ] == [20, 29, 32, 18]
     assert d["VERTICAL_LABEL_H"] == 18
     assert [
         d["VERTICAL_SLOT_1_ICON_Y"],

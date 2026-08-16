@@ -25,6 +25,15 @@
 #define VERTICAL_ICON_W 52
 #define VERTICAL_ICON_H 44
 
+// Dynamic day number over the reusable blank calendar bitmap. The calendar's
+// white body occupies local x=12..39 and y=11..36 inside its 52 x 44 canvas.
+// Pebble's 18 px custom-font top inset places the visible two-digit glyph at
+// x=25..47 and y=33..45, centered inside that body.
+#define VERTICAL_CALENDAR_DAY_X 20
+#define VERTICAL_CALENDAR_DAY_Y 29
+#define VERTICAL_CALENDAR_DAY_W 32
+#define VERTICAL_CALENDAR_DAY_H 18
+
 // Figma tray: 16 px vertical padding, centered content, 6 px between
 // three 62 px icon/value groups. Emulator capture QA showed that Pebble
 // renders the first two icon bitmaps one pixel above the Figma output and the

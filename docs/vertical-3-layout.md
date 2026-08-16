@@ -35,6 +35,19 @@ Each icon/value group is 62 px tall. The combined 198 px stack is centered in th
 | 2 | 83 | 84 | 127 | 125 | `65°` |
 | 3 | 151 | 151 | 195 | 192 | `13.5k` |
 
+### Calendar day overlay
+
+The calendar PNG remains a reusable blank icon. Its day number is rendered as
+a separate Roboto Flex ExtraBold 18 px text layer:
+
+- Pebble input frame: `x=20, y=29, w=32, h=18`
+- Alignment: centered
+- Static layout-QA value: `28`
+- Live implementation: current day without a leading zero
+
+This centers the visible two-digit glyph inside the icon's white calendar body
+without changing the `Wed` weekday label below it.
+
 ## Divider
 
 - Width: 8 px
