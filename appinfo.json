@@ -32,6 +32,18 @@
         "characterRegex": "[0-9:]"
       },
       {
+        "type": "font",
+        "name": "FONT_ROBOTO_FLEX_BOLD_20",
+        "file": "fonts/RobotoFlex-Bold-20.ttf",
+        "characterRegex": "[0-9A-Za-z%°.-]"
+      },
+      {
+        "type": "font",
+        "name": "FONT_ROBOTO_FLEX_EXTRABOLD_28",
+        "file": "fonts/RobotoFlex-ExtraBold-28.ttf",
+        "characterRegex": "[0-9]"
+      },
+      {
         "type": "png",
         "name": "IMAGE_CALENDAR_52X44",
         "file": "images/icons/52x44/calendar/white_calendar_52x44.png"
@@ -45,6 +57,16 @@
         "type": "png",
         "name": "IMAGE_STEPS_52X44",
         "file": "images/icons/52x44/activity/white_steps_52x44.png"
+      },
+      {
+        "type": "png",
+        "name": "IMAGE_CALENDAR_64X64",
+        "file": "images/icons/64x64/calendar/white_calendar_64x64.png"
+      },
+      {
+        "type": "png",
+        "name": "IMAGE_WEATHER_PARTLY_CLOUDY_64X64",
+        "file": "images/icons/64x64/weather/white_weather_partly_cloudy_64x64.png"
       }
     ]
   }

@@ -25,6 +25,8 @@ The vertical three-slot QA build uses pinned ExtraBold instances generated from 
 | File | Optical size | Weight | Width | Usage |
 | --- | ---: | ---: | ---: | --- |
 | `RobotoFlex-ExtraBold-18.ttf` | 18 | 800 | 100 | Tray values and date |
+| `RobotoFlex-Bold-20.ttf` | 20 | 700 | 100 | Two-slot tray values |
+| `RobotoFlex-ExtraBold-28.ttf` | 28 | 800 | 100 | Two-slot calendar day |
 | `RobotoFlex-ExtraBold-62.ttf` | 62 | 800 | 100 | Horizontal time |
 | `RobotoFlex-ExtraBold-93.ttf` | 93 | 800 | 100 | Stacked time |
 

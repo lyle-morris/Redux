@@ -1,15 +1,15 @@
 #include <pebble.h>
 
-#include "layout_horizontal.h"
+#include "layout_two_slot.h"
 
 static Window *s_main_window;
 
 static void main_window_load(Window *window) {
-  horizontal_layout_load(window);
+  two_slot_layout_load(window);
 }
 
 static void main_window_unload(Window *window) {
-  horizontal_layout_unload(window);
+  two_slot_layout_unload(window);
 }
 
 static void init(void) {
