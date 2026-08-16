@@ -68,6 +68,10 @@ Each icon/value group is 62 px tall. The combined 198 px stack is centered in th
 - Frame: `x=86, y=194, w=108, h=18`
 - Figma QA value: `May 28 Wed`
 
+Localization stress-test value: `Sept 30 Mer`. Do not add punctuation to this
+format. In the pinned Roboto Flex ExtraBold 18 px font it measures approximately
+101.79 px, leaving 6.21 px inside the 108 px usable date width.
+
 ## QA scope
 
 This build intentionally uses static Figma values. Approve the geometry with a Pebble Time 2 emulator overlay before connecting live time, date, weather, health, battery, localization, theme, or configuration logic.

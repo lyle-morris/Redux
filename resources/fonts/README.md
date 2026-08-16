@@ -37,7 +37,7 @@ Before the font is wired into the watchface, validate:
 - Supported Roboto Flex axes
 - Glyph coverage for every supported language
 - Rendering at the specified watchface sizes
-- Long localized dates and numeric stress cases
+- Localized date stress case `Sept 30 Mer` (no punctuation) and numeric stress cases
 - Pebble build compatibility
 - Runtime storage and memory impact
 
