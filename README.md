@@ -5,10 +5,12 @@ Pebble Time 2 watchface project for the Redux layouts.
 ## Current build
 
 The Figma-specified `vertical_3` layout is approved and geometry locked at
-revision 1. Its static stress screen validates maximum-width time, date, steps,
-battery, and calendar values before live data and configuration are connected.
+revision 1. The active QA build now targets the `horizontal_3` layout with
+static maximum-width time, steps, battery, and calendar values.
 
-See [`docs/vertical-3-layout.md`](docs/vertical-3-layout.md) for the exact pixel contract.
+See [`docs/vertical-3-layout.md`](docs/vertical-3-layout.md) for the locked
+vertical contract and [`docs/horizontal-3-layout.md`](docs/horizontal-3-layout.md)
+for the active horizontal QA contract.
 
 ## Target layouts
 

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <pebble.h>
+
 // Figma content source: Redux Racer, node 334:8199
 // All measurements are native Pebble Time 2 pixels on the 200 x 228 Emery canvas.
 //
@@ -80,3 +82,6 @@
 
 #define VERTICAL_LABEL_FONT_SIZE 18
 #define VERTICAL_TIME_FONT_SIZE 93
+
+void vertical_layout_load(Window *window);
+void vertical_layout_unload(Window *window);

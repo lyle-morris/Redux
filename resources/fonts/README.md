@@ -25,6 +25,7 @@ The vertical three-slot QA build uses pinned ExtraBold instances generated from 
 | File | Optical size | Weight | Width | Usage |
 | --- | ---: | ---: | ---: | --- |
 | `RobotoFlex-ExtraBold-18.ttf` | 18 | 800 | 100 | Tray values and date |
+| `RobotoFlex-ExtraBold-62.ttf` | 62 | 800 | 100 | Horizontal time |
 | `RobotoFlex-ExtraBold-93.ttf` | 93 | 800 | 100 | Stacked time |
 
 All remaining Roboto Flex axes are pinned to their defaults. These production files are static TrueType fonts; the Pebble manifest applies a character regex to each font resource to limit bundled glyphs.
