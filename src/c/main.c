@@ -13,12 +13,11 @@
 static Window *s_main_window;
 static Layer *s_background_layer;
 
-static BitmapLayer *s_calendar_icon_layer;
+static Layer *s_calendar_icon_layer;
 static BitmapLayer *s_weather_icon_layer;
 static BitmapLayer *s_steps_icon_layer;
 
 static TextLayer *s_calendar_value_layer;
-static TextLayer *s_calendar_day_layer;
 static TextLayer *s_weather_value_layer;
 static TextLayer *s_steps_value_layer;
 static TextLayer *s_hour_layer;
@@ -31,6 +30,29 @@ static GBitmap *s_steps_bitmap;
 
 static GFont s_font_18;
 static GFont s_font_93;
+
+static void calendar_icon_update_proc(Layer *layer, GContext *ctx) {
+  GRect bounds = layer_get_bounds(layer);
+
+  graphics_context_set_compositing_mode(ctx, GCompOpSet);
+  graphics_draw_bitmap_in_rect(ctx, s_calendar_bitmap, bounds);
+
+  graphics_context_set_text_color(ctx, COLOR_TEXT);
+  graphics_draw_text(
+    ctx,
+    "28",
+    s_font_18,
+    GRect(
+      VERTICAL_CALENDAR_DAY_X,
+      VERTICAL_CALENDAR_DAY_Y,
+      VERTICAL_CALENDAR_DAY_W,
+      VERTICAL_CALENDAR_DAY_H
+    ),
+    GTextOverflowModeFill,
+    GTextAlignmentCenter,
+    NULL
+  );
+}
 
 static void background_update_proc(Layer *layer, GContext *ctx) {
   graphics_context_set_fill_color(ctx, COLOR_TRAY);
@@ -150,23 +172,16 @@ static void main_window_load(Window *window) {
   layer_set_update_proc(s_background_layer, background_update_proc);
   layer_add_child(root_layer, s_background_layer);
 
-  s_calendar_icon_layer = create_icon_layer(
-    root_layer,
-    VERTICAL_SLOT_1_ICON_Y,
-    s_calendar_bitmap
-  );
-  s_calendar_day_layer = create_text_layer(
-    bitmap_layer_get_layer(s_calendar_icon_layer),
+  s_calendar_icon_layer = layer_create(
     GRect(
-      VERTICAL_CALENDAR_DAY_X,
-      VERTICAL_CALENDAR_DAY_Y,
-      VERTICAL_CALENDAR_DAY_W,
-      VERTICAL_CALENDAR_DAY_H
-    ),
-    s_font_18,
-    GTextAlignmentCenter,
-    "28"
+      VERTICAL_ICON_X,
+      VERTICAL_SLOT_1_ICON_Y,
+      VERTICAL_ICON_W,
+      VERTICAL_ICON_H
+    )
   );
+  layer_set_update_proc(s_calendar_icon_layer, calendar_icon_update_proc);
+  layer_add_child(root_layer, s_calendar_icon_layer);
   s_calendar_value_layer = create_tray_value_layer(
     root_layer,
     VERTICAL_SLOT_1_LABEL_Y,
@@ -238,11 +253,10 @@ static void main_window_unload(Window *window) {
   text_layer_destroy(s_steps_value_layer);
   text_layer_destroy(s_weather_value_layer);
   text_layer_destroy(s_calendar_value_layer);
-  text_layer_destroy(s_calendar_day_layer);
 
   bitmap_layer_destroy(s_steps_icon_layer);
   bitmap_layer_destroy(s_weather_icon_layer);
-  bitmap_layer_destroy(s_calendar_icon_layer);
+  layer_destroy(s_calendar_icon_layer);
 
   layer_destroy(s_background_layer);
 

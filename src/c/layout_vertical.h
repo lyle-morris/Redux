@@ -25,10 +25,10 @@
 #define VERTICAL_ICON_W 52
 #define VERTICAL_ICON_H 44
 
-// Dynamic day number is a child of the reusable blank calendar BitmapLayer,
-// which guarantees that it renders above the bitmap. The calendar's white body
-// occupies local x=12..39 and y=11..36 inside its 52 x 44 canvas. Pebble's
-// 18 px custom-font inset centers the visible two-digit glyph inside that body.
+// Dynamic day number is drawn after the reusable blank calendar bitmap in the
+// same custom Layer update pass. The calendar's white body occupies local
+// x=12..39 and y=11..36 inside its 52 x 44 canvas. Pebble's 18 px custom-font
+// inset centers the visible two-digit glyph inside that body.
 #define VERTICAL_CALENDAR_DAY_X 10
 #define VERTICAL_CALENDAR_DAY_Y 13
 #define VERTICAL_CALENDAR_DAY_W 32

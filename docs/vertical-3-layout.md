@@ -46,10 +46,11 @@ a separate Roboto Flex ExtraBold 18 px text layer:
 - Static layout-QA value: `28`
 - Live implementation: current day without a leading zero
 
-The TextLayer is a child of the calendar BitmapLayer, guaranteeing that the
-bitmap draws first and the day draws above it. This centers the visible
-two-digit glyph inside the icon's white calendar body without changing the
-`Wed` weekday label below it.
+The calendar uses one custom Pebble Layer. Its update procedure draws the blank
+bitmap first and the day with `graphics_draw_text()` second in the same render
+pass. This guarantees the day is composited above the bitmap, centers the
+visible two-digit glyph inside the white calendar body, and leaves the `Wed`
+weekday label below it unchanged.
 
 ## Divider
 
