@@ -1,6 +1,6 @@
 #pragma once
 
-// Figma source: Redux Racer, node 334:8183
+// Figma content source: Redux Racer, node 334:8199
 // All measurements are native Pebble Time 2 pixels on the 200 x 228 Emery canvas.
 
 #define VERTICAL_CANVAS_W 200
@@ -42,7 +42,7 @@
 #define VERTICAL_SLOT_GROUP_H 62
 #define VERTICAL_SLOT_GAP 6
 #define VERTICAL_SLOT_1_ICON_Y 16
-#define VERTICAL_SLOT_2_ICON_Y 84
+#define VERTICAL_SLOT_2_ICON_Y 83
 #define VERTICAL_SLOT_3_ICON_Y 151
 
 #define VERTICAL_LABEL_X 0

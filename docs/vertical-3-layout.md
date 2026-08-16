@@ -1,10 +1,11 @@
 # Vertical Three-Slot Layout
 
-Status: first static pixel-QA build
+Status: static stress-test build
 
-Figma source: Redux Racer, node `334:8183` (`Calendar + Weather + Steps`)
+Figma content source: Redux Racer, node `334:8199` (`Calendar + Steps + Battery`)
 
-![Figma vertical three-slot reference](../qa/goldens/vertical_3/figma-334-8183.png)
+Geometry reference: node `334:8183`, preserved at
+[`qa/goldens/vertical_3/figma-334-8183.png`](../qa/goldens/vertical_3/figma-334-8183.png).
 
 ## Canvas structure
 
@@ -31,9 +32,9 @@ Each icon/value group is 62 px tall. The combined 198 px stack is centered in th
 
 | Slot | Figma icon Y | Pebble icon Y | Figma value Y | Pebble value Y | QA value |
 | --- | ---: | ---: | ---: | ---: | --- |
-| 1 | 15 | 16 | 59 | 57 | `Wed` |
-| 2 | 83 | 84 | 127 | 125 | `65°` |
-| 3 | 151 | 151 | 195 | 192 | `13.5k` |
+| 1 | 15 | 16 | 59 | 57 | `Mer` |
+| 2 | 83 | 83 | 127 | 125 | `99999` |
+| 3 | 151 | 151 | 195 | 192 | `100%` |
 
 ### Calendar day overlay
 
@@ -43,14 +44,14 @@ a separate Roboto Flex ExtraBold 18 px text layer:
 - Calendar-local input frame: `x=10, y=13, w=32, h=18`
 - Resolved canvas position: `x=20, y=29, w=32, h=18`
 - Alignment: centered
-- Static layout-QA value: `28`
+- Static stress-test value: `30`
 - Live implementation: current day without a leading zero
 
 The calendar uses one custom Pebble Layer. Its update procedure draws the blank
 bitmap first and the day with `graphics_draw_text()` second in the same render
 pass. This guarantees the day is composited above the bitmap, centers the
-visible two-digit glyph inside the white calendar body, and leaves the `Wed`
-weekday label below it unchanged.
+visible two-digit glyph inside the white calendar body, and leaves the weekday
+label below it unchanged.
 
 ## Divider
 
@@ -97,6 +98,20 @@ Localization stress-test value: `Sept 30 Mer`. Do not add punctuation to this
 format. In the pinned Roboto Flex ExtraBold 18 px font it measures approximately
 101.79 px, leaving 6.21 px inside the 108 px usable date width.
 
+## Stress-test values
+
+| Element | Value | Measured width | Available width |
+| --- | --- | ---: | ---: |
+| Hour | `23` | 107.80 px | 108 px |
+| Minute | `59` | 107.80 px | 108 px |
+| Calendar day | `30` | two digits | calendar body |
+| Calendar weekday | `Mer` | 33.71 px | 72 px |
+| Steps | `99999` | 50.93 px | 72 px |
+| Battery | `100%` | 47.41 px | 72 px |
+| Localized date | `Sept 30 Mer` | 101.79 px | 108 px |
+
 ## QA scope
 
-This build intentionally uses static Figma values. Approve the geometry with a Pebble Time 2 emulator overlay before connecting live time, date, weather, health, battery, localization, theme, or configuration logic.
+This build intentionally uses static worst-case values. Approve the stress
+screen with a Pebble Time 2 emulator overlay before connecting live time, date,
+weather, health, battery, localization, theme, or configuration logic.

@@ -14,19 +14,19 @@ static Window *s_main_window;
 static Layer *s_background_layer;
 
 static Layer *s_calendar_icon_layer;
-static BitmapLayer *s_weather_icon_layer;
 static BitmapLayer *s_steps_icon_layer;
+static BitmapLayer *s_battery_icon_layer;
 
 static TextLayer *s_calendar_value_layer;
-static TextLayer *s_weather_value_layer;
 static TextLayer *s_steps_value_layer;
+static TextLayer *s_battery_value_layer;
 static TextLayer *s_hour_layer;
 static TextLayer *s_minute_layer;
 static TextLayer *s_date_layer;
 
 static GBitmap *s_calendar_bitmap;
-static GBitmap *s_weather_bitmap;
 static GBitmap *s_steps_bitmap;
+static GBitmap *s_battery_bitmap;
 
 static GFont s_font_18;
 static GFont s_font_93;
@@ -40,7 +40,7 @@ static void calendar_icon_update_proc(Layer *layer, GContext *ctx) {
   graphics_context_set_text_color(ctx, COLOR_TEXT);
   graphics_draw_text(
     ctx,
-    "28",
+    "30",
     s_font_18,
     GRect(
       VERTICAL_CALENDAR_DAY_X,
@@ -159,11 +159,11 @@ static void main_window_load(Window *window) {
   s_calendar_bitmap = gbitmap_create_with_resource(
     RESOURCE_ID_IMAGE_CALENDAR_52X44
   );
-  s_weather_bitmap = gbitmap_create_with_resource(
-    RESOURCE_ID_IMAGE_WEATHER_CLOUDY_NIGHT_52X44
-  );
   s_steps_bitmap = gbitmap_create_with_resource(
     RESOURCE_ID_IMAGE_STEPS_52X44
+  );
+  s_battery_bitmap = gbitmap_create_with_resource(
+    RESOURCE_ID_IMAGE_BATTERY_100_52X44
   );
 
   s_background_layer = layer_create(
@@ -185,29 +185,29 @@ static void main_window_load(Window *window) {
   s_calendar_value_layer = create_tray_value_layer(
     root_layer,
     VERTICAL_SLOT_1_LABEL_Y,
-    "Wed"
-  );
-
-  s_weather_icon_layer = create_icon_layer(
-    root_layer,
-    VERTICAL_SLOT_2_ICON_Y,
-    s_weather_bitmap
-  );
-  s_weather_value_layer = create_tray_value_layer(
-    root_layer,
-    VERTICAL_SLOT_2_LABEL_Y,
-    "65°"
+    "Mer"
   );
 
   s_steps_icon_layer = create_icon_layer(
     root_layer,
-    VERTICAL_SLOT_3_ICON_Y,
+    VERTICAL_SLOT_2_ICON_Y,
     s_steps_bitmap
   );
   s_steps_value_layer = create_tray_value_layer(
     root_layer,
+    VERTICAL_SLOT_2_LABEL_Y,
+    "99999"
+  );
+
+  s_battery_icon_layer = create_icon_layer(
+    root_layer,
+    VERTICAL_SLOT_3_ICON_Y,
+    s_battery_bitmap
+  );
+  s_battery_value_layer = create_tray_value_layer(
+    root_layer,
     VERTICAL_SLOT_3_LABEL_Y,
-    "13.5k"
+    "100%"
   );
 
   s_hour_layer = create_text_layer(
@@ -220,7 +220,7 @@ static void main_window_load(Window *window) {
     ),
     s_font_93,
     GTextAlignmentRight,
-    "02"
+    "23"
   );
 
   s_minute_layer = create_text_layer(
@@ -233,7 +233,7 @@ static void main_window_load(Window *window) {
     ),
     s_font_93,
     GTextAlignmentRight,
-    "18"
+    "59"
   );
 
   s_date_layer = create_text_layer(
@@ -241,7 +241,7 @@ static void main_window_load(Window *window) {
     GRect(VERTICAL_DATE_X, VERTICAL_DATE_Y, VERTICAL_DATE_W, VERTICAL_DATE_H),
     s_font_18,
     GTextAlignmentCenter,
-    "May 28 Wed"
+    "Sept 30 Mer"
   );
 }
 
@@ -250,18 +250,18 @@ static void main_window_unload(Window *window) {
   text_layer_destroy(s_minute_layer);
   text_layer_destroy(s_hour_layer);
 
+  text_layer_destroy(s_battery_value_layer);
   text_layer_destroy(s_steps_value_layer);
-  text_layer_destroy(s_weather_value_layer);
   text_layer_destroy(s_calendar_value_layer);
 
+  bitmap_layer_destroy(s_battery_icon_layer);
   bitmap_layer_destroy(s_steps_icon_layer);
-  bitmap_layer_destroy(s_weather_icon_layer);
   layer_destroy(s_calendar_icon_layer);
 
   layer_destroy(s_background_layer);
 
+  gbitmap_destroy(s_battery_bitmap);
   gbitmap_destroy(s_steps_bitmap);
-  gbitmap_destroy(s_weather_bitmap);
   gbitmap_destroy(s_calendar_bitmap);
 
   fonts_unload_custom_font(s_font_93);

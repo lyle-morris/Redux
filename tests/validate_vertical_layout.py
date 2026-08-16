@@ -68,7 +68,7 @@ def main():
         d["VERTICAL_SLOT_1_ICON_Y"],
         d["VERTICAL_SLOT_2_ICON_Y"],
         d["VERTICAL_SLOT_3_ICON_Y"],
-    ] == [16, 84, 151]
+    ] == [16, 83, 151]
     assert [
         d["VERTICAL_SLOT_1_LABEL_Y"],
         d["VERTICAL_SLOT_2_LABEL_Y"],
@@ -85,8 +85,8 @@ def main():
 
     icon_paths = [
         ROOT / "resources/images/icons/52x44/calendar/white_calendar_52x44.png",
-        ROOT / "resources/images/icons/52x44/weather/white_weather_cloudy_night_52x44.png",
         ROOT / "resources/images/icons/52x44/activity/white_steps_52x44.png",
+        ROOT / "resources/images/icons/52x44/battery/white_battery_100_52x44.png",
     ]
     for icon_path in icon_paths:
         assert png_dimensions(icon_path) == (52, 44), icon_path
@@ -103,6 +103,9 @@ def main():
     appinfo = json.loads((ROOT / "appinfo.json").read_text(encoding="utf-8"))
     assert appinfo["targetPlatforms"] == ["emery"]
     assert appinfo["watchapp"]["watchface"] is True
+    resource_names = {item["name"] for item in appinfo["resources"]["media"]}
+    assert "IMAGE_BATTERY_100_52X44" in resource_names
+    assert "IMAGE_WEATHER_CLOUDY_NIGHT_52X44" not in resource_names
 
     print("Vertical three-slot layout validation passed.")
 

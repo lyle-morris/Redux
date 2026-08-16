@@ -32,8 +32,8 @@
       },
       {
         "type": "png",
-        "name": "IMAGE_WEATHER_CLOUDY_NIGHT_52X44",
-        "file": "images/icons/52x44/weather/white_weather_cloudy_night_52x44.png"
+        "name": "IMAGE_BATTERY_100_52X44",
+        "file": "images/icons/52x44/battery/white_battery_100_52x44.png"
       },
       {
         "type": "png",
@@ -43,4 +43,3 @@
     ]
   }
 }
-
