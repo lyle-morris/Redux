@@ -27,21 +27,21 @@
 
 // Figma tray: 16 px vertical padding, centered content, 6 px between
 // three 62 px icon/value groups. Emulator capture QA showed that Pebble
-// renders the icon bitmap one pixel above the Figma output and the custom
-// 18 px text glyphs two pixels below it. These input frames compensate for
-// those renderer offsets; the resulting visible pixels match Figma.
+// renders the first two icon bitmaps one pixel above the Figma output and the
+// custom 18 px text glyphs below it. These input frames compensate for those
+// renderer offsets. The third slot is independently tuned from overlay QA.
 #define VERTICAL_SLOT_GROUP_H 62
 #define VERTICAL_SLOT_GAP 6
 #define VERTICAL_SLOT_1_ICON_Y 16
 #define VERTICAL_SLOT_2_ICON_Y 84
-#define VERTICAL_SLOT_3_ICON_Y 152
+#define VERTICAL_SLOT_3_ICON_Y 151
 
 #define VERTICAL_LABEL_X 0
 #define VERTICAL_LABEL_W 72
 #define VERTICAL_LABEL_H 18
 #define VERTICAL_SLOT_1_LABEL_Y 57
 #define VERTICAL_SLOT_2_LABEL_Y 125
-#define VERTICAL_SLOT_3_LABEL_Y 193
+#define VERTICAL_SLOT_3_LABEL_Y 192
 
 #define VERTICAL_TIME_CONTENT_X 86
 #define VERTICAL_TIME_CONTENT_W 108
@@ -59,7 +59,9 @@
 #define VERTICAL_DATE_X 86
 #define VERTICAL_DATE_Y 192
 #define VERTICAL_DATE_W 108
-#define VERTICAL_DATE_H 18
+// The Figma frame is 18 px high. Pebble needs four additional transparent
+// pixels to expose the custom font's descender instead of clipping it.
+#define VERTICAL_DATE_H 22
 
 #define VERTICAL_LABEL_FONT_SIZE 18
 #define VERTICAL_TIME_FONT_SIZE 93

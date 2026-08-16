@@ -33,7 +33,7 @@ Each icon/value group is 62 px tall. The combined 198 px stack is centered in th
 | --- | ---: | ---: | ---: | ---: | --- |
 | 1 | 15 | 16 | 59 | 57 | `Wed` |
 | 2 | 83 | 84 | 127 | 125 | `65°` |
-| 3 | 151 | 152 | 195 | 193 | `13.5k` |
+| 3 | 151 | 151 | 195 | 192 | `13.5k` |
 
 ## Divider
 
@@ -70,7 +70,10 @@ Pebble positions the 93 px custom-font glyphs 25 px below the text-layer origin.
 - Font size and line height: 18 px
 - Alignment: centered
 - Figma frame: `x=86, y=194, w=108, h=18`
-- Pebble input frame: `x=86, y=192, w=108, h=18`
+- Pebble input frame: `x=86, y=192, w=108, h=22`
+
+The additional four transparent pixels expose the custom font's date
+descender; they do not change the date baseline or the Figma target position.
 - Figma QA value: `May 28 Wed`
 
 Localization stress-test value: `Sept 30 Mer`. Do not add punctuation to this
