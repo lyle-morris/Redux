@@ -62,11 +62,13 @@
 #define HORIZONTAL_FIGMA_TIME_W 162
 #define HORIZONTAL_FIGMA_TIME_H 62
 
-// Pebble input frame compensates for the custom font's baseline metrics. The
-// first emulator overlay will validate or refine this renderer-only offset.
-#define HORIZONTAL_TIME_X 19
+// Pebble input frame compensates for the custom font's baseline metrics. It
+// spans the full panel because Pebble's text engine ellipsizes the 161.54 px
+// stress value inside Figma's 162 px frame. Centering the transparent 200 px
+// layer preserves the intended visible x position (approximately 19.23 px).
+#define HORIZONTAL_TIME_X 0
 #define HORIZONTAL_TIME_Y 123
-#define HORIZONTAL_TIME_W 162
+#define HORIZONTAL_TIME_W 200
 #define HORIZONTAL_TIME_H 64
 
 #define HORIZONTAL_LABEL_FONT_SIZE 18
