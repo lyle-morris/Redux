@@ -62,15 +62,19 @@ def main():
         d["VERTICAL_SLOT_1_ICON_Y"],
         d["VERTICAL_SLOT_2_ICON_Y"],
         d["VERTICAL_SLOT_3_ICON_Y"],
-    ] == [15, 83, 151]
+    ] == [16, 84, 152]
     assert [
         d["VERTICAL_SLOT_1_LABEL_Y"],
         d["VERTICAL_SLOT_2_LABEL_Y"],
         d["VERTICAL_SLOT_3_LABEL_Y"],
-    ] == [59, 127, 195]
+    ] == [57, 125, 193]
     assert d["VERTICAL_TIME_CONTENT_W"] == 108
+    assert d["VERTICAL_FIGMA_TIME_LINE_H"] == 76
+    assert d["VERTICAL_TIME_LAYER_H"] == 94
+    assert d["VERTICAL_TIME_HOUR_Y"] == -2
+    assert d["VERTICAL_TIME_MINUTE_Y"] == 80
     assert d["VERTICAL_DATE_X"] + d["VERTICAL_DATE_W"] == 194
-    assert d["VERTICAL_DATE_Y"] + d["VERTICAL_DATE_H"] == 212
+    assert d["VERTICAL_DATE_Y"] == 192
 
     icon_paths = [
         ROOT / "resources/images/icons/52x44/calendar/white_calendar_52x44.png",
@@ -98,4 +102,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

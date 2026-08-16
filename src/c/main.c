@@ -188,7 +188,7 @@ static void main_window_load(Window *window) {
       VERTICAL_TIME_CONTENT_X,
       VERTICAL_TIME_HOUR_Y,
       VERTICAL_TIME_CONTENT_W,
-      VERTICAL_TIME_LINE_H
+      VERTICAL_TIME_LAYER_H
     ),
     s_font_93,
     GTextAlignmentRight,
@@ -201,7 +201,7 @@ static void main_window_load(Window *window) {
       VERTICAL_TIME_CONTENT_X,
       VERTICAL_TIME_MINUTE_Y,
       VERTICAL_TIME_CONTENT_W,
-      VERTICAL_TIME_LINE_H
+      VERTICAL_TIME_LAYER_H
     ),
     s_font_93,
     GTextAlignmentRight,
@@ -259,4 +259,3 @@ int main(void) {
   app_event_loop();
   deinit();
 }
-

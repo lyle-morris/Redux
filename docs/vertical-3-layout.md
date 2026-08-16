@@ -27,13 +27,13 @@ The three regions fill the 200 × 228 px Emery canvas exactly.
 - Value alignment: centered
 - Text color: black
 
-Each icon/value group is 62 px tall. The combined 198 px stack is centered in the tray's 196 px padded content area, producing these runtime positions:
+Each icon/value group is 62 px tall. The combined 198 px stack is centered in the tray's 196 px padded content area. Pebble's bitmap and custom-font renderers require small input-frame offsets to reproduce the Figma visible-pixel positions:
 
-| Slot | Icon Y | Value Y | QA value |
-| --- | ---: | ---: | --- |
-| 1 | 15 | 59 | `Wed` |
-| 2 | 83 | 127 | `65°` |
-| 3 | 151 | 195 | `13.5k` |
+| Slot | Figma icon Y | Pebble icon Y | Figma value Y | Pebble value Y | QA value |
+| --- | ---: | ---: | ---: | ---: | --- |
+| 1 | 15 | 16 | 59 | 57 | `Wed` |
+| 2 | 83 | 84 | 127 | 125 | `65°` |
+| 3 | 151 | 152 | 195 | 193 | `13.5k` |
 
 ## Divider
 
@@ -57,15 +57,20 @@ Each icon/value group is 62 px tall. The combined 198 px stack is centered in th
 - Line height: 76 px
 - Gap between hour and minute lines: 6 px
 - Alignment: right
-- Hour frame: `x=86, y=20, w=108, h=76`
-- Minute frame: `x=86, y=102, w=108, h=76`
+- Figma hour frame: `x=86, y=20, w=108, h=76`
+- Figma minute frame: `x=86, y=102, w=108, h=76`
+- Pebble hour input frame: `x=86, y=-2, w=108, h=94`
+- Pebble minute input frame: `x=86, y=80, w=108, h=94`
+
+Pebble positions the 93 px custom-font glyphs 25 px below the text-layer origin. The expanded transparent layers prevent the lower portion of each numeral from being clipped while preserving the Figma visible-pixel positions.
 
 ### Date
 
 - Typeface: Roboto Flex ExtraBold
 - Font size and line height: 18 px
 - Alignment: centered
-- Frame: `x=86, y=194, w=108, h=18`
+- Figma frame: `x=86, y=194, w=108, h=18`
+- Pebble input frame: `x=86, y=192, w=108, h=18`
 - Figma QA value: `May 28 Wed`
 
 Localization stress-test value: `Sept 30 Mer`. Do not add punctuation to this
