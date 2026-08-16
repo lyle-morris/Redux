@@ -43,6 +43,7 @@ def sfnt_tables(path):
 def main():
     d = load_defines()
 
+    assert d["VERTICAL_LAYOUT_LOCK_REVISION"] == 1
     assert d["VERTICAL_CANVAS_W"] == 200
     assert d["VERTICAL_CANVAS_H"] == 228
     assert (
@@ -90,6 +91,11 @@ def main():
     ]
     for icon_path in icon_paths:
         assert png_dimensions(icon_path) == (52, 44), icon_path
+
+    approved_capture = (
+        ROOT / "qa/goldens/vertical_3/approved-stress-emulator.png"
+    )
+    assert png_dimensions(approved_capture) == (200, 228), approved_capture
 
     for font_name in [
         "RobotoFlex-ExtraBold-18.ttf",

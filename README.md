@@ -4,7 +4,9 @@ Pebble Time 2 watchface project for the Redux layouts.
 
 ## Current build
 
-The first runnable QA target is the Figma-specified `vertical_3` layout. It intentionally renders static reference values so geometry can be approved with an emulator overlay before live data and configuration are connected.
+The Figma-specified `vertical_3` layout is approved and geometry locked at
+revision 1. Its static stress screen validates maximum-width time, date, steps,
+battery, and calendar values before live data and configuration are connected.
 
 See [`docs/vertical-3-layout.md`](docs/vertical-3-layout.md) for the exact pixel contract.
 

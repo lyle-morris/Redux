@@ -1,6 +1,11 @@
 # Vertical Three-Slot Layout
 
-Status: static stress-test build
+Status: **approved and geometry locked**
+
+- Lock revision: `1`
+- Approved: August 16, 2026
+- Approved stress capture:
+  [`qa/goldens/vertical_3/approved-stress-emulator.png`](../qa/goldens/vertical_3/approved-stress-emulator.png)
 
 Figma content source: Redux Racer, node `334:8199` (`Calendar + Steps + Battery`)
 
@@ -112,6 +117,14 @@ format. In the pinned Roboto Flex ExtraBold 18 px font it measures approximately
 
 ## QA scope
 
-This build intentionally uses static worst-case values. Approve the stress
-screen with a Pebble Time 2 emulator overlay before connecting live time, date,
-weather, health, battery, localization, theme, or configuration logic.
+The vertical three-slot geometry is locked. Live time, date, weather, health,
+battery, localization, theme, and configuration logic may be connected without
+changing the approved frames.
+
+Any coordinate, dimension, font size, icon canvas, or panel geometry change
+must:
+
+1. Increment `VERTICAL_LAYOUT_LOCK_REVISION`.
+2. Update `tests/validate_vertical_layout.py`.
+3. Pass a Pebble Time 2 emulator build.
+4. Receive a new emulator/Figma overlay approval.
