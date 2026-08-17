@@ -1,5 +1,6 @@
 #include <pebble.h>
 
+#include "battery_indicator.h"
 #include "layout_two_slot.h"
 
 // Static maximum-width build for horizontal two-slot pixel QA.
@@ -12,6 +13,7 @@
 static Layer *s_background_layer;
 static Layer *s_calendar_icon_layer;
 static BitmapLayer *s_weather_icon_layer;
+static BatteryIndicator *s_battery_indicator;
 
 static TextLayer *s_calendar_value_layer;
 static TextLayer *s_weather_value_layer;
@@ -205,9 +207,26 @@ void two_slot_layout_load(Window *window) {
     GTextAlignmentCenter,
     "23:59"
   );
+
+  s_battery_indicator = battery_indicator_create(
+    GRect(
+      TWO_SLOT_BOTTOM_STRIP_X,
+      TWO_SLOT_BOTTOM_STRIP_Y,
+      TWO_SLOT_BOTTOM_STRIP_W,
+      TWO_SLOT_BOTTOM_STRIP_H
+    )
+  );
+  if (s_battery_indicator) {
+    layer_add_child(
+      root_layer,
+      battery_indicator_get_layer(s_battery_indicator)
+    );
+  }
 }
 
 void two_slot_layout_unload(Window *window) {
+  battery_indicator_destroy(s_battery_indicator);
+
   text_layer_destroy(s_time_layer);
   text_layer_destroy(s_weather_value_layer);
   text_layer_destroy(s_calendar_value_layer);

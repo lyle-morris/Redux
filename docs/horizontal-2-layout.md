@@ -27,6 +27,10 @@ legacy Figma frame's Teko labels/time and its extra 229th canvas row.
 
 These regions fill the native 200 × 228 px Emery canvas exactly.
 
+The reserved strip now hosts the shared
+[`Battery Indicator`](battery-indicator.md). This is a styling addition inside
+the locked region and does not change the two-slot geometry contract.
+
 ## Informational tray
 
 - Background: `#00AAFF`

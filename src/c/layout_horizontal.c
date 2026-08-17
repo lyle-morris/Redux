@@ -1,5 +1,6 @@
 #include <pebble.h>
 
+#include "battery_indicator.h"
 #include "layout_horizontal.h"
 
 // Static Figma-reference stress build for horizontal three-slot pixel QA.
@@ -13,6 +14,7 @@ static Layer *s_background_layer;
 static Layer *s_calendar_icon_layer;
 static BitmapLayer *s_steps_icon_layer;
 static BitmapLayer *s_battery_icon_layer;
+static BatteryIndicator *s_battery_indicator;
 
 static TextLayer *s_calendar_value_layer;
 static TextLayer *s_steps_value_layer;
@@ -229,9 +231,26 @@ void horizontal_layout_load(Window *window) {
     GTextAlignmentCenter,
     "23:59"
   );
+
+  s_battery_indicator = battery_indicator_create(
+    GRect(
+      HORIZONTAL_BOTTOM_STRIP_X,
+      HORIZONTAL_BOTTOM_STRIP_Y,
+      HORIZONTAL_BOTTOM_STRIP_W,
+      HORIZONTAL_BOTTOM_STRIP_H
+    )
+  );
+  if (s_battery_indicator) {
+    layer_add_child(
+      root_layer,
+      battery_indicator_get_layer(s_battery_indicator)
+    );
+  }
 }
 
 void horizontal_layout_unload(Window *window) {
+  battery_indicator_destroy(s_battery_indicator);
+
   text_layer_destroy(s_time_layer);
   text_layer_destroy(s_battery_value_layer);
   text_layer_destroy(s_steps_value_layer);

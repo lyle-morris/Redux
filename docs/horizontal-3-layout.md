@@ -22,7 +22,9 @@ Figma source: Redux Racer, node `334:8203` (`Calendar + Steps + Battery`)
 | Reserved bottom strip | 0 | 208 | 200 | 20 |
 
 The five regions fill the 200 × 228 px Emery canvas exactly. The bottom strip
-inherits the tray color while the battery indicator is disabled.
+hosts the shared [`Battery Indicator`](battery-indicator.md) when enabled and
+inherits the tray color when the indicator is disabled. The indicator does not
+change the locked horizontal geometry.
 
 ## Informational tray
 

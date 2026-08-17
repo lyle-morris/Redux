@@ -44,6 +44,12 @@
         "characterRegex": "[0-9]"
       },
       {
+        "type": "font",
+        "name": "FONT_ROBOTO_FLEX_EXTRABOLD_12",
+        "file": "fonts/RobotoFlex-ExtraBold-12.ttf",
+        "characterRegex": "[0-9%]"
+      },
+      {
         "type": "png",
         "name": "IMAGE_CALENDAR_52X44",
         "file": "images/icons/52x44/calendar/white_calendar_52x44.png"

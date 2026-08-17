@@ -13,6 +13,11 @@ The locked contracts are documented in
 [`docs/horizontal-3-layout.md`](docs/horizontal-3-layout.md), and
 [`docs/horizontal-2-layout.md`](docs/horizontal-2-layout.md).
 
+The new Figma battery indicator styling is implemented in the existing 200 ×
+20 px reserved strip for both horizontal layouts. Its behavior and theme rules
+are documented in
+[`docs/battery-indicator.md`](docs/battery-indicator.md).
+
 ## Target layouts
 
 - `horizontal_2`
