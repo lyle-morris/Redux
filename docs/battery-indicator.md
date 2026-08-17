@@ -34,6 +34,17 @@ locked layout coordinate, panel dimension, font size, or icon canvas changed.
 The normal segment color is configurable so production themes can override the
 blue without changing indicator geometry.
 
+## Charging animation
+
+While charging below 100%, the blocks progressively fill from the actual
+battery level to all nine blocks. Each additional block appears every 350 ms.
+The full scale holds for 700 ms, then resets to the actual level and repeats.
+The percentage label always shows the real battery value.
+
+At 100%, all nine blocks remain steadily illuminated. The timer is cancelled
+when charging stops or the indicator is destroyed, so the animation cannot
+continue after the layout unloads.
+
 ## Percentage mapping
 
 | Charge | Segments |

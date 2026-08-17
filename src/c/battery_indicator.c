@@ -11,6 +11,8 @@
 #define BATTERY_INDICATOR_LABEL_Y 2
 #define BATTERY_INDICATOR_LABEL_W 42
 #define BATTERY_INDICATOR_LABEL_H 16
+#define BATTERY_INDICATOR_ANIMATION_STEP_MS 350
+#define BATTERY_INDICATOR_ANIMATION_HOLD_MS 700
 
 #define BATTERY_INDICATOR_COLOR_BACKGROUND GColorBlack
 #define BATTERY_INDICATOR_COLOR_NORMAL GColorFromHEX(0x60A0FF)
@@ -21,8 +23,10 @@ struct BatteryIndicator {
   Layer *layer;
   GFont font;
   uint8_t percentage;
+  uint8_t animated_segment_count;
   bool charging;
   GColor normal_color;
+  AppTimer *animation_timer;
   char label[5];
 };
 
@@ -50,6 +54,65 @@ static void update_label(BatteryIndicator *indicator) {
   );
 }
 
+static void animation_timer_callback(void *context);
+
+static void cancel_animation(BatteryIndicator *indicator) {
+  if (!indicator->animation_timer) {
+    return;
+  }
+
+  app_timer_cancel(indicator->animation_timer);
+  indicator->animation_timer = NULL;
+}
+
+static void schedule_animation(
+  BatteryIndicator *indicator,
+  uint32_t delay_ms
+) {
+  indicator->animation_timer = app_timer_register(
+    delay_ms,
+    animation_timer_callback,
+    indicator
+  );
+}
+
+static void restart_animation(BatteryIndicator *indicator) {
+  cancel_animation(indicator);
+  indicator->animated_segment_count = segment_count_for_percentage(
+    indicator->percentage
+  );
+
+  if (indicator->charging && indicator->percentage < 100) {
+    schedule_animation(indicator, BATTERY_INDICATOR_ANIMATION_STEP_MS);
+  }
+}
+
+static void animation_timer_callback(void *context) {
+  BatteryIndicator *indicator = context;
+  indicator->animation_timer = NULL;
+
+  if (!indicator->charging || indicator->percentage >= 100) {
+    return;
+  }
+
+  uint32_t next_delay = BATTERY_INDICATOR_ANIMATION_STEP_MS;
+  if (indicator->animated_segment_count < BATTERY_INDICATOR_MAX_SEGMENTS) {
+    indicator->animated_segment_count++;
+    if (
+      indicator->animated_segment_count == BATTERY_INDICATOR_MAX_SEGMENTS
+    ) {
+      next_delay = BATTERY_INDICATOR_ANIMATION_HOLD_MS;
+    }
+  } else {
+    indicator->animated_segment_count = segment_count_for_percentage(
+      indicator->percentage
+    );
+  }
+
+  layer_mark_dirty(indicator->layer);
+  schedule_animation(indicator, next_delay);
+}
+
 static void battery_indicator_update_proc(Layer *layer, GContext *ctx) {
   BatteryIndicator **layer_indicator = layer_get_data(layer);
   BatteryIndicator *indicator = *layer_indicator;
@@ -58,9 +121,9 @@ static void battery_indicator_update_proc(Layer *layer, GContext *ctx) {
   graphics_context_set_fill_color(ctx, BATTERY_INDICATOR_COLOR_BACKGROUND);
   graphics_fill_rect(ctx, bounds, 0, GCornerNone);
 
-  uint8_t segment_count = segment_count_for_percentage(
-    indicator->percentage
-  );
+  uint8_t segment_count = indicator->charging
+    ? indicator->animated_segment_count
+    : segment_count_for_percentage(indicator->percentage);
   GColor active_color = indicator->charging
     ? BATTERY_INDICATOR_COLOR_CHARGING
     : indicator->normal_color;
@@ -132,8 +195,10 @@ BatteryIndicator *battery_indicator_create(GRect frame) {
     resource_get_handle(RESOURCE_ID_FONT_ROBOTO_FLEX_EXTRABOLD_12)
   );
   indicator->percentage = 100;
+  indicator->animated_segment_count = BATTERY_INDICATOR_MAX_SEGMENTS;
   indicator->charging = false;
   indicator->normal_color = BATTERY_INDICATOR_COLOR_NORMAL;
+  indicator->animation_timer = NULL;
   update_label(indicator);
 
   BatteryIndicator **layer_indicator = layer_get_data(indicator->layer);
@@ -157,6 +222,7 @@ void battery_indicator_set_percentage(
 
   indicator->percentage = percentage > 100 ? 100 : percentage;
   update_label(indicator);
+  restart_animation(indicator);
   layer_mark_dirty(indicator->layer);
 }
 
@@ -169,6 +235,7 @@ void battery_indicator_set_charging(
   }
 
   indicator->charging = charging;
+  restart_animation(indicator);
   layer_mark_dirty(indicator->layer);
 }
 
@@ -189,6 +256,7 @@ void battery_indicator_destroy(BatteryIndicator *indicator) {
     return;
   }
 
+  cancel_animation(indicator);
   fonts_unload_custom_font(indicator->font);
   layer_destroy(indicator->layer);
   free(indicator);

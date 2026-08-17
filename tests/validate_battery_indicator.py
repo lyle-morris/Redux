@@ -43,10 +43,15 @@ def main() -> None:
     assert define_int("BATTERY_INDICATOR_LABEL_Y", source) == 2
     assert define_int("BATTERY_INDICATOR_LABEL_W", source) == 42
     assert define_int("BATTERY_INDICATOR_LABEL_H", source) == 16
+    assert define_int("BATTERY_INDICATOR_ANIMATION_STEP_MS", source) == 350
+    assert define_int("BATTERY_INDICATOR_ANIMATION_HOLD_MS", source) == 700
 
     assert "0x60A0FF" in source
     assert "0x00FF00" in source
     assert "RESOURCE_ID_FONT_ROBOTO_FLEX_EXTRABOLD_12" in source
+    assert "app_timer_register" in source
+    assert "app_timer_cancel" in source
+    assert "animated_segment_count" in source
 
     resources = appinfo["resources"]["media"]
     font = next(
@@ -65,6 +70,14 @@ def main() -> None:
         text = (ROOT / "src" / "c" / layout_source).read_text()
         assert "battery_indicator_create" in text
         assert "battery_indicator_destroy" in text
+
+    two_slot_source = (ROOT / "src" / "c" / "layout_two_slot.c").read_text()
+    assert "battery_indicator_set_percentage(s_battery_indicator, 50)" in (
+        two_slot_source
+    )
+    assert "battery_indicator_set_charging(s_battery_indicator, true)" in (
+        two_slot_source
+    )
 
     print("Battery indicator specification validated.")
 

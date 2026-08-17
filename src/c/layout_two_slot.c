@@ -218,6 +218,7 @@ void two_slot_layout_load(Window *window) {
   );
   if (s_battery_indicator) {
     battery_indicator_set_percentage(s_battery_indicator, 50);
+    battery_indicator_set_charging(s_battery_indicator, true);
     layer_add_child(
       root_layer,
       battery_indicator_get_layer(s_battery_indicator)
