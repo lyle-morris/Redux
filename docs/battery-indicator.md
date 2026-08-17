@@ -1,6 +1,12 @@
 # Battery Indicator
 
-Status: **implemented for horizontal layout QA**
+Status: **approved and design locked**
+
+- Lock revision: `1`
+- Approved: August 17, 2026
+- Approved 50% reference:
+  [`qa/goldens/battery_indicator/approved-50-percent.png`](../qa/goldens/battery_indicator/approved-50-percent.png)
+- Charging animation: approved in Pebble Time 2 emulator testing
 
 Figma source: Battery Indicator component set, node `330:1453`; approved blue
 instance, node `334:8182`.
@@ -69,3 +75,16 @@ always displays the actual percentage.
 - `horizontal_2`: enabled in the reserved bottom strip
 - `horizontal_3`: enabled in the reserved bottom strip
 - `vertical_3`: not included; that layout has no 200 × 20 indicator strip
+
+## Lock contract
+
+The geometry, 12 px typography, normal and charging colors, percentage bands,
+350 ms animation step, and 700 ms full-bar hold are locked at revision 1.
+Connecting live battery and charging services does not change this contract.
+
+Any change to those approved properties must:
+
+1. Increment `BATTERY_INDICATOR_LOCK_REVISION`.
+2. Update `tests/validate_battery_indicator.py`.
+3. Pass a Pebble Time 2 emulator build.
+4. Receive new visual and animation approval.

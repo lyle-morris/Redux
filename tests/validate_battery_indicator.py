@@ -8,6 +8,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "src" / "c" / "battery_indicator.c"
+HEADER = ROOT / "src" / "c" / "battery_indicator.h"
 APPINFO = ROOT / "appinfo.json"
 
 
@@ -30,9 +31,19 @@ def sfnt_tables(path: Path) -> set[str]:
     return tables
 
 
+def png_dimensions(path: Path) -> tuple[int, int]:
+    with path.open("rb") as image:
+        header = image.read(24)
+    assert header[:8] == b"\x89PNG\r\n\x1a\n", f"Invalid PNG: {path}"
+    return struct.unpack(">II", header[16:24])
+
+
 def main() -> None:
     source = SOURCE.read_text()
+    header = HEADER.read_text()
     appinfo = json.loads(APPINFO.read_text())
+
+    assert define_int("BATTERY_INDICATOR_LOCK_REVISION", header) == 1
 
     assert define_int("BATTERY_INDICATOR_PADDING", source) == 2
     assert define_int("BATTERY_INDICATOR_SEGMENT_W", source) == 16
@@ -53,6 +64,15 @@ def main() -> None:
     assert "app_timer_cancel" in source
     assert "animated_segment_count" in source
 
+    approved_capture = (
+        ROOT
+        / "qa"
+        / "goldens"
+        / "battery_indicator"
+        / "approved-50-percent.png"
+    )
+    assert png_dimensions(approved_capture) == (637, 719), approved_capture
+
     resources = appinfo["resources"]["media"]
     font = next(
         item
@@ -70,14 +90,6 @@ def main() -> None:
         text = (ROOT / "src" / "c" / layout_source).read_text()
         assert "battery_indicator_create" in text
         assert "battery_indicator_destroy" in text
-
-    two_slot_source = (ROOT / "src" / "c" / "layout_two_slot.c").read_text()
-    assert "battery_indicator_set_percentage(s_battery_indicator, 50)" in (
-        two_slot_source
-    )
-    assert "battery_indicator_set_charging(s_battery_indicator, true)" in (
-        two_slot_source
-    )
 
     print("Battery indicator specification validated.")
 
