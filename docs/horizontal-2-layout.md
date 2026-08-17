@@ -1,6 +1,11 @@
 # Horizontal Two-Slot Layout
 
-Status: first static pixel-QA build
+Status: **approved and geometry locked**
+
+- Lock revision: `1`
+- Approved: August 17, 2026
+- Approved stress overlay:
+  [`qa/goldens/horizontal_2/approved-stress-overlay.png`](../qa/goldens/horizontal_2/approved-stress-overlay.png)
 
 Geometry reference: Redux Racer, Figma node `295:4551` (`yellow_template`)
 
@@ -29,7 +34,7 @@ These regions fill the native 200 × 228 px Emery canvas exactly.
 - Icon canvas: 64 × 64 px
 - Icon positions: `x=24, y=16` and `x=112, y=16`
 - Figma value frame: y=80, height=20 px
-- Initial Pebble value frame: y=78, height=20 px
+- Approved Pebble value frame: y=78, height=20 px
 - Typeface: Roboto Flex Bold, 20 px / 20 px
 - Value alignment: centered
 - Text color: black
@@ -40,7 +45,7 @@ The QA slots use Calendar (`30`, `Mer`) and Weather (`888°`).
 
 - Typeface: Roboto Flex ExtraBold, 28 px / 28 px
 - Figma icon-local frame: `x=16, y=21, w=32, h=28`
-- Initial Pebble icon-local frame: `x=16, y=17, w=32, h=28`
+- Approved Pebble icon-local frame: `x=16, y=17, w=32, h=28`
 - Alignment: centered
 
 As with the approved three-slot layouts, the custom layer draws the reusable
@@ -62,6 +67,14 @@ value while preserving its visible centered position.
 
 ## QA scope
 
-This build intentionally uses static worst-case values. Approve the two slot
-positions, 20 px label baseline, 28 px calendar day, and reused time frame with
-a Pebble Time 2 emulator/Figma overlay before this geometry is locked.
+The horizontal two-slot geometry is locked. Live time, weather, calendar,
+battery, health, localization, theme, Bluetooth, and configuration logic may be
+connected without changing the approved frames.
+
+Any coordinate, dimension, font size, icon canvas, or panel geometry change
+must:
+
+1. Increment `TWO_SLOT_LAYOUT_LOCK_REVISION`.
+2. Update `tests/validate_two_slot_layout.py`.
+3. Pass a Pebble Time 2 emulator build.
+4. Receive a new emulator/Figma overlay approval.

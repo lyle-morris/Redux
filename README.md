@@ -4,13 +4,13 @@ Pebble Time 2 watchface project for the Redux layouts.
 
 ## Current build
 
-The `vertical_3` and `horizontal_3` layouts are approved and geometry locked at
-revision 1. The active QA build now targets the standard `horizontal_2` layout
-with static maximum-width time, weather, and calendar values.
+The `vertical_3`, `horizontal_3`, and standard `horizontal_2` layouts are all
+approved and geometry locked at revision 1. The active static build remains on
+`horizontal_2` for the next integration phase.
 
-See [`docs/vertical-3-layout.md`](docs/vertical-3-layout.md) and
-[`docs/horizontal-3-layout.md`](docs/horizontal-3-layout.md) for the locked
-three-slot contracts. The active two-slot QA contract is documented in
+The locked contracts are documented in
+[`docs/vertical-3-layout.md`](docs/vertical-3-layout.md),
+[`docs/horizontal-3-layout.md`](docs/horizontal-3-layout.md), and
 [`docs/horizontal-2-layout.md`](docs/horizontal-2-layout.md).
 
 ## Target layouts

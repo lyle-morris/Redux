@@ -43,6 +43,7 @@ def sfnt_tables(path):
 def main():
     d = load_defines()
 
+    assert d["TWO_SLOT_LAYOUT_LOCK_REVISION"] == 1
     assert d["TWO_SLOT_CANVAS_W"] == 200
     assert d["TWO_SLOT_CANVAS_H"] == 228
     assert d["TWO_SLOT_TRAY_H"] == 116
@@ -107,6 +108,11 @@ def main():
 
     build_spec = ROOT / "qa/goldens/horizontal_2/build-specification.png"
     assert png_dimensions(build_spec) == (970, 1299), build_spec
+
+    approved_capture = (
+        ROOT / "qa/goldens/horizontal_2/approved-stress-overlay.png"
+    )
+    assert png_dimensions(approved_capture) == (200, 228), approved_capture
 
     for font_name in ["RobotoFlex-Bold-20.ttf", "RobotoFlex-ExtraBold-28.ttf"]:
         font_path = ROOT / "resources/fonts" / font_name

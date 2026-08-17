@@ -5,6 +5,12 @@
 // Geometry source: Build Specifications, "Horizontal layout (2 info slots)".
 // Figma reference: Redux Racer, node 295:4551. The build specification
 // supersedes that legacy frame's Teko typography and 229 px canvas.
+//
+// GEOMETRY LOCKED: revision 1, approved 2026-08-17.
+// Any coordinate, dimension, font size, or icon-canvas change requires a lock
+// revision increment, validator update, and new emulator/Figma overlay approval.
+
+#define TWO_SLOT_LAYOUT_LOCK_REVISION 1
 
 #define TWO_SLOT_CANVAS_W 200
 #define TWO_SLOT_CANVAS_H 228
@@ -42,7 +48,7 @@
 #define TWO_SLOT_ICON_H 64
 
 #define TWO_SLOT_FIGMA_LABEL_Y 80
-// Initial renderer compensation for the custom 20 px font.
+// Approved renderer compensation for the custom 20 px font.
 #define TWO_SLOT_LABEL_Y 78
 #define TWO_SLOT_LABEL_W 64
 #define TWO_SLOT_LABEL_H 20
@@ -52,7 +58,7 @@
 #define TWO_SLOT_FIGMA_CALENDAR_DAY_Y 21
 #define TWO_SLOT_FIGMA_CALENDAR_DAY_W 32
 #define TWO_SLOT_FIGMA_CALENDAR_DAY_H 28
-// Initial renderer-only vertical compensation for the custom 28 px font.
+// Approved renderer-only vertical compensation for the custom 28 px font.
 #define TWO_SLOT_CALENDAR_DAY_X 16
 #define TWO_SLOT_CALENDAR_DAY_Y 17
 #define TWO_SLOT_CALENDAR_DAY_W 32
