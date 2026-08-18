@@ -5,11 +5,38 @@
   "companyName": "Lyle Morris",
   "versionLabel": "0.1.0",
   "sdkVersion": "3",
+  "enableMultiJS": false,
   "targetPlatforms": [
     "emery"
   ],
   "watchapp": {
     "watchface": true
+  },
+  "capabilities": [
+    "configurable",
+    "health"
+  ],
+  "appKeys": {
+    "layout": 0,
+    "slot_1_metric": 1,
+    "slot_2_metric": 2,
+    "slot_3_metric": 3,
+    "theme_mode": 4,
+    "theme": 5,
+    "show_battery_indicator": 6,
+    "watchface_background": 7,
+    "box_background_color": 8,
+    "box_top_border_color": 9,
+    "box_bottom_border_color": 10,
+    "tray_background_color": 11,
+    "divider_color": 12,
+    "time_text_color": 13,
+    "date_text_color": 14,
+    "slot_1_text_color": 15,
+    "slot_2_text_color": 16,
+    "slot_3_text_color": 17,
+    "battery_indicator_color": 18,
+    "js_ready": 19
   },
   "resources": {
     "media": [
