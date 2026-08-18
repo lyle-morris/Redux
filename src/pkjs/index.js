@@ -1,8 +1,18 @@
 var CONFIG_URL = 'https://lyle-morris.github.io/Hosting/apps/redux/qa/app-config.html';
-var CONFIG_VERSION = 'redux-qa-v2';
+var CONFIG_VERSION = 'redux-qa-v3';
 var SETTINGS_KEY = 'redux_qa_settings_v1';
 
 var DEFAULTS = {
+  showLeadingZero: true,
+  hour24: false,
+  celsius: false,
+  showBluetooth: false,
+  manualLocation: false,
+  manualPostalCode: '',
+  manualCity: '',
+  manualCountry: '',
+  language: 'en',
+  analyticsEnabled: true,
   verticalLayout: true,
   layout: 'vertical_3',
   slot1Metric: 'calendar',
@@ -39,6 +49,16 @@ function normalize(raw) {
   if(layout !== 'vertical_3' && layout !== 'horizontal_3' && layout !== 'horizontal_2') layout = DEFAULTS.layout;
 
   return {
+    showLeadingZero: !!first(raw, 'showLeadingZero', 'show_leading_zero', DEFAULTS.showLeadingZero),
+    hour24: !!first(raw, 'hour24', 'use_24_hour', DEFAULTS.hour24),
+    celsius: !!first(raw, 'celsius', 'use_celsius', DEFAULTS.celsius),
+    showBluetooth: !!first(raw, 'showBluetooth', 'show_bluetooth', DEFAULTS.showBluetooth),
+    manualLocation: !!first(raw, 'manualLocation', 'manual_location', DEFAULTS.manualLocation),
+    manualPostalCode: String(first(raw, 'manualPostalCode', 'manual_postal_code', DEFAULTS.manualPostalCode) || ''),
+    manualCity: String(first(raw, 'manualCity', 'manual_city', DEFAULTS.manualCity) || ''),
+    manualCountry: String(first(raw, 'manualCountry', 'manual_country', DEFAULTS.manualCountry) || ''),
+    language: first(raw, 'language', 'language', DEFAULTS.language),
+    analyticsEnabled: !!first(raw, 'analyticsEnabled', 'analytics_enabled', DEFAULTS.analyticsEnabled),
     verticalLayout: layout === 'vertical_3',
     layout: layout,
     slot1Metric: first(raw, 'slot1Metric', 'slot_1_metric', DEFAULTS.slot1Metric),
@@ -87,6 +107,7 @@ function buildPayload(settings) {
   var layouts = {horizontal_2: 0, horizontal_3: 1, vertical_3: 2};
   var metrics = {calendar: 0, weather: 1, battery: 2, calories: 3, activity: 4, sleep: 5, heart: 6, steps: 7, distance: 8, none: 9};
   var themes = {orange: 0, blue: 1, purple: 2, yellow: 3, green: 4, red: 5, pink: 6, brown: 7, white: 8, black: 9};
+  var languages = {en:0,es:1,fr:2,de:3,pt:4,it:5,nl:6,da:7,nb:8,sv:9,fi:10,is:11,ca:12,eu:13,gl:14,pl:15,cs:16,sk:17,sl:18,hr:19,bs:20,'sr-Latn':21,ro:22,hu:23,et:24,lv:25,lt:26,tr:27,sq:28,mt:29};
   return {
     0: enumValue(settings.layout, layouts, 2),
     1: enumValue(settings.slot1Metric, metrics, 0),
@@ -107,7 +128,13 @@ function buildPayload(settings) {
     16: colorValue(settings.slot2TextColor, DEFAULTS.slot2TextColor),
     17: colorValue(settings.slot3TextColor, DEFAULTS.slot3TextColor),
     18: colorValue(settings.batteryIndicatorColor, DEFAULTS.batteryIndicatorColor),
-    19: 1
+    19: 1,
+    20: settings.showLeadingZero ? 1 : 0,
+    21: settings.hour24 ? 1 : 0,
+    22: settings.celsius ? 1 : 0,
+    23: settings.showBluetooth ? 1 : 0,
+    24: enumValue(settings.language, languages, 0),
+    25: settings.analyticsEnabled ? 1 : 0
   };
 }
 

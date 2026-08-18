@@ -2,13 +2,14 @@
 
 #include "battery_indicator.h"
 #include "layout_horizontal.h"
+#include "redux_settings.h"
 
 // Static Figma-reference stress build for horizontal three-slot pixel QA.
 
-#define COLOR_TRAY GColorFromHEX(0x00AAFF)
-#define COLOR_DIVIDER GColorBlack
-#define COLOR_TIME_PANEL GColorWhite
-#define COLOR_TEXT GColorBlack
+#define COLOR_TRAY (g_redux_settings.theme_mode ? redux_color(g_redux_settings.watchface_background) : redux_preset_color())
+#define COLOR_DIVIDER (g_redux_settings.theme_mode ? redux_color(g_redux_settings.box_top_border) : GColorBlack)
+#define COLOR_TIME_PANEL (g_redux_settings.theme_mode ? redux_color(g_redux_settings.box_background) : GColorWhite)
+#define COLOR_TEXT (g_redux_settings.theme_mode ? redux_color(g_redux_settings.slot_text[0]) : redux_contrast_color(COLOR_TRAY))
 
 static Layer *s_background_layer;
 static Layer *s_calendar_icon_layer;
@@ -27,6 +28,14 @@ static GBitmap *s_battery_bitmap;
 
 static GFont s_font_18;
 static GFont s_font_62;
+static char s_time_buffer[8];
+
+static void update_time(struct tm *tick_time) {
+  if(g_redux_settings.hour24) strftime(s_time_buffer, sizeof(s_time_buffer), "%H:%M", tick_time);
+  else strftime(s_time_buffer, sizeof(s_time_buffer), g_redux_settings.show_leading_zero ? "%I:%M" : "%l:%M", tick_time);
+  text_layer_set_text(s_time_layer, s_time_buffer);
+}
+static void tick_handler(struct tm *tick_time, TimeUnits units) { update_time(tick_time); }
 
 static void background_update_proc(Layer *layer, GContext *ctx) {
   graphics_context_set_fill_color(ctx, COLOR_TRAY);
@@ -231,16 +240,19 @@ void horizontal_layout_load(Window *window) {
     GTextAlignmentCenter,
     "23:59"
   );
+  text_layer_set_text_color(s_time_layer, g_redux_settings.theme_mode ? redux_color(g_redux_settings.time_text) : GColorBlack);
+  time_t now = time(NULL); update_time(localtime(&now)); tick_timer_service_subscribe(MINUTE_UNIT, tick_handler);
 
-  s_battery_indicator = battery_indicator_create(
+  s_battery_indicator = g_redux_settings.show_battery_indicator ? battery_indicator_create(
     GRect(
       HORIZONTAL_BOTTOM_STRIP_X,
       HORIZONTAL_BOTTOM_STRIP_Y,
       HORIZONTAL_BOTTOM_STRIP_W,
       HORIZONTAL_BOTTOM_STRIP_H
     )
-  );
+  ) : NULL;
   if (s_battery_indicator) {
+    battery_indicator_set_normal_color(s_battery_indicator, redux_color(g_redux_settings.battery_indicator));
     layer_add_child(
       root_layer,
       battery_indicator_get_layer(s_battery_indicator)
@@ -249,6 +261,7 @@ void horizontal_layout_load(Window *window) {
 }
 
 void horizontal_layout_unload(Window *window) {
+  tick_timer_service_unsubscribe();
   battery_indicator_destroy(s_battery_indicator);
 
   text_layer_destroy(s_time_layer);

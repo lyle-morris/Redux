@@ -36,7 +36,13 @@
     "slot_2_text_color": 16,
     "slot_3_text_color": 17,
     "battery_indicator_color": 18,
-    "js_ready": 19
+    "js_ready": 19,
+    "show_leading_zero": 20,
+    "hour24": 21,
+    "celsius": 22,
+    "show_bluetooth": 23,
+    "language": 24,
+    "analytics_enabled": 25
   },
   "resources": {
     "media": [

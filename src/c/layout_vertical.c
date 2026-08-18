@@ -1,14 +1,15 @@
 #include <pebble.h>
 
 #include "layout_vertical.h"
+#include "redux_settings.h"
 
 // Static Figma-reference build for vertical three-slot pixel QA.
 // Live settings and data are intentionally connected after geometry approval.
 
-#define COLOR_TRAY GColorFromHEX(0x00AAFF)
-#define COLOR_DIVIDER GColorBlack
-#define COLOR_TIME_PANEL GColorWhite
-#define COLOR_TEXT GColorBlack
+#define COLOR_TRAY (g_redux_settings.theme_mode ? redux_color(g_redux_settings.tray_background) : redux_preset_color())
+#define COLOR_DIVIDER (g_redux_settings.theme_mode ? redux_color(g_redux_settings.divider) : GColorWhite)
+#define COLOR_TIME_PANEL (g_redux_settings.theme_mode ? redux_color(g_redux_settings.watchface_background) : GColorBlack)
+#define COLOR_TEXT (g_redux_settings.theme_mode ? redux_color(g_redux_settings.slot_text[0]) : redux_contrast_color(COLOR_TRAY))
 
 static Layer *s_background_layer;
 
@@ -29,6 +30,16 @@ static GBitmap *s_battery_bitmap;
 
 static GFont s_font_18;
 static GFont s_font_93;
+static char s_hour_buffer[4], s_minute_buffer[4], s_date_buffer[24];
+
+static void update_time(struct tm *tick_time) {
+  if(g_redux_settings.hour24) strftime(s_hour_buffer, sizeof(s_hour_buffer), "%H", tick_time);
+  else strftime(s_hour_buffer, sizeof(s_hour_buffer), g_redux_settings.show_leading_zero ? "%I" : "%l", tick_time);
+  strftime(s_minute_buffer, sizeof(s_minute_buffer), "%M", tick_time);
+  strftime(s_date_buffer, sizeof(s_date_buffer), "%b %e %a", tick_time);
+  text_layer_set_text(s_hour_layer, s_hour_buffer); text_layer_set_text(s_minute_layer, s_minute_buffer); text_layer_set_text(s_date_layer, s_date_buffer);
+}
+static void tick_handler(struct tm *tick_time, TimeUnits units) { update_time(tick_time); }
 
 static void calendar_icon_update_proc(Layer *layer, GContext *ctx) {
   GRect bounds = layer_get_bounds(layer);
@@ -221,6 +232,7 @@ void vertical_layout_load(Window *window) {
     GTextAlignmentRight,
     "23"
   );
+  text_layer_set_text_color(s_hour_layer, g_redux_settings.theme_mode ? redux_color(g_redux_settings.time_text) : GColorBlack);
 
   s_minute_layer = create_text_layer(
     root_layer,
@@ -234,6 +246,7 @@ void vertical_layout_load(Window *window) {
     GTextAlignmentRight,
     "59"
   );
+  text_layer_set_text_color(s_minute_layer, g_redux_settings.theme_mode ? redux_color(g_redux_settings.time_text) : GColorBlack);
 
   s_date_layer = create_text_layer(
     root_layer,
@@ -242,9 +255,12 @@ void vertical_layout_load(Window *window) {
     GTextAlignmentCenter,
     "Sept 30 Mer"
   );
+  text_layer_set_text_color(s_date_layer, g_redux_settings.theme_mode ? redux_color(g_redux_settings.date_text) : GColorBlack);
+  time_t now = time(NULL); update_time(localtime(&now)); tick_timer_service_subscribe(MINUTE_UNIT, tick_handler);
 }
 
 void vertical_layout_unload(Window *window) {
+  tick_timer_service_unsubscribe();
   text_layer_destroy(s_date_layer);
   text_layer_destroy(s_minute_layer);
   text_layer_destroy(s_hour_layer);

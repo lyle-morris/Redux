@@ -3,6 +3,7 @@
 #include "layout_horizontal.h"
 #include "layout_two_slot.h"
 #include "layout_vertical.h"
+#include "redux_settings.h"
 
 typedef enum {
   ReduxLayoutHorizontalTwo = 0,
@@ -65,6 +66,28 @@ static void inbox_received_handler(DictionaryIterator *iterator, void *context) 
   Tuple *layout_tuple = dict_find(iterator, MESSAGE_KEY_layout);
   if(layout_tuple) apply_layout(valid_layout(layout_tuple->value->int32));
 
+#define READ_U8(key, field) do { Tuple *t = dict_find(iterator, MESSAGE_KEY_##key); if(t) g_redux_settings.field = (uint8_t)t->value->int32; } while(0)
+#define READ_BOOL(key, field) do { Tuple *t = dict_find(iterator, MESSAGE_KEY_##key); if(t) g_redux_settings.field = t->value->int32 != 0; } while(0)
+#define READ_COLOR(key, field) do { Tuple *t = dict_find(iterator, MESSAGE_KEY_##key); if(t) g_redux_settings.field = (uint32_t)t->value->int32; } while(0)
+  READ_U8(theme_mode, theme_mode); READ_U8(theme, theme);
+  READ_BOOL(show_battery_indicator, show_battery_indicator);
+  READ_BOOL(show_leading_zero, show_leading_zero); READ_BOOL(hour24, hour24);
+  READ_BOOL(celsius, celsius); READ_BOOL(show_bluetooth, show_bluetooth); READ_U8(language, language);
+  READ_COLOR(watchface_background, watchface_background); READ_COLOR(box_background_color, box_background);
+  READ_COLOR(box_top_border_color, box_top_border); READ_COLOR(box_bottom_border_color, box_bottom_border);
+  READ_COLOR(tray_background_color, tray_background); READ_COLOR(divider_color, divider);
+  READ_COLOR(time_text_color, time_text); READ_COLOR(date_text_color, date_text);
+  READ_COLOR(slot_1_text_color, slot_text[0]); READ_COLOR(slot_2_text_color, slot_text[1]);
+  READ_COLOR(slot_3_text_color, slot_text[2]); READ_COLOR(battery_indicator_color, battery_indicator);
+#undef READ_U8
+#undef READ_BOOL
+#undef READ_COLOR
+
+  if(s_layout_loaded) {
+    unload_active_layout(s_main_window);
+    load_active_layout(s_main_window);
+  }
+
   Tuple *theme_mode = dict_find(iterator, MESSAGE_KEY_theme_mode);
   Tuple *theme = dict_find(iterator, MESSAGE_KEY_theme);
   Tuple *battery = dict_find(iterator, MESSAGE_KEY_show_battery_indicator);
@@ -84,6 +107,7 @@ static void main_window_load(Window *window) { load_active_layout(window); }
 static void main_window_unload(Window *window) { unload_active_layout(window); }
 
 static void init(void) {
+  redux_settings_set_defaults();
   if(persist_exists(PersistKeyLayout)) {
     s_layout = valid_layout(persist_read_int(PersistKeyLayout));
   }
