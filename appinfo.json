@@ -79,7 +79,7 @@
       {
         "type": "font",
         "name": "FONT_ROBOTO_FLEX_BOLD_20",
-        "file": "fonts/RobotoFlex-Bold-20.ttf",
+        "file": "fonts/RobotoFlex-ExtraBold-18.ttf",
         "characterRegex": "[0-9A-Za-z%°.-]"
       },
       {
