@@ -10,12 +10,11 @@
 // Figma Battery Indicator component: 2 px outer padding, 143 px scale,
 // then a right-aligned 16 px percentage label. Pebble's generated font
 // metrics are slightly wider than the browser metrics used by Figma, so
-// let the text frame begin at the end of the scale. Right alignment keeps
-// the visible label anchored to the intended 2 px right padding while
-// allowing values such as "100%" to render without clipping.
+// the text frame overlaps the visual gap slightly. Right alignment keeps
+// values such as "100%" fully visible while matching the Figma placement.
 // Pebble's font baseline sits about 2 px lower than Figma's browser text,
 // so the label frame is shifted up 2 px for visual alignment.
-#define BATTERY_INDICATOR_LABEL_X 145
+#define BATTERY_INDICATOR_LABEL_X 147
 #define BATTERY_INDICATOR_LABEL_Y 0
 #define BATTERY_INDICATOR_LABEL_W 53
 #define BATTERY_INDICATOR_LABEL_H 16
