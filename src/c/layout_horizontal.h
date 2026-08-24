@@ -6,8 +6,6 @@
 // All measurements are native Pebble Time 2 pixels on the 200 x 228 Emery canvas.
 //
 // GEOMETRY RESET: revision 2, pending emulator/Figma overlay approval.
-// This first bisect step changes geometry only. It intentionally keeps the
-// previously proven font and bitmap resource set unchanged.
 
 #define HORIZONTAL_LAYOUT_LOCK_REVISION 2
 
@@ -39,16 +37,15 @@
 #define HORIZONTAL_BOTTOM_STRIP_W 200
 #define HORIZONTAL_BOTTOM_STRIP_H 20
 
-// Revision-2 horizontal three-slot positions. The production PNGs remain
-// 52 x 44 in this diagnostic step; centering them in the final 54 x 46 Figma
-// containers will be introduced only after this build step is proven.
+// Revision-2 tray: 11 px outer margins, 8 px gaps, and three 54 px groups.
 #define HORIZONTAL_SLOT_1_X 11
 #define HORIZONTAL_SLOT_2_X 73
 #define HORIZONTAL_SLOT_3_X 135
 #define HORIZONTAL_SLOT_W 54
 
-#define HORIZONTAL_ICON_W 52
-#define HORIZONTAL_ICON_H 44
+// Revision-2 artwork is exported directly on the 54 x 46 Figma canvas.
+#define HORIZONTAL_ICON_W 54
+#define HORIZONTAL_ICON_H 46
 #define HORIZONTAL_CALENDAR_ICON_Y 20
 #define HORIZONTAL_STEPS_ICON_Y 20
 #define HORIZONTAL_BATTERY_ICON_Y 20
@@ -58,9 +55,9 @@
 #define HORIZONTAL_LABEL_W 54
 #define HORIZONTAL_LABEL_H 18
 
-// Keep the previously proven calendar-day renderer metrics for this step.
-#define HORIZONTAL_CALENDAR_DAY_X 10
-#define HORIZONTAL_CALENDAR_DAY_Y 13
+// Calendar day typography is still on the proven 18 px resource for this step.
+#define HORIZONTAL_CALENDAR_DAY_X 11
+#define HORIZONTAL_CALENDAR_DAY_Y 12
 #define HORIZONTAL_CALENDAR_DAY_W 32
 #define HORIZONTAL_CALENDAR_DAY_H 18
 
@@ -69,9 +66,6 @@
 #define HORIZONTAL_FIGMA_TIME_W 162
 #define HORIZONTAL_FIGMA_TIME_H 62
 
-// Preserve the proven 62 px time font and shift only its layer with the new
-// 82 px time panel. Renderer compensation will be re-QA'd after the build
-// bisect is complete.
 #define HORIZONTAL_TIME_X 0
 #define HORIZONTAL_TIME_Y 117
 #define HORIZONTAL_TIME_W 200
