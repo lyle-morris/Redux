@@ -107,18 +107,8 @@
       },
       {
         "type": "png",
-        "name": "IMAGE_REVERSE_CALENDAR_54X46",
-        "file": "images/icons/54x46/calendar/reverse_calendar_54x46.png"
-      },
-      {
-        "type": "png",
         "name": "IMAGE_BATTERY_100_54X46",
         "file": "images/icons/54x46/battery/white_battery_100_54x46.png"
-      },
-      {
-        "type": "png",
-        "name": "IMAGE_REVERSE_BATTERY_100_54X46",
-        "file": "images/icons/54x46/battery/reverse_battery_100_54x46.png"
       },
       {
         "type": "png",
@@ -127,28 +117,13 @@
       },
       {
         "type": "png",
-        "name": "IMAGE_REVERSE_STEPS_54X46",
-        "file": "images/icons/54x46/steps/reverse_steps_54x46.png"
-      },
-      {
-        "type": "png",
         "name": "IMAGE_CALENDAR_64X64",
         "file": "images/icons/64x64/calendar/white_calendar_64x64.png"
       },
       {
         "type": "png",
-        "name": "IMAGE_REVERSE_CALENDAR_64X64",
-        "file": "images/icons/64x64/calendar/reverse_calendar_64x64.png"
-      },
-      {
-        "type": "png",
         "name": "IMAGE_WEATHER_PARTLY_CLOUDY_64X64",
         "file": "images/icons/64x64/weather/white_weather_partly_cloudy_64x64.png"
-      },
-      {
-        "type": "png",
-        "name": "IMAGE_REVERSE_WEATHER_PARTLY_CLOUDY_64X64",
-        "file": "images/icons/64x64/weather/reverse_weather_partly_cloudy_64x64.png"
       }
     ]
   }
