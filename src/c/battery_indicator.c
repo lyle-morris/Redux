@@ -3,13 +3,16 @@
 #include "battery_indicator.h"
 
 #define BATTERY_INDICATOR_PADDING 2
-#define BATTERY_INDICATOR_SEGMENT_W 16
+#define BATTERY_INDICATOR_SEGMENT_W 15
 #define BATTERY_INDICATOR_SEGMENT_H 16
 #define BATTERY_INDICATOR_SEGMENT_GAP 1
 #define BATTERY_INDICATOR_MAX_SEGMENTS 9
-#define BATTERY_INDICATOR_LABEL_X 154
+// Figma Battery Indicator component: 2 px outer padding, 143 px scale,
+// 10 px gap, then a 43 px label wrapper with 2 px horizontal padding.
+// These constants describe the inner text frame of that label wrapper.
+#define BATTERY_INDICATOR_LABEL_X 157
 #define BATTERY_INDICATOR_LABEL_Y 2
-#define BATTERY_INDICATOR_LABEL_W 42
+#define BATTERY_INDICATOR_LABEL_W 39
 #define BATTERY_INDICATOR_LABEL_H 16
 #define BATTERY_INDICATOR_ANIMATION_STEP_MS 350
 #define BATTERY_INDICATOR_ANIMATION_HOLD_MS 700
@@ -199,7 +202,7 @@ BatteryIndicator *battery_indicator_create(GRect frame) {
   }
 
   indicator->font = fonts_load_custom_font(
-    resource_get_handle(RESOURCE_ID_FONT_ROBOTO_FLEX_EXTRABOLD_12)
+    resource_get_handle(RESOURCE_ID_FONT_ROBOTO_FLEX_EXTRABOLD_16)
   );
   indicator->percentage = 100;
   indicator->animated_segment_count = BATTERY_INDICATOR_MAX_SEGMENTS;
