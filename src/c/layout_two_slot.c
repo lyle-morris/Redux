@@ -4,7 +4,7 @@
 #include "layout_two_slot.h"
 #include "redux_settings.h"
 
-// Static maximum-width build for horizontal two-slot pixel QA.
+// Static Figma-reference stress build for horizontal two-slot pixel QA.
 
 #define COLOR_TRAY (g_redux_settings.theme_mode ? redux_color(g_redux_settings.watchface_background) : redux_preset_color())
 #define COLOR_DIVIDER (g_redux_settings.theme_mode ? redux_color(g_redux_settings.box_top_border) : GColorBlack)
@@ -23,7 +23,7 @@ static TextLayer *s_time_layer;
 static GBitmap *s_calendar_bitmap;
 static GBitmap *s_weather_bitmap;
 
-static GFont s_font_20;
+static GFont s_font_24;
 static GFont s_font_28;
 static GFont s_font_62;
 static char s_time_buffer[8];
@@ -129,7 +129,7 @@ static TextLayer *create_slot_value_layer(
   return create_text_layer(
     parent,
     GRect(x, TWO_SLOT_LABEL_Y, TWO_SLOT_LABEL_W, TWO_SLOT_LABEL_H),
-    s_font_20,
+    s_font_24,
     GTextAlignmentCenter,
     text
   );
@@ -141,13 +141,14 @@ void two_slot_layout_load(Window *window) {
 
   APP_LOG(
     APP_LOG_LEVEL_INFO,
-    "Two-slot QA canvas: %d x %d",
+    "Horizontal 2 QA canvas: %d x %d (geometry r%d)",
     bounds.size.w,
-    bounds.size.h
+    bounds.size.h,
+    TWO_SLOT_LAYOUT_LOCK_REVISION
   );
 
-  s_font_20 = fonts_load_custom_font(
-    resource_get_handle(RESOURCE_ID_FONT_ROBOTO_FLEX_BOLD_20)
+  s_font_24 = fonts_load_custom_font(
+    resource_get_handle(RESOURCE_ID_FONT_ROBOTO_FLEX_EXTRABOLD_24)
   );
   s_font_28 = fonts_load_custom_font(
     resource_get_handle(RESOURCE_ID_FONT_ROBOTO_FLEX_EXTRABOLD_28)
@@ -253,5 +254,5 @@ void two_slot_layout_unload(Window *window) {
 
   fonts_unload_custom_font(s_font_62);
   fonts_unload_custom_font(s_font_28);
-  fonts_unload_custom_font(s_font_20);
+  fonts_unload_custom_font(s_font_24);
 }
