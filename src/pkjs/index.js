@@ -13,26 +13,26 @@ var DEFAULTS = {
   manualCountry: '',
   language: 'en',
   analyticsEnabled: true,
-  verticalLayout: true,
-  layout: 'vertical_3',
+  verticalLayout: false,
+  layout: 'horizontal_2',
   slot1Metric: 'calendar',
   slot2Metric: 'weather',
-  slot3Metric: 'steps',
+  slot3Metric: 'none',
   themeMode: 'preset',
-  theme: 'blue',
+  theme: 'orange',
   showBatteryIndicator: true,
   watchfaceBackground: '#000000',
   boxBackgroundColor: '#ffffff',
   boxTopBorderColor: '#000000',
   boxBottomBorderColor: '#000000',
-  trayBackgroundColor: '#00aaff',
-  dividerColor: '#ffffff',
-  timeTextColor: '#ffffff',
-  dateTextColor: '#ffffff',
+  trayBackgroundColor: '#ff5500',
+  dividerColor: '#000000',
+  timeTextColor: '#000000',
+  dateTextColor: '#000000',
   slot1TextColor: '#000000',
   slot2TextColor: '#000000',
   slot3TextColor: '#000000',
-  batteryIndicatorColor: '#00aaff'
+  batteryIndicatorColor: '#ff5500'
 };
 
 function first(settings, camel, snake, fallback) {
@@ -109,12 +109,12 @@ function buildPayload(settings) {
   var themes = {orange: 0, blue: 1, purple: 2, yellow: 3, green: 4, red: 5, pink: 6, brown: 7, white: 8, black: 9};
   var languages = {en:0,es:1,fr:2,de:3,pt:4,it:5,nl:6,da:7,nb:8,sv:9,fi:10,is:11,ca:12,eu:13,gl:14,pl:15,cs:16,sk:17,sl:18,hr:19,bs:20,'sr-Latn':21,ro:22,hu:23,et:24,lv:25,lt:26,tr:27,sq:28,mt:29};
   return {
-    0: enumValue(settings.layout, layouts, 2),
+    0: enumValue(settings.layout, layouts, 0),
     1: enumValue(settings.slot1Metric, metrics, 0),
     2: enumValue(settings.slot2Metric, metrics, 1),
-    3: enumValue(settings.slot3Metric, metrics, 7),
+    3: enumValue(settings.slot3Metric, metrics, 9),
     4: settings.themeMode === 'custom' ? 1 : 0,
-    5: enumValue(settings.theme, themes, 1),
+    5: enumValue(settings.theme, themes, 0),
     6: settings.showBatteryIndicator ? 1 : 0,
     7: colorValue(settings.watchfaceBackground, DEFAULTS.watchfaceBackground),
     8: colorValue(settings.boxBackgroundColor, DEFAULTS.boxBackgroundColor),
