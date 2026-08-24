@@ -14,12 +14,12 @@ typedef enum {
 enum { PersistKeyLayout = 100 };
 
 static Window *s_main_window;
-static ReduxLayout s_layout = ReduxLayoutVerticalThree;
+static ReduxLayout s_layout = ReduxLayoutHorizontalTwo;
 static bool s_layout_loaded;
 
 static ReduxLayout valid_layout(int32_t value) {
   if(value < ReduxLayoutHorizontalTwo || value > ReduxLayoutVerticalThree) {
-    return ReduxLayoutVerticalThree;
+    return ReduxLayoutHorizontalTwo;
   }
   return (ReduxLayout)value;
 }
