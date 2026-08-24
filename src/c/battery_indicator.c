@@ -13,8 +13,10 @@
 // let the text frame begin at the end of the scale. Right alignment keeps
 // the visible label anchored to the intended 2 px right padding while
 // allowing values such as "100%" to render without clipping.
+// Pebble's font baseline sits about 2 px lower than Figma's browser text,
+// so the label frame is shifted up 2 px for visual alignment.
 #define BATTERY_INDICATOR_LABEL_X 145
-#define BATTERY_INDICATOR_LABEL_Y 2
+#define BATTERY_INDICATOR_LABEL_Y 0
 #define BATTERY_INDICATOR_LABEL_W 53
 #define BATTERY_INDICATOR_LABEL_H 16
 #define BATTERY_INDICATOR_ANIMATION_STEP_MS 350
