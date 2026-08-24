@@ -173,13 +173,13 @@ void horizontal_layout_load(Window *window) {
   );
 
   s_calendar_bitmap = gbitmap_create_with_resource(
-    RESOURCE_ID_IMAGE_CALENDAR_52X44
+    RESOURCE_ID_IMAGE_CALENDAR_54X46
   );
   s_steps_bitmap = gbitmap_create_with_resource(
-    RESOURCE_ID_IMAGE_STEPS_52X44
+    RESOURCE_ID_IMAGE_STEPS_54X46
   );
   s_battery_bitmap = gbitmap_create_with_resource(
-    RESOURCE_ID_IMAGE_BATTERY_100_52X44
+    RESOURCE_ID_IMAGE_BATTERY_100_54X46
   );
 
   s_background_layer = layer_create(
