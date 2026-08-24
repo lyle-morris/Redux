@@ -5,7 +5,9 @@
 // Figma source: REDUX - PEBBLE, Redux 2.1.0 horizontal three-slot layout.
 // All measurements are native Pebble Time 2 pixels on the 200 x 228 Emery canvas.
 //
-// GEOMETRY RESET: revision 2, pending emulator/Figma overlay approval.
+// GEOMETRY LOCKED: revision 2, approved 2026-08-24.
+// Any coordinate, dimension, font size, or icon-canvas change requires a lock
+// revision increment and a new emulator/Figma overlay approval.
 
 #define HORIZONTAL_LAYOUT_LOCK_REVISION 2
 
