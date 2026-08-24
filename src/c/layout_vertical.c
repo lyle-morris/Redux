@@ -4,8 +4,8 @@
 #include "redux_settings.h"
 
 // Revision-2 geometry build for vertical three-slot pixel QA.
-// The 88 px time resource is enabled first; the remaining revised type sizes
-// stay on the previously successful resource set until the build bisect is clean.
+// The 88 px time resource and 20 px slot-label resource are enabled first;
+// calendar-day/date sizing remains on the proven 18 px resource for isolation.
 
 #define COLOR_TRAY (g_redux_settings.theme_mode ? redux_color(g_redux_settings.tray_background) : redux_preset_color())
 #define COLOR_DIVIDER (g_redux_settings.theme_mode ? redux_color(g_redux_settings.divider) : GColorWhite)
@@ -31,6 +31,7 @@ static GBitmap *s_steps_bitmap;
 static GBitmap *s_battery_bitmap;
 
 static GFont s_font_18;
+static GFont s_font_label;
 static GFont s_font_88;
 static char s_hour_buffer[4];
 static char s_minute_buffer[4];
@@ -166,7 +167,7 @@ static TextLayer *create_tray_value_layer(
   return create_text_layer(
     parent,
     GRect(VERTICAL_LABEL_X, y, VERTICAL_LABEL_W, VERTICAL_LABEL_H),
-    s_font_18,
+    s_font_label,
     GTextAlignmentCenter,
     text
   );
@@ -186,6 +187,9 @@ void vertical_layout_load(Window *window) {
 
   s_font_18 = fonts_load_custom_font(
     resource_get_handle(RESOURCE_ID_FONT_ROBOTO_FLEX_EXTRABOLD_18)
+  );
+  s_font_label = fonts_load_custom_font(
+    resource_get_handle(RESOURCE_ID_FONT_ROBOTO_FLEX_BOLD_20)
   );
   s_font_88 = fonts_load_custom_font(
     resource_get_handle(RESOURCE_ID_FONT_ROBOTO_FLEX_EXTRABOLD_88)
@@ -307,5 +311,6 @@ void vertical_layout_unload(Window *window) {
   gbitmap_destroy(s_calendar_bitmap);
 
   fonts_unload_custom_font(s_font_88);
+  fonts_unload_custom_font(s_font_label);
   fonts_unload_custom_font(s_font_18);
 }
