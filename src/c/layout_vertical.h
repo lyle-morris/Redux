@@ -8,8 +8,13 @@
 // GEOMETRY RESET: revision 2, 2026-08-24.
 // Revision 1 was approved against the previous wireframe and is now obsolete.
 // Revision 2 remains pending emulator/Figma overlay approval.
+//
+// TEMP QA: force the existing vertical renderer into the derived two-slot
+// state. This deliberately avoids adding a new C/H compilation unit while
+// isolating CloudPebble's "list index out of range" failure.
 
 #define VERTICAL_LAYOUT_LOCK_REVISION 2
+#define VERTICAL_QA_TWO_SLOT 1
 
 #define VERTICAL_CANVAS_W 200
 #define VERTICAL_CANVAS_H 228
@@ -51,22 +56,27 @@
 #define VERTICAL_CALENDAR_DAY_W 32
 #define VERTICAL_CALENDAR_DAY_H 21
 
-// 3-slot tray: 8 px top/bottom, three 66 px groups, and 7 px gaps.
+// Two 66 px groups with the existing 7 px gap consume 139 px. Centering the
+// stack in the 228 px tray leaves 44.5 px above/below, so native integer
+// coordinates use 45 px top and 44 px bottom.
 #define VERTICAL_SLOT_GROUP_H 66
 #define VERTICAL_SLOT_GAP 7
-#define VERTICAL_SLOT_1_ICON_Y 8
-#define VERTICAL_SLOT_2_ICON_Y 81
-#define VERTICAL_SLOT_3_ICON_Y 154
+#define VERTICAL_SLOT_1_ICON_Y 45
+#define VERTICAL_SLOT_2_ICON_Y 118
+
+// Slot 3 remains instantiated by the proven renderer during this diagnostic
+// build, but is positioned beyond the 228 px canvas so it is not visible.
+#define VERTICAL_SLOT_3_ICON_Y 300
 
 #define VERTICAL_LABEL_X 10
 #define VERTICAL_LABEL_W 54
 #define VERTICAL_LABEL_H 20
-#define VERTICAL_SLOT_1_FIGMA_LABEL_Y 54
-#define VERTICAL_SLOT_2_FIGMA_LABEL_Y 127
-#define VERTICAL_SLOT_3_FIGMA_LABEL_Y 200
-#define VERTICAL_SLOT_1_LABEL_Y 52
-#define VERTICAL_SLOT_2_LABEL_Y 125
-#define VERTICAL_SLOT_3_LABEL_Y 198
+#define VERTICAL_SLOT_1_FIGMA_LABEL_Y 91
+#define VERTICAL_SLOT_2_FIGMA_LABEL_Y 164
+#define VERTICAL_SLOT_3_FIGMA_LABEL_Y 346
+#define VERTICAL_SLOT_1_LABEL_Y 89
+#define VERTICAL_SLOT_2_LABEL_Y 162
+#define VERTICAL_SLOT_3_LABEL_Y 346
 
 // The 120 px time panel uses 8 px horizontal padding in Figma.
 #define VERTICAL_TIME_CONTENT_X 90
