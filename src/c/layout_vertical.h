@@ -47,13 +47,16 @@
 #define VERTICAL_ICON_BITMAP_W 54
 #define VERTICAL_ICON_BITMAP_H 46
 
-#define VERTICAL_FIGMA_CALENDAR_DAY_X 11
+// Figma 54x46 calendar day box: 15 px left/right, 14 px top,
+// 11 px bottom => 24 x 21 px. Pebble's generated 21 px font needs
+// a 3 px upward frame compensation to match the visible Figma baseline.
+#define VERTICAL_FIGMA_CALENDAR_DAY_X 15
 #define VERTICAL_FIGMA_CALENDAR_DAY_Y 14
-#define VERTICAL_FIGMA_CALENDAR_DAY_W 32
+#define VERTICAL_FIGMA_CALENDAR_DAY_W 24
 #define VERTICAL_FIGMA_CALENDAR_DAY_H 21
-#define VERTICAL_CALENDAR_DAY_X 11
+#define VERTICAL_CALENDAR_DAY_X 15
 #define VERTICAL_CALENDAR_DAY_Y 11
-#define VERTICAL_CALENDAR_DAY_W 32
+#define VERTICAL_CALENDAR_DAY_W 24
 #define VERTICAL_CALENDAR_DAY_H 21
 
 // Two 66 px groups with the existing 7 px gap consume 139 px. Centering the
