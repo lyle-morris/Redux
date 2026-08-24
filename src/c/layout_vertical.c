@@ -5,7 +5,7 @@
 
 // Revision-2 geometry build for vertical three-slot pixel QA.
 // The 88 px time resource and 20 px slot-label resource are enabled first;
-// calendar-day/date sizing remains on the proven 18 px resource for isolation.
+// date sizing remains on the proven 18 px resource for isolation.
 
 #define COLOR_TRAY (g_redux_settings.theme_mode ? redux_color(g_redux_settings.tray_background) : redux_preset_color())
 #define COLOR_DIVIDER (g_redux_settings.theme_mode ? redux_color(g_redux_settings.divider) : redux_preset_divider_color())
@@ -33,6 +33,7 @@ static GBitmap *s_steps_bitmap;
 static GBitmap *s_battery_bitmap;
 
 static GFont s_font_18;
+static GFont s_font_21;
 static GFont s_font_label;
 static GFont s_font_88;
 static char s_hour_buffer[4];
@@ -78,7 +79,7 @@ static void calendar_icon_update_proc(Layer *layer, GContext *ctx) {
   graphics_draw_text(
     ctx,
     "30",
-    s_font_18,
+    s_font_21,
     GRect(
       VERTICAL_CALENDAR_DAY_X,
       VERTICAL_CALENDAR_DAY_Y,
@@ -193,6 +194,9 @@ void vertical_layout_load(Window *window) {
 
   s_font_18 = fonts_load_custom_font(
     resource_get_handle(RESOURCE_ID_FONT_ROBOTO_FLEX_EXTRABOLD_18)
+  );
+  s_font_21 = fonts_load_custom_font(
+    resource_get_handle(RESOURCE_ID_FONT_ROBOTO_FLEX_EXTRABOLD_21)
   );
   s_font_label = fonts_load_custom_font(
     resource_get_handle(RESOURCE_ID_FONT_ROBOTO_FLEX_BOLD_20)
@@ -327,5 +331,6 @@ void vertical_layout_unload(Window *window) {
 
   fonts_unload_custom_font(s_font_88);
   fonts_unload_custom_font(s_font_label);
+  fonts_unload_custom_font(s_font_21);
   fonts_unload_custom_font(s_font_18);
 }
