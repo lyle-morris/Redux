@@ -235,7 +235,7 @@ void vertical_layout_load(Window *window) {
   s_steps_value_layer = create_tray_value_layer(
     root_layer,
     VERTICAL_SLOT_2_LABEL_Y,
-    "99999"
+    "99.9K"
   );
 
   s_battery_icon_layer = create_icon_layer(
