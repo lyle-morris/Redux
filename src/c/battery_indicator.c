@@ -8,11 +8,14 @@
 #define BATTERY_INDICATOR_SEGMENT_GAP 1
 #define BATTERY_INDICATOR_MAX_SEGMENTS 9
 // Figma Battery Indicator component: 2 px outer padding, 143 px scale,
-// 10 px gap, then a 43 px label wrapper with 2 px horizontal padding.
-// These constants describe the inner text frame of that label wrapper.
-#define BATTERY_INDICATOR_LABEL_X 157
+// then a right-aligned 16 px percentage label. Pebble's generated font
+// metrics are slightly wider than the browser metrics used by Figma, so
+// let the text frame begin at the end of the scale. Right alignment keeps
+// the visible label anchored to the intended 2 px right padding while
+// allowing values such as "100%" to render without clipping.
+#define BATTERY_INDICATOR_LABEL_X 145
 #define BATTERY_INDICATOR_LABEL_Y 2
-#define BATTERY_INDICATOR_LABEL_W 39
+#define BATTERY_INDICATOR_LABEL_W 53
 #define BATTERY_INDICATOR_LABEL_H 16
 #define BATTERY_INDICATOR_ANIMATION_STEP_MS 350
 #define BATTERY_INDICATOR_ANIMATION_HOLD_MS 700
