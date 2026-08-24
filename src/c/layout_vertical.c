@@ -10,6 +10,8 @@
 #define COLOR_DIVIDER (g_redux_settings.theme_mode ? redux_color(g_redux_settings.divider) : GColorWhite)
 #define COLOR_TIME_PANEL (g_redux_settings.theme_mode ? redux_color(g_redux_settings.watchface_background) : GColorBlack)
 #define COLOR_TEXT (g_redux_settings.theme_mode ? redux_color(g_redux_settings.slot_text[0]) : redux_contrast_color(COLOR_TRAY))
+#define COLOR_TIME_TEXT (g_redux_settings.theme_mode ? redux_color(g_redux_settings.time_text) : GColorWhite)
+#define COLOR_DATE_TEXT (g_redux_settings.theme_mode ? redux_color(g_redux_settings.date_text) : GColorWhite)
 
 static Layer *s_background_layer;
 
@@ -232,7 +234,7 @@ void vertical_layout_load(Window *window) {
     GTextAlignmentRight,
     "23"
   );
-  text_layer_set_text_color(s_hour_layer, g_redux_settings.theme_mode ? redux_color(g_redux_settings.time_text) : GColorBlack);
+  text_layer_set_text_color(s_hour_layer, COLOR_TIME_TEXT);
 
   s_minute_layer = create_text_layer(
     root_layer,
@@ -246,7 +248,7 @@ void vertical_layout_load(Window *window) {
     GTextAlignmentRight,
     "59"
   );
-  text_layer_set_text_color(s_minute_layer, g_redux_settings.theme_mode ? redux_color(g_redux_settings.time_text) : GColorBlack);
+  text_layer_set_text_color(s_minute_layer, COLOR_TIME_TEXT);
 
   s_date_layer = create_text_layer(
     root_layer,
@@ -255,7 +257,7 @@ void vertical_layout_load(Window *window) {
     GTextAlignmentCenter,
     "Sept 30 Mer"
   );
-  text_layer_set_text_color(s_date_layer, g_redux_settings.theme_mode ? redux_color(g_redux_settings.date_text) : GColorBlack);
+  text_layer_set_text_color(s_date_layer, COLOR_DATE_TEXT);
   time_t now = time(NULL); update_time(localtime(&now)); tick_timer_service_subscribe(MINUTE_UNIT, tick_handler);
 }
 
