@@ -7,9 +7,14 @@
 // Static Figma-reference stress build for horizontal three-slot pixel QA.
 
 #define COLOR_TRAY (g_redux_settings.theme_mode ? redux_color(g_redux_settings.watchface_background) : redux_preset_color())
-#define COLOR_DIVIDER (g_redux_settings.theme_mode ? redux_color(g_redux_settings.box_top_border) : GColorBlack)
-#define COLOR_TIME_PANEL (g_redux_settings.theme_mode ? redux_color(g_redux_settings.box_background) : GColorWhite)
-#define COLOR_TEXT (g_redux_settings.theme_mode ? redux_color(g_redux_settings.slot_text[0]) : redux_contrast_color(COLOR_TRAY))
+#define COLOR_TOP_DIVIDER (g_redux_settings.theme_mode ? redux_color(g_redux_settings.box_top_border) : redux_preset_divider_color())
+#define COLOR_BOTTOM_DIVIDER (g_redux_settings.theme_mode ? redux_color(g_redux_settings.box_bottom_border) : redux_preset_divider_color())
+#define COLOR_TIME_PANEL (g_redux_settings.theme_mode ? redux_color(g_redux_settings.box_background) : redux_preset_time_panel_color())
+#define COLOR_SLOT_1_TEXT (g_redux_settings.theme_mode ? redux_color(g_redux_settings.slot_text[0]) : redux_preset_slot_text_color())
+#define COLOR_SLOT_2_TEXT (g_redux_settings.theme_mode ? redux_color(g_redux_settings.slot_text[1]) : redux_preset_slot_text_color())
+#define COLOR_SLOT_3_TEXT (g_redux_settings.theme_mode ? redux_color(g_redux_settings.slot_text[2]) : redux_preset_slot_text_color())
+#define COLOR_TIME_TEXT (g_redux_settings.theme_mode ? redux_color(g_redux_settings.time_text) : redux_preset_time_text_color())
+#define COLOR_BATTERY (g_redux_settings.theme_mode ? redux_color(g_redux_settings.battery_indicator) : redux_preset_battery_color())
 
 static Layer *s_background_layer;
 static Layer *s_calendar_icon_layer;
@@ -47,7 +52,7 @@ static void background_update_proc(Layer *layer, GContext *ctx) {
     GCornerNone
   );
 
-  graphics_context_set_fill_color(ctx, COLOR_DIVIDER);
+  graphics_context_set_fill_color(ctx, COLOR_TOP_DIVIDER);
   graphics_fill_rect(
     ctx,
     GRect(
@@ -59,6 +64,8 @@ static void background_update_proc(Layer *layer, GContext *ctx) {
     0,
     GCornerNone
   );
+
+  graphics_context_set_fill_color(ctx, COLOR_BOTTOM_DIVIDER);
   graphics_fill_rect(
     ctx,
     GRect(
@@ -89,7 +96,7 @@ static void calendar_icon_update_proc(Layer *layer, GContext *ctx) {
   graphics_context_set_compositing_mode(ctx, GCompOpSet);
   graphics_draw_bitmap_in_rect(ctx, s_calendar_bitmap, layer_get_bounds(layer));
 
-  graphics_context_set_text_color(ctx, COLOR_TEXT);
+  graphics_context_set_text_color(ctx, COLOR_SLOT_1_TEXT);
   graphics_draw_text(
     ctx,
     "30",
@@ -128,11 +135,12 @@ static TextLayer *create_text_layer(
   GRect frame,
   GFont font,
   GTextAlignment alignment,
-  const char *text
+  const char *text,
+  GColor color
 ) {
   TextLayer *layer = text_layer_create(frame);
   text_layer_set_background_color(layer, GColorClear);
-  text_layer_set_text_color(layer, COLOR_TEXT);
+  text_layer_set_text_color(layer, color);
   text_layer_set_font(layer, font);
   text_layer_set_text_alignment(layer, alignment);
   text_layer_set_overflow_mode(layer, GTextOverflowModeFill);
@@ -144,20 +152,23 @@ static TextLayer *create_text_layer(
 static TextLayer *create_slot_value_layer(
   Layer *parent,
   int16_t x,
-  const char *text
+  const char *text,
+  GColor color
 ) {
   return create_text_layer(
     parent,
     GRect(x, HORIZONTAL_LABEL_Y, HORIZONTAL_LABEL_W, HORIZONTAL_LABEL_H),
     s_font_label,
     GTextAlignmentCenter,
-    text
+    text,
+    color
   );
 }
 
 void horizontal_layout_load(Window *window) {
   Layer *root_layer = window_get_root_layer(window);
   GRect bounds = layer_get_bounds(root_layer);
+  bool reverse_icons = !g_redux_settings.theme_mode && redux_preset_uses_reverse_icons();
 
   APP_LOG(
     APP_LOG_LEVEL_INFO,
@@ -177,13 +188,19 @@ void horizontal_layout_load(Window *window) {
   );
 
   s_calendar_bitmap = gbitmap_create_with_resource(
-    RESOURCE_ID_IMAGE_CALENDAR_54X46
+    reverse_icons
+      ? RESOURCE_ID_IMAGE_REVERSE_CALENDAR_54X46
+      : RESOURCE_ID_IMAGE_CALENDAR_54X46
   );
   s_steps_bitmap = gbitmap_create_with_resource(
-    RESOURCE_ID_IMAGE_STEPS_54X46
+    reverse_icons
+      ? RESOURCE_ID_IMAGE_REVERSE_STEPS_54X46
+      : RESOURCE_ID_IMAGE_STEPS_54X46
   );
   s_battery_bitmap = gbitmap_create_with_resource(
-    RESOURCE_ID_IMAGE_BATTERY_100_54X46
+    reverse_icons
+      ? RESOURCE_ID_IMAGE_REVERSE_BATTERY_100_54X46
+      : RESOURCE_ID_IMAGE_BATTERY_100_54X46
   );
 
   s_background_layer = layer_create(
@@ -205,7 +222,8 @@ void horizontal_layout_load(Window *window) {
   s_calendar_value_layer = create_slot_value_layer(
     root_layer,
     HORIZONTAL_SLOT_1_X,
-    "Mer"
+    "Mer",
+    COLOR_SLOT_1_TEXT
   );
 
   s_steps_icon_layer = create_icon_layer(
@@ -217,7 +235,8 @@ void horizontal_layout_load(Window *window) {
   s_steps_value_layer = create_slot_value_layer(
     root_layer,
     HORIZONTAL_SLOT_2_X,
-    "99.9K"
+    "99.9K",
+    COLOR_SLOT_2_TEXT
   );
 
   s_battery_icon_layer = create_icon_layer(
@@ -229,7 +248,8 @@ void horizontal_layout_load(Window *window) {
   s_battery_value_layer = create_slot_value_layer(
     root_layer,
     HORIZONTAL_SLOT_3_X,
-    "100%"
+    "100%",
+    COLOR_SLOT_3_TEXT
   );
 
   s_time_layer = create_text_layer(
@@ -242,9 +262,9 @@ void horizontal_layout_load(Window *window) {
     ),
     s_font_62,
     GTextAlignmentCenter,
-    "23:59"
+    "23:59",
+    COLOR_TIME_TEXT
   );
-  text_layer_set_text_color(s_time_layer, g_redux_settings.theme_mode ? redux_color(g_redux_settings.time_text) : GColorBlack);
   time_t now = time(NULL); update_time(localtime(&now)); tick_timer_service_subscribe(MINUTE_UNIT, tick_handler);
 
   s_battery_indicator = g_redux_settings.show_battery_indicator ? battery_indicator_create(
@@ -256,7 +276,7 @@ void horizontal_layout_load(Window *window) {
     )
   ) : NULL;
   if (s_battery_indicator) {
-    battery_indicator_set_normal_color(s_battery_indicator, redux_color(g_redux_settings.battery_indicator));
+    battery_indicator_set_normal_color(s_battery_indicator, COLOR_BATTERY);
     layer_add_child(
       root_layer,
       battery_indicator_get_layer(s_battery_indicator)
