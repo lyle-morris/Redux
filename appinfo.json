@@ -90,18 +90,18 @@
       },
       {
         "type": "png",
-        "name": "IMAGE_CALENDAR_52X44",
-        "file": "images/icons/52x44/calendar/white_calendar_52x44.png"
+        "name": "IMAGE_CALENDAR_54X46",
+        "file": "images/icons/54x46/calendar/white_calendar_54x46.png"
       },
       {
         "type": "png",
-        "name": "IMAGE_BATTERY_100_52X44",
-        "file": "images/icons/52x44/battery/white_battery_100_52x44.png"
+        "name": "IMAGE_BATTERY_100_54X46",
+        "file": "images/icons/54x46/battery/white_battery_100_54x46.png"
       },
       {
         "type": "png",
-        "name": "IMAGE_STEPS_52X44",
-        "file": "images/icons/52x44/activity/white_steps_52x44.png"
+        "name": "IMAGE_STEPS_54X46",
+        "file": "images/icons/54x46/steps/white_steps_54x46.png"
       },
       {
         "type": "png",
