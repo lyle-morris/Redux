@@ -1,16 +1,17 @@
 var CONFIG_URL = 'https://lyle-morris.github.io/Hosting/apps/redux/qa/app-config.html';
-var CONFIG_VERSION = 'redux-qa-v3';
-var SETTINGS_KEY = 'redux_qa_settings_v1';
+var CONFIG_VERSION = 'redux-qa-v4';
+var SETTINGS_KEY = 'redux_qa_settings_v2';
 
 var DEFAULTS = {
   showLeadingZero: true,
   hour24: false,
   celsius: false,
   showBluetooth: false,
+  weekdayInsteadOfMonth: false,
   manualLocation: false,
   manualPostalCode: '',
   manualCity: '',
-  manualCountry: '',
+  manualCountry: 'US',
   language: 'en',
   analyticsEnabled: true,
   verticalLayout: false,
@@ -45,25 +46,31 @@ function normalize(raw) {
   raw = raw || {};
   var vertical = !!first(raw, 'verticalLayout', 'vertical_layout', DEFAULTS.verticalLayout);
   var slot3 = first(raw, 'slot3Metric', 'slot_3_metric', DEFAULTS.slot3Metric);
-  var layout = first(raw, 'layout', 'layout', vertical ? 'vertical_3' : (slot3 === 'none' ? 'horizontal_2' : 'horizontal_3'));
-  if(layout !== 'vertical_3' && layout !== 'horizontal_3' && layout !== 'horizontal_2') layout = DEFAULTS.layout;
+  var inferredLayout = vertical
+    ? (slot3 === 'none' ? 'vertical_2' : 'vertical_3')
+    : (slot3 === 'none' ? 'horizontal_2' : 'horizontal_3');
+  var layout = first(raw, 'layout', 'layout', inferredLayout);
+  if(layout !== 'vertical_2' && layout !== 'vertical_3' && layout !== 'horizontal_3' && layout !== 'horizontal_2') {
+    layout = DEFAULTS.layout;
+  }
 
   return {
     showLeadingZero: !!first(raw, 'showLeadingZero', 'show_leading_zero', DEFAULTS.showLeadingZero),
     hour24: !!first(raw, 'hour24', 'use_24_hour', DEFAULTS.hour24),
     celsius: !!first(raw, 'celsius', 'use_celsius', DEFAULTS.celsius),
     showBluetooth: !!first(raw, 'showBluetooth', 'show_bluetooth', DEFAULTS.showBluetooth),
+    weekdayInsteadOfMonth: !!first(raw, 'weekdayInsteadOfMonth', 'weekday_instead_of_month', DEFAULTS.weekdayInsteadOfMonth),
     manualLocation: !!first(raw, 'manualLocation', 'manual_location', DEFAULTS.manualLocation),
     manualPostalCode: String(first(raw, 'manualPostalCode', 'manual_postal_code', DEFAULTS.manualPostalCode) || ''),
     manualCity: String(first(raw, 'manualCity', 'manual_city', DEFAULTS.manualCity) || ''),
-    manualCountry: String(first(raw, 'manualCountry', 'manual_country', DEFAULTS.manualCountry) || ''),
+    manualCountry: String(first(raw, 'manualCountry', 'manual_country', DEFAULTS.manualCountry) || DEFAULTS.manualCountry),
     language: first(raw, 'language', 'language', DEFAULTS.language),
     analyticsEnabled: !!first(raw, 'analyticsEnabled', 'analytics_enabled', DEFAULTS.analyticsEnabled),
-    verticalLayout: layout === 'vertical_3',
+    verticalLayout: layout === 'vertical_2' || layout === 'vertical_3',
     layout: layout,
     slot1Metric: first(raw, 'slot1Metric', 'slot_1_metric', DEFAULTS.slot1Metric),
     slot2Metric: first(raw, 'slot2Metric', 'slot_2_metric', DEFAULTS.slot2Metric),
-    slot3Metric: slot3,
+    slot3Metric: layout === 'horizontal_2' || layout === 'vertical_2' ? 'none' : slot3,
     themeMode: first(raw, 'themeMode', 'theme_mode', DEFAULTS.themeMode),
     theme: first(raw, 'theme', 'theme', DEFAULTS.theme),
     showBatteryIndicator: !!first(raw, 'showBatteryIndicator', 'show_battery_indicator', DEFAULTS.showBatteryIndicator),
@@ -104,7 +111,7 @@ function colorValue(value, fallback) {
 
 function buildPayload(settings) {
   settings = normalize(settings);
-  var layouts = {horizontal_2: 0, horizontal_3: 1, vertical_3: 2};
+  var layouts = {horizontal_2: 0, horizontal_3: 1, vertical_3: 2, vertical_2: 3};
   var metrics = {calendar: 0, weather: 1, battery: 2, calories: 3, activity: 4, sleep: 5, heart: 6, steps: 7, distance: 8, none: 9};
   var themes = {orange: 0, blue: 1, purple: 2, yellow: 3, green: 4, red: 5, pink: 6, brown: 7, white: 8, black: 9};
   var languages = {en:0,es:1,fr:2,de:3,pt:4,it:5,nl:6,da:7,nb:8,sv:9,fi:10,is:11,ca:12,eu:13,gl:14,pl:15,cs:16,sk:17,sl:18,hr:19,bs:20,'sr-Latn':21,ro:22,hu:23,et:24,lv:25,lt:26,tr:27,sq:28,mt:29};
