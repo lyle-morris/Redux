@@ -4,7 +4,8 @@
 #include "redux_settings.h"
 
 // Revision-2 geometry build for vertical three-slot pixel QA.
-// Exact 17/20/21/88 px resources are deferred until the build bisect is clean.
+// The 88 px time resource is enabled first; the remaining revised type sizes
+// stay on the previously successful resource set until the build bisect is clean.
 
 #define COLOR_TRAY (g_redux_settings.theme_mode ? redux_color(g_redux_settings.tray_background) : redux_preset_color())
 #define COLOR_DIVIDER (g_redux_settings.theme_mode ? redux_color(g_redux_settings.divider) : GColorWhite)
@@ -30,7 +31,7 @@ static GBitmap *s_steps_bitmap;
 static GBitmap *s_battery_bitmap;
 
 static GFont s_font_18;
-static GFont s_font_93;
+static GFont s_font_88;
 static char s_hour_buffer[4];
 static char s_minute_buffer[4];
 static char s_date_buffer[24];
@@ -183,12 +184,11 @@ void vertical_layout_load(Window *window) {
     VERTICAL_LAYOUT_LOCK_REVISION
   );
 
-  // Keep the previously successful resource set during build isolation.
   s_font_18 = fonts_load_custom_font(
     resource_get_handle(RESOURCE_ID_FONT_ROBOTO_FLEX_EXTRABOLD_18)
   );
-  s_font_93 = fonts_load_custom_font(
-    resource_get_handle(RESOURCE_ID_FONT_ROBOTO_FLEX_EXTRABOLD_93)
+  s_font_88 = fonts_load_custom_font(
+    resource_get_handle(RESOURCE_ID_FONT_ROBOTO_FLEX_EXTRABOLD_88)
   );
 
   s_calendar_bitmap = gbitmap_create_with_resource(
@@ -253,7 +253,7 @@ void vertical_layout_load(Window *window) {
       VERTICAL_TIME_CONTENT_W,
       VERTICAL_TIME_LAYER_H
     ),
-    s_font_93,
+    s_font_88,
     GTextAlignmentRight,
     "23"
   );
@@ -267,7 +267,7 @@ void vertical_layout_load(Window *window) {
       VERTICAL_TIME_CONTENT_W,
       VERTICAL_TIME_LAYER_H
     ),
-    s_font_93,
+    s_font_88,
     GTextAlignmentRight,
     "59"
   );
@@ -306,6 +306,6 @@ void vertical_layout_unload(Window *window) {
   gbitmap_destroy(s_steps_bitmap);
   gbitmap_destroy(s_calendar_bitmap);
 
-  fonts_unload_custom_font(s_font_93);
+  fonts_unload_custom_font(s_font_88);
   fonts_unload_custom_font(s_font_18);
 }
