@@ -50,10 +50,10 @@
 #define HORIZONTAL_STEPS_ICON_Y 20
 #define HORIZONTAL_BATTERY_ICON_Y 20
 
-// Keep the proven 18 px resource for this build-isolation step.
+// Revision-2 info labels use the proven 20 px custom font resource.
 #define HORIZONTAL_LABEL_Y 68
 #define HORIZONTAL_LABEL_W 54
-#define HORIZONTAL_LABEL_H 18
+#define HORIZONTAL_LABEL_H 20
 
 // Calendar day typography is still on the proven 18 px resource for this step.
 #define HORIZONTAL_CALENDAR_DAY_X 11
@@ -71,7 +71,7 @@
 #define HORIZONTAL_TIME_W 200
 #define HORIZONTAL_TIME_H 64
 
-#define HORIZONTAL_LABEL_FONT_SIZE 18
+#define HORIZONTAL_LABEL_FONT_SIZE 20
 #define HORIZONTAL_TIME_FONT_SIZE 62
 
 void horizontal_layout_load(Window *window);
