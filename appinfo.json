@@ -66,6 +66,12 @@
       },
       {
         "type": "font",
+        "name": "FONT_ROBOTO_FLEX_EXTRABOLD_16",
+        "file": "fonts/RobotoFlex-ExtraBold-18.ttf",
+        "characterRegex": "[0-9%]"
+      },
+      {
+        "type": "font",
         "name": "FONT_ROBOTO_FLEX_EXTRABOLD_62",
         "file": "fonts/RobotoFlex-ExtraBold-62.ttf",
         "characterRegex": "[0-9:]"
