@@ -32,15 +32,15 @@
 #define VERTICAL_TIME_PANEL_W 120
 #define VERTICAL_TIME_PANEL_H 228
 
-// Figma slot container is 54 x 46. Existing production artwork remains
-// 52 x 44 and is centered at +1/+1 so it is never scaled.
+// Revision-2 artwork is exported directly on the 54 x 46 Figma canvas.
+// Draw it 1:1; no scaling or legacy 52 x 44 inset compensation.
 #define VERTICAL_ICON_X 10
 #define VERTICAL_ICON_W 54
 #define VERTICAL_ICON_H 46
-#define VERTICAL_ICON_BITMAP_X 1
-#define VERTICAL_ICON_BITMAP_Y 1
-#define VERTICAL_ICON_BITMAP_W 52
-#define VERTICAL_ICON_BITMAP_H 44
+#define VERTICAL_ICON_BITMAP_X 0
+#define VERTICAL_ICON_BITMAP_Y 0
+#define VERTICAL_ICON_BITMAP_W 54
+#define VERTICAL_ICON_BITMAP_H 46
 
 #define VERTICAL_FIGMA_CALENDAR_DAY_X 11
 #define VERTICAL_FIGMA_CALENDAR_DAY_Y 14
@@ -72,16 +72,14 @@
 #define VERTICAL_TIME_CONTENT_X 90
 #define VERTICAL_TIME_CONTENT_W 104
 
-// Final typography target is 88 px / 80 px line-height. This build still uses
-// the known-good 93 px resource so resource generation remains unchanged.
+// Final typography target is 88 px / 80 px line-height.
 #define VERTICAL_FIGMA_HOUR_Y 32
 #define VERTICAL_FIGMA_MINUTE_Y 107
 #define VERTICAL_FIGMA_TIME_VISIBLE_H 63
 #define VERTICAL_FIGMA_TIME_LINE_H 80
 #define VERTICAL_TIME_LINE_GAP 12
 
-// Initial renderer frames for revision-2 overlay QA with the existing 93 px
-// resource. These will be retuned when the exact 88 px resource is restored.
+// Initial renderer frames for revision-2 overlay QA using the 88 px resource.
 #define VERTICAL_TIME_LAYER_H 90
 #define VERTICAL_TIME_HOUR_Y 8
 #define VERTICAL_TIME_MINUTE_Y 83
