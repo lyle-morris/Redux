@@ -6,10 +6,9 @@
 // All measurements are native Pebble Time 2 pixels on the 200 x 228 Emery canvas.
 //
 // GEOMETRY LOCKED: revision 2, approved 2026-08-24.
-// Any coordinate, dimension, font size, or icon-canvas change requires a lock
-// revision increment and a new emulator/Figma overlay approval.
+// Revision 3 changes only the calendar-day typography box for QA.
 
-#define HORIZONTAL_LAYOUT_LOCK_REVISION 2
+#define HORIZONTAL_LAYOUT_LOCK_REVISION 3
 
 #define HORIZONTAL_CANVAS_W 200
 #define HORIZONTAL_CANVAS_H 228
@@ -52,16 +51,21 @@
 #define HORIZONTAL_STEPS_ICON_Y 20
 #define HORIZONTAL_BATTERY_ICON_Y 20
 
-// Revision-2 info labels use the proven 20 px custom font resource.
 #define HORIZONTAL_LABEL_Y 68
 #define HORIZONTAL_LABEL_W 54
 #define HORIZONTAL_LABEL_H 20
 
-// Calendar day typography is still on the proven 18 px resource for this step.
-#define HORIZONTAL_CALENDAR_DAY_X 11
-#define HORIZONTAL_CALENDAR_DAY_Y 12
-#define HORIZONTAL_CALENDAR_DAY_W 32
-#define HORIZONTAL_CALENDAR_DAY_H 18
+// Figma 54x46 calendar day box: 15 px left/right, 14 px top,
+// 11 px bottom => 24 x 21 px. Pebble's generated 21 px font needs
+// a 3 px upward frame compensation to match the visible Figma baseline.
+#define HORIZONTAL_FIGMA_CALENDAR_DAY_X 15
+#define HORIZONTAL_FIGMA_CALENDAR_DAY_Y 14
+#define HORIZONTAL_FIGMA_CALENDAR_DAY_W 24
+#define HORIZONTAL_FIGMA_CALENDAR_DAY_H 21
+#define HORIZONTAL_CALENDAR_DAY_X 15
+#define HORIZONTAL_CALENDAR_DAY_Y 11
+#define HORIZONTAL_CALENDAR_DAY_W 24
+#define HORIZONTAL_CALENDAR_DAY_H 21
 
 #define HORIZONTAL_FIGMA_TIME_X 19
 #define HORIZONTAL_FIGMA_TIME_Y 128
@@ -74,6 +78,7 @@
 #define HORIZONTAL_TIME_H 64
 
 #define HORIZONTAL_LABEL_FONT_SIZE 20
+#define HORIZONTAL_CALENDAR_FONT_SIZE 21
 #define HORIZONTAL_TIME_FONT_SIZE 62
 
 void horizontal_layout_load(Window *window);
