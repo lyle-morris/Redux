@@ -3,8 +3,8 @@
 #include "layout_vertical.h"
 #include "redux_settings.h"
 
-// Static Figma-reference build for vertical three-slot pixel QA.
-// Live settings and data are intentionally connected after geometry approval.
+// Revision-2 geometry build for vertical three-slot pixel QA.
+// Exact 17/20/21/88 px resources are deferred until the build bisect is clean.
 
 #define COLOR_TRAY (g_redux_settings.theme_mode ? redux_color(g_redux_settings.tray_background) : redux_preset_color())
 #define COLOR_DIVIDER (g_redux_settings.theme_mode ? redux_color(g_redux_settings.divider) : GColorWhite)
@@ -14,7 +14,6 @@
 #define COLOR_DATE_TEXT (g_redux_settings.theme_mode ? redux_color(g_redux_settings.date_text) : GColorWhite)
 
 static Layer *s_background_layer;
-
 static Layer *s_calendar_icon_layer;
 static BitmapLayer *s_steps_icon_layer;
 static BitmapLayer *s_battery_icon_layer;
@@ -32,22 +31,44 @@ static GBitmap *s_battery_bitmap;
 
 static GFont s_font_18;
 static GFont s_font_93;
-static char s_hour_buffer[4], s_minute_buffer[4], s_date_buffer[24];
+static char s_hour_buffer[4];
+static char s_minute_buffer[4];
+static char s_date_buffer[24];
 
 static void update_time(struct tm *tick_time) {
-  if(g_redux_settings.hour24) strftime(s_hour_buffer, sizeof(s_hour_buffer), "%H", tick_time);
-  else strftime(s_hour_buffer, sizeof(s_hour_buffer), g_redux_settings.show_leading_zero ? "%I" : "%l", tick_time);
+  if(g_redux_settings.hour24) {
+    strftime(s_hour_buffer, sizeof(s_hour_buffer), "%H", tick_time);
+  } else {
+    strftime(
+      s_hour_buffer,
+      sizeof(s_hour_buffer),
+      g_redux_settings.show_leading_zero ? "%I" : "%l",
+      tick_time
+    );
+  }
   strftime(s_minute_buffer, sizeof(s_minute_buffer), "%M", tick_time);
   strftime(s_date_buffer, sizeof(s_date_buffer), "%b %e %a", tick_time);
-  text_layer_set_text(s_hour_layer, s_hour_buffer); text_layer_set_text(s_minute_layer, s_minute_buffer); text_layer_set_text(s_date_layer, s_date_buffer);
+  text_layer_set_text(s_hour_layer, s_hour_buffer);
+  text_layer_set_text(s_minute_layer, s_minute_buffer);
+  text_layer_set_text(s_date_layer, s_date_buffer);
 }
-static void tick_handler(struct tm *tick_time, TimeUnits units) { update_time(tick_time); }
+
+static void tick_handler(struct tm *tick_time, TimeUnits units) {
+  update_time(tick_time);
+}
 
 static void calendar_icon_update_proc(Layer *layer, GContext *ctx) {
-  GRect bounds = layer_get_bounds(layer);
-
   graphics_context_set_compositing_mode(ctx, GCompOpSet);
-  graphics_draw_bitmap_in_rect(ctx, s_calendar_bitmap, bounds);
+  graphics_draw_bitmap_in_rect(
+    ctx,
+    s_calendar_bitmap,
+    GRect(
+      VERTICAL_ICON_BITMAP_X,
+      VERTICAL_ICON_BITMAP_Y,
+      VERTICAL_ICON_BITMAP_W,
+      VERTICAL_ICON_BITMAP_H
+    )
+  );
 
   graphics_context_set_text_color(ctx, COLOR_TEXT);
   graphics_draw_text(
@@ -156,11 +177,13 @@ void vertical_layout_load(Window *window) {
 
   APP_LOG(
     APP_LOG_LEVEL_INFO,
-    "Vertical QA canvas: %d x %d",
+    "Vertical 3 QA canvas: %d x %d (geometry r%d)",
     bounds.size.w,
-    bounds.size.h
+    bounds.size.h,
+    VERTICAL_LAYOUT_LOCK_REVISION
   );
 
+  // Keep the previously successful resource set during build isolation.
   s_font_18 = fonts_load_custom_font(
     resource_get_handle(RESOURCE_ID_FONT_ROBOTO_FLEX_EXTRABOLD_18)
   );
@@ -258,15 +281,18 @@ void vertical_layout_load(Window *window) {
     "Sept 30 Mer"
   );
   text_layer_set_text_color(s_date_layer, COLOR_DATE_TEXT);
-  time_t now = time(NULL); update_time(localtime(&now)); tick_timer_service_subscribe(MINUTE_UNIT, tick_handler);
+
+  time_t now = time(NULL);
+  update_time(localtime(&now));
+  tick_timer_service_subscribe(MINUTE_UNIT, tick_handler);
 }
 
 void vertical_layout_unload(Window *window) {
   tick_timer_service_unsubscribe();
+
   text_layer_destroy(s_date_layer);
   text_layer_destroy(s_minute_layer);
   text_layer_destroy(s_hour_layer);
-
   text_layer_destroy(s_battery_value_layer);
   text_layer_destroy(s_steps_value_layer);
   text_layer_destroy(s_calendar_value_layer);
@@ -274,7 +300,6 @@ void vertical_layout_unload(Window *window) {
   bitmap_layer_destroy(s_battery_icon_layer);
   bitmap_layer_destroy(s_steps_icon_layer);
   layer_destroy(s_calendar_icon_layer);
-
   layer_destroy(s_background_layer);
 
   gbitmap_destroy(s_battery_bitmap);
