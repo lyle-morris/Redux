@@ -9,6 +9,7 @@ typedef enum {
   ReduxLayoutHorizontalTwo = 0,
   ReduxLayoutHorizontalThree = 1,
   ReduxLayoutVerticalThree = 2,
+  ReduxLayoutVerticalTwo = 3,
 } ReduxLayout;
 
 enum { PersistKeyLayout = 100 };
@@ -18,7 +19,7 @@ static ReduxLayout s_layout = ReduxLayoutHorizontalTwo;
 static bool s_layout_loaded;
 
 static ReduxLayout valid_layout(int32_t value) {
-  if(value < ReduxLayoutHorizontalTwo || value > ReduxLayoutVerticalThree) {
+  if(value < ReduxLayoutHorizontalTwo || value > ReduxLayoutVerticalTwo) {
     return ReduxLayoutHorizontalTwo;
   }
   return (ReduxLayout)value;
@@ -34,6 +35,10 @@ static void load_active_layout(Window *window) {
       horizontal_layout_load(window);
       APP_LOG(APP_LOG_LEVEL_INFO, "Redux layout loaded: horizontal_3");
       break;
+    case ReduxLayoutVerticalTwo:
+      vertical_layout_load(window);
+      APP_LOG(APP_LOG_LEVEL_INFO, "Redux layout loaded: vertical_2");
+      break;
     case ReduxLayoutVerticalThree:
     default:
       vertical_layout_load(window);
@@ -48,6 +53,7 @@ static void unload_active_layout(Window *window) {
   switch(s_layout) {
     case ReduxLayoutHorizontalTwo: two_slot_layout_unload(window); break;
     case ReduxLayoutHorizontalThree: horizontal_layout_unload(window); break;
+    case ReduxLayoutVerticalTwo:
     case ReduxLayoutVerticalThree:
     default: vertical_layout_unload(window); break;
   }
