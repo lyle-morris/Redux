@@ -27,6 +27,7 @@ static GBitmap *s_steps_bitmap;
 static GBitmap *s_battery_bitmap;
 
 static GFont s_font_18;
+static GFont s_font_label;
 static GFont s_font_62;
 static char s_time_buffer[8];
 
@@ -148,7 +149,7 @@ static TextLayer *create_slot_value_layer(
   return create_text_layer(
     parent,
     GRect(x, HORIZONTAL_LABEL_Y, HORIZONTAL_LABEL_W, HORIZONTAL_LABEL_H),
-    s_font_18,
+    s_font_label,
     GTextAlignmentCenter,
     text
   );
@@ -167,6 +168,9 @@ void horizontal_layout_load(Window *window) {
 
   s_font_18 = fonts_load_custom_font(
     resource_get_handle(RESOURCE_ID_FONT_ROBOTO_FLEX_EXTRABOLD_18)
+  );
+  s_font_label = fonts_load_custom_font(
+    resource_get_handle(RESOURCE_ID_FONT_ROBOTO_FLEX_BOLD_20)
   );
   s_font_62 = fonts_load_custom_font(
     resource_get_handle(RESOURCE_ID_FONT_ROBOTO_FLEX_EXTRABOLD_62)
@@ -213,7 +217,7 @@ void horizontal_layout_load(Window *window) {
   s_steps_value_layer = create_slot_value_layer(
     root_layer,
     HORIZONTAL_SLOT_2_X,
-    "99999"
+    "99.9K"
   );
 
   s_battery_icon_layer = create_icon_layer(
@@ -279,5 +283,6 @@ void horizontal_layout_unload(Window *window) {
   gbitmap_destroy(s_calendar_bitmap);
 
   fonts_unload_custom_font(s_font_62);
+  fonts_unload_custom_font(s_font_label);
   fonts_unload_custom_font(s_font_18);
 }
