@@ -31,7 +31,7 @@ static GBitmap *s_calendar_bitmap;
 static GBitmap *s_steps_bitmap;
 static GBitmap *s_battery_bitmap;
 
-static GFont s_font_18;
+static GFont s_font_21;
 static GFont s_font_label;
 static GFont s_font_62;
 static char s_time_buffer[8];
@@ -100,7 +100,7 @@ static void calendar_icon_update_proc(Layer *layer, GContext *ctx) {
   graphics_draw_text(
     ctx,
     "30",
-    s_font_18,
+    s_font_21,
     GRect(
       HORIZONTAL_CALENDAR_DAY_X,
       HORIZONTAL_CALENDAR_DAY_Y,
@@ -177,8 +177,8 @@ void horizontal_layout_load(Window *window) {
     bounds.size.h
   );
 
-  s_font_18 = fonts_load_custom_font(
-    resource_get_handle(RESOURCE_ID_FONT_ROBOTO_FLEX_EXTRABOLD_18)
+  s_font_21 = fonts_load_custom_font(
+    resource_get_handle(RESOURCE_ID_FONT_ROBOTO_FLEX_EXTRABOLD_21)
   );
   s_font_label = fonts_load_custom_font(
     resource_get_handle(RESOURCE_ID_FONT_ROBOTO_FLEX_BOLD_20)
@@ -304,5 +304,5 @@ void horizontal_layout_unload(Window *window) {
 
   fonts_unload_custom_font(s_font_62);
   fonts_unload_custom_font(s_font_label);
-  fonts_unload_custom_font(s_font_18);
+  fonts_unload_custom_font(s_font_21);
 }
