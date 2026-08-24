@@ -8,11 +8,13 @@
 // calendar-day/date sizing remains on the proven 18 px resource for isolation.
 
 #define COLOR_TRAY (g_redux_settings.theme_mode ? redux_color(g_redux_settings.tray_background) : redux_preset_color())
-#define COLOR_DIVIDER (g_redux_settings.theme_mode ? redux_color(g_redux_settings.divider) : GColorWhite)
-#define COLOR_TIME_PANEL (g_redux_settings.theme_mode ? redux_color(g_redux_settings.watchface_background) : GColorBlack)
-#define COLOR_TEXT (g_redux_settings.theme_mode ? redux_color(g_redux_settings.slot_text[0]) : redux_contrast_color(COLOR_TRAY))
-#define COLOR_TIME_TEXT (g_redux_settings.theme_mode ? redux_color(g_redux_settings.time_text) : GColorWhite)
-#define COLOR_DATE_TEXT (g_redux_settings.theme_mode ? redux_color(g_redux_settings.date_text) : GColorWhite)
+#define COLOR_DIVIDER (g_redux_settings.theme_mode ? redux_color(g_redux_settings.divider) : redux_preset_divider_color())
+#define COLOR_TIME_PANEL (g_redux_settings.theme_mode ? redux_color(g_redux_settings.watchface_background) : redux_preset_time_panel_color())
+#define COLOR_SLOT_1_TEXT (g_redux_settings.theme_mode ? redux_color(g_redux_settings.slot_text[0]) : redux_preset_slot_text_color())
+#define COLOR_SLOT_2_TEXT (g_redux_settings.theme_mode ? redux_color(g_redux_settings.slot_text[1]) : redux_preset_slot_text_color())
+#define COLOR_SLOT_3_TEXT (g_redux_settings.theme_mode ? redux_color(g_redux_settings.slot_text[2]) : redux_preset_slot_text_color())
+#define COLOR_TIME_TEXT (g_redux_settings.theme_mode ? redux_color(g_redux_settings.time_text) : redux_preset_time_text_color())
+#define COLOR_DATE_TEXT (g_redux_settings.theme_mode ? redux_color(g_redux_settings.date_text) : redux_preset_time_text_color())
 
 static Layer *s_background_layer;
 static Layer *s_calendar_icon_layer;
@@ -72,7 +74,7 @@ static void calendar_icon_update_proc(Layer *layer, GContext *ctx) {
     )
   );
 
-  graphics_context_set_text_color(ctx, COLOR_TEXT);
+  graphics_context_set_text_color(ctx, COLOR_SLOT_1_TEXT);
   graphics_draw_text(
     ctx,
     "30",
@@ -146,11 +148,12 @@ static TextLayer *create_text_layer(
   GRect frame,
   GFont font,
   GTextAlignment alignment,
-  const char *text
+  const char *text,
+  GColor color
 ) {
   TextLayer *layer = text_layer_create(frame);
   text_layer_set_background_color(layer, GColorClear);
-  text_layer_set_text_color(layer, COLOR_TEXT);
+  text_layer_set_text_color(layer, color);
   text_layer_set_font(layer, font);
   text_layer_set_text_alignment(layer, alignment);
   text_layer_set_overflow_mode(layer, GTextOverflowModeFill);
@@ -162,20 +165,23 @@ static TextLayer *create_text_layer(
 static TextLayer *create_tray_value_layer(
   Layer *parent,
   int16_t y,
-  const char *text
+  const char *text,
+  GColor color
 ) {
   return create_text_layer(
     parent,
     GRect(VERTICAL_LABEL_X, y, VERTICAL_LABEL_W, VERTICAL_LABEL_H),
     s_font_label,
     GTextAlignmentCenter,
-    text
+    text,
+    color
   );
 }
 
 void vertical_layout_load(Window *window) {
   Layer *root_layer = window_get_root_layer(window);
   GRect bounds = layer_get_bounds(root_layer);
+  bool reverse_icons = !g_redux_settings.theme_mode && redux_preset_uses_reverse_icons();
 
   APP_LOG(
     APP_LOG_LEVEL_INFO,
@@ -196,13 +202,19 @@ void vertical_layout_load(Window *window) {
   );
 
   s_calendar_bitmap = gbitmap_create_with_resource(
-    RESOURCE_ID_IMAGE_CALENDAR_54X46
+    reverse_icons
+      ? RESOURCE_ID_IMAGE_REVERSE_CALENDAR_54X46
+      : RESOURCE_ID_IMAGE_CALENDAR_54X46
   );
   s_steps_bitmap = gbitmap_create_with_resource(
-    RESOURCE_ID_IMAGE_STEPS_54X46
+    reverse_icons
+      ? RESOURCE_ID_IMAGE_REVERSE_STEPS_54X46
+      : RESOURCE_ID_IMAGE_STEPS_54X46
   );
   s_battery_bitmap = gbitmap_create_with_resource(
-    RESOURCE_ID_IMAGE_BATTERY_100_54X46
+    reverse_icons
+      ? RESOURCE_ID_IMAGE_REVERSE_BATTERY_100_54X46
+      : RESOURCE_ID_IMAGE_BATTERY_100_54X46
   );
 
   s_background_layer = layer_create(
@@ -224,7 +236,8 @@ void vertical_layout_load(Window *window) {
   s_calendar_value_layer = create_tray_value_layer(
     root_layer,
     VERTICAL_SLOT_1_LABEL_Y,
-    "Mer"
+    "Mer",
+    COLOR_SLOT_1_TEXT
   );
 
   s_steps_icon_layer = create_icon_layer(
@@ -235,7 +248,8 @@ void vertical_layout_load(Window *window) {
   s_steps_value_layer = create_tray_value_layer(
     root_layer,
     VERTICAL_SLOT_2_LABEL_Y,
-    "99.9K"
+    "99.9K",
+    COLOR_SLOT_2_TEXT
   );
 
   s_battery_icon_layer = create_icon_layer(
@@ -246,7 +260,8 @@ void vertical_layout_load(Window *window) {
   s_battery_value_layer = create_tray_value_layer(
     root_layer,
     VERTICAL_SLOT_3_LABEL_Y,
-    "100%"
+    "100%",
+    COLOR_SLOT_3_TEXT
   );
 
   s_hour_layer = create_text_layer(
@@ -259,9 +274,9 @@ void vertical_layout_load(Window *window) {
     ),
     s_font_88,
     GTextAlignmentRight,
-    "23"
+    "23",
+    COLOR_TIME_TEXT
   );
-  text_layer_set_text_color(s_hour_layer, COLOR_TIME_TEXT);
 
   s_minute_layer = create_text_layer(
     root_layer,
@@ -273,18 +288,18 @@ void vertical_layout_load(Window *window) {
     ),
     s_font_88,
     GTextAlignmentRight,
-    "59"
+    "59",
+    COLOR_TIME_TEXT
   );
-  text_layer_set_text_color(s_minute_layer, COLOR_TIME_TEXT);
 
   s_date_layer = create_text_layer(
     root_layer,
     GRect(VERTICAL_DATE_X, VERTICAL_DATE_Y, VERTICAL_DATE_W, VERTICAL_DATE_H),
     s_font_18,
     GTextAlignmentCenter,
-    "Sept 30 Mer"
+    "Sept 30 Mer",
+    COLOR_DATE_TEXT
   );
-  text_layer_set_text_color(s_date_layer, COLOR_DATE_TEXT);
 
   time_t now = time(NULL);
   update_time(localtime(&now));
