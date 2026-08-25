@@ -2,26 +2,14 @@
 
 #include <pebble.h>
 
-// Figma source: REDUX - PEBBLE, node 334:9297.
-// All measurements are native Pebble Time 2 pixels on the 200 x 228 Emery canvas.
-//
-// GEOMETRY RESET: revision 2, 2026-08-24.
-// Revision 1 was approved against the previous wireframe and is now obsolete.
-// Revision 2 remains pending emulator/Figma overlay approval.
-//
-// TEMP QA: force the existing vertical renderer into the derived two-slot
-// state. This deliberately avoids adding a new C/H compilation unit while
-// isolating CloudPebble's "list index out of range" failure.
+// Redux 2.1.0 vertical layout geometry. The renderer supports both two-slot
+// and three-slot tray states without a separate compilation unit.
 
-#define VERTICAL_LAYOUT_LOCK_REVISION 2
-#define VERTICAL_QA_TWO_SLOT 1
+#define VERTICAL_LAYOUT_LOCK_REVISION 3
 
 #define VERTICAL_CANVAS_W 200
 #define VERTICAL_CANVAS_H 228
 
-// Figma explicitly specifies 74 + 8 + 120 = 202 px. The final 2 px of the
-// time panel are clipped by the native 200 px watch canvas. Preserve the
-// Figma geometry during QA rather than silently shrinking it.
 #define VERTICAL_TRAY_X 0
 #define VERTICAL_TRAY_Y 0
 #define VERTICAL_TRAY_W 74
@@ -37,68 +25,40 @@
 #define VERTICAL_TIME_PANEL_W 120
 #define VERTICAL_TIME_PANEL_H 228
 
-// Revision-2 artwork is exported directly on the 54 x 46 Figma canvas.
-// Draw it 1:1; no scaling or legacy 52 x 44 inset compensation.
 #define VERTICAL_ICON_X 10
 #define VERTICAL_ICON_W 54
 #define VERTICAL_ICON_H 46
-#define VERTICAL_ICON_BITMAP_X 0
-#define VERTICAL_ICON_BITMAP_Y 0
-#define VERTICAL_ICON_BITMAP_W 54
-#define VERTICAL_ICON_BITMAP_H 46
 
-// Figma 54x46 calendar day box: 15 px left/right, 14 px top,
-// 11 px bottom => 24 x 21 px. Pebble's generated 21 px font needs
-// a 3 px upward frame compensation to match the visible Figma baseline.
-#define VERTICAL_FIGMA_CALENDAR_DAY_X 15
-#define VERTICAL_FIGMA_CALENDAR_DAY_Y 14
-#define VERTICAL_FIGMA_CALENDAR_DAY_W 24
-#define VERTICAL_FIGMA_CALENDAR_DAY_H 21
 #define VERTICAL_CALENDAR_DAY_X 15
 #define VERTICAL_CALENDAR_DAY_Y 11
 #define VERTICAL_CALENDAR_DAY_W 24
 #define VERTICAL_CALENDAR_DAY_H 21
 
-// Two 66 px groups with the existing 7 px gap consume 139 px. Centering the
-// stack in the 228 px tray leaves 44.5 px above/below, so native integer
-// coordinates use 45 px top and 44 px bottom.
-#define VERTICAL_SLOT_GROUP_H 66
-#define VERTICAL_SLOT_GAP 7
-#define VERTICAL_SLOT_1_ICON_Y 45
-#define VERTICAL_SLOT_2_ICON_Y 118
+// Three-slot tray: 8 px top/bottom, three 66 px groups and 7 px gaps.
+#define VERTICAL_THREE_SLOT_1_ICON_Y 8
+#define VERTICAL_THREE_SLOT_2_ICON_Y 81
+#define VERTICAL_THREE_SLOT_3_ICON_Y 154
+#define VERTICAL_THREE_SLOT_1_LABEL_Y 52
+#define VERTICAL_THREE_SLOT_2_LABEL_Y 125
+#define VERTICAL_THREE_SLOT_3_LABEL_Y 198
 
-// Slot 3 remains instantiated by the proven renderer during this diagnostic
-// build, but is positioned beyond the 228 px canvas so it is not visible.
-#define VERTICAL_SLOT_3_ICON_Y 300
+// Two-slot tray: two 66 px groups + 7 px gap centered vertically.
+#define VERTICAL_TWO_SLOT_1_ICON_Y 45
+#define VERTICAL_TWO_SLOT_2_ICON_Y 118
+#define VERTICAL_TWO_SLOT_1_LABEL_Y 89
+#define VERTICAL_TWO_SLOT_2_LABEL_Y 162
 
 #define VERTICAL_LABEL_X 10
 #define VERTICAL_LABEL_W 54
 #define VERTICAL_LABEL_H 20
-#define VERTICAL_SLOT_1_FIGMA_LABEL_Y 91
-#define VERTICAL_SLOT_2_FIGMA_LABEL_Y 164
-#define VERTICAL_SLOT_3_FIGMA_LABEL_Y 346
-#define VERTICAL_SLOT_1_LABEL_Y 89
-#define VERTICAL_SLOT_2_LABEL_Y 162
-#define VERTICAL_SLOT_3_LABEL_Y 346
 
-// The 120 px time panel uses 8 px horizontal padding in Figma.
 #define VERTICAL_TIME_CONTENT_X 90
 #define VERTICAL_TIME_CONTENT_W 104
-
-// Final typography target is 88 px / 80 px line-height.
-#define VERTICAL_FIGMA_HOUR_Y 32
-#define VERTICAL_FIGMA_MINUTE_Y 107
-#define VERTICAL_FIGMA_TIME_VISIBLE_H 63
-#define VERTICAL_FIGMA_TIME_LINE_H 80
-#define VERTICAL_TIME_LINE_GAP 12
-
-// Initial renderer frames for revision-2 overlay QA using the 88 px resource.
 #define VERTICAL_TIME_LAYER_H 90
 #define VERTICAL_TIME_HOUR_Y 8
 #define VERTICAL_TIME_MINUTE_Y 83
 
 #define VERTICAL_DATE_X 90
-#define VERTICAL_FIGMA_DATE_Y 178
 #define VERTICAL_DATE_Y 174
 #define VERTICAL_DATE_W 104
 #define VERTICAL_DATE_H 22
