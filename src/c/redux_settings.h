@@ -11,9 +11,23 @@
 #define RESOURCE_ID_IMAGE_REVERSE_CALENDAR_64X64 RESOURCE_ID_IMAGE_CALENDAR_64X64
 #define RESOURCE_ID_IMAGE_REVERSE_WEATHER_PARTLY_CLOUDY_64X64 RESOURCE_ID_IMAGE_WEATHER_PARTLY_CLOUDY_64X64
 
+typedef enum {
+  ReduxMetricCalendar = 0,
+  ReduxMetricWeather = 1,
+  ReduxMetricBattery = 2,
+  ReduxMetricCalories = 3,
+  ReduxMetricActivity = 4,
+  ReduxMetricSleep = 5,
+  ReduxMetricHeart = 6,
+  ReduxMetricSteps = 7,
+  ReduxMetricDistance = 8,
+  ReduxMetricNone = 9,
+} ReduxMetric;
+
 typedef struct {
   uint8_t theme_mode;
   uint8_t theme;
+  uint8_t slot_metric[3];
   bool show_battery_indicator;
   bool show_leading_zero;
   bool hour24;
@@ -34,6 +48,7 @@ typedef struct {
 
 extern ReduxSettings g_redux_settings;
 void redux_settings_set_defaults(void);
+uint8_t redux_valid_metric(uint8_t metric, uint8_t fallback);
 GColor redux_color(uint32_t value);
 GColor redux_preset_color(void);
 GColor redux_preset_divider_color(void);
