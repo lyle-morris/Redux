@@ -6,16 +6,9 @@
   "versionLabel": "0.1.0",
   "sdkVersion": "3",
   "enableMultiJS": false,
-  "targetPlatforms": [
-    "emery"
-  ],
-  "watchapp": {
-    "watchface": true
-  },
-  "capabilities": [
-    "configurable",
-    "health"
-  ],
+  "targetPlatforms": ["emery"],
+  "watchapp": {"watchface": true},
+  "capabilities": ["configurable", "health"],
   "appKeys": {
     "layout": 0,
     "slot_1_metric": 1,
@@ -46,91 +39,36 @@
   },
   "resources": {
     "media": [
-      {
-        "type": "font",
-        "name": "FONT_ROBOTO_FLEX_EXTRABOLD_93",
-        "file": "fonts/RobotoFlex-ExtraBold-93.ttf",
-        "characterRegex": "[0-9]"
-      },
-      {
-        "type": "font",
-        "name": "FONT_ROBOTO_FLEX_EXTRABOLD_88",
-        "file": "fonts/RobotoFlex-ExtraBold-93.ttf",
-        "characterRegex": "[0-9]"
-      },
-      {
-        "type": "font",
-        "name": "FONT_ROBOTO_FLEX_EXTRABOLD_18",
-        "file": "fonts/RobotoFlex-ExtraBold-18.ttf",
-        "characterRegex": "[0-9A-Za-z .,:;%°-]"
-      },
-      {
-        "type": "font",
-        "name": "FONT_ROBOTO_FLEX_EXTRABOLD_16",
-        "file": "fonts/RobotoFlex-ExtraBold-18.ttf",
-        "characterRegex": "[0-9%]"
-      },
-      {
-        "type": "font",
-        "name": "FONT_ROBOTO_FLEX_EXTRABOLD_21",
-        "file": "fonts/RobotoFlex-ExtraBold-18.ttf",
-        "characterRegex": "[0-9]"
-      },
-      {
-        "type": "font",
-        "name": "FONT_ROBOTO_FLEX_EXTRABOLD_62",
-        "file": "fonts/RobotoFlex-ExtraBold-62.ttf",
-        "characterRegex": "[0-9:]"
-      },
-      {
-        "type": "font",
-        "name": "FONT_ROBOTO_FLEX_BOLD_20",
-        "file": "fonts/RobotoFlex-ExtraBold-18.ttf",
-        "characterRegex": "[0-9A-Za-z%°.-]"
-      },
-      {
-        "type": "font",
-        "name": "FONT_ROBOTO_FLEX_EXTRABOLD_24",
-        "file": "fonts/RobotoFlex-ExtraBold-28.ttf",
-        "characterRegex": "[0-9A-Za-z%°.-]"
-      },
-      {
-        "type": "font",
-        "name": "FONT_ROBOTO_FLEX_EXTRABOLD_28",
-        "file": "fonts/RobotoFlex-ExtraBold-28.ttf",
-        "characterRegex": "[0-9]"
-      },
-      {
-        "type": "font",
-        "name": "FONT_ROBOTO_FLEX_EXTRABOLD_12",
-        "file": "fonts/RobotoFlex-ExtraBold-12.ttf",
-        "characterRegex": "[0-9%]"
-      },
-      {
-        "type": "png",
-        "name": "IMAGE_CALENDAR_54X46",
-        "file": "images/icons/54x46/calendar/white_calendar_54x46.png"
-      },
-      {
-        "type": "png",
-        "name": "IMAGE_BATTERY_100_54X46",
-        "file": "images/icons/54x46/battery/white_battery_100_54x46.png"
-      },
-      {
-        "type": "png",
-        "name": "IMAGE_STEPS_54X46",
-        "file": "images/icons/54x46/steps/white_steps_54x46.png"
-      },
-      {
-        "type": "png",
-        "name": "IMAGE_CALENDAR_64X64",
-        "file": "images/icons/64x64/calendar/white_calendar_64x64.png"
-      },
-      {
-        "type": "png",
-        "name": "IMAGE_WEATHER_PARTLY_CLOUDY_64X64",
-        "file": "images/icons/64x64/weather/white_weather_partly_cloudy_64x64.png"
-      }
+      {"type":"font","name":"FONT_ROBOTO_FLEX_EXTRABOLD_93","file":"fonts/RobotoFlex-ExtraBold-93.ttf","characterRegex":"[0-9]"},
+      {"type":"font","name":"FONT_ROBOTO_FLEX_EXTRABOLD_88","file":"fonts/RobotoFlex-ExtraBold-93.ttf","characterRegex":"[0-9]"},
+      {"type":"font","name":"FONT_ROBOTO_FLEX_EXTRABOLD_18","file":"fonts/RobotoFlex-ExtraBold-18.ttf","characterRegex":"[0-9A-Za-z .,:;%°-]"},
+      {"type":"font","name":"FONT_ROBOTO_FLEX_EXTRABOLD_16","file":"fonts/RobotoFlex-ExtraBold-18.ttf","characterRegex":"[0-9%]"},
+      {"type":"font","name":"FONT_ROBOTO_FLEX_EXTRABOLD_21","file":"fonts/RobotoFlex-ExtraBold-18.ttf","characterRegex":"[0-9]"},
+      {"type":"font","name":"FONT_ROBOTO_FLEX_EXTRABOLD_62","file":"fonts/RobotoFlex-ExtraBold-62.ttf","characterRegex":"[0-9:]"},
+      {"type":"font","name":"FONT_ROBOTO_FLEX_BOLD_20","file":"fonts/RobotoFlex-ExtraBold-18.ttf","characterRegex":"[0-9A-Za-z%°.-]"},
+      {"type":"font","name":"FONT_ROBOTO_FLEX_EXTRABOLD_24","file":"fonts/RobotoFlex-ExtraBold-28.ttf","characterRegex":"[0-9A-Za-z%°.-]"},
+      {"type":"font","name":"FONT_ROBOTO_FLEX_EXTRABOLD_28","file":"fonts/RobotoFlex-ExtraBold-28.ttf","characterRegex":"[0-9]"},
+      {"type":"font","name":"FONT_ROBOTO_FLEX_EXTRABOLD_12","file":"fonts/RobotoFlex-ExtraBold-12.ttf","characterRegex":"[0-9%]"},
+
+      {"type":"png","name":"IMAGE_CALENDAR_54X46","file":"images/icons/54x46/calendar/white_calendar_54x46.png"},
+      {"type":"png","name":"IMAGE_WEATHER_PARTLY_CLOUDY_54X46","file":"images/icons/54x46/weather/white_weather_partly_cloudy_54x46.png"},
+      {"type":"png","name":"IMAGE_BATTERY_100_54X46","file":"images/icons/54x46/battery/white_battery_100_54x46.png"},
+      {"type":"png","name":"IMAGE_CALORIES_54X46","file":"images/icons/54x46/calories/white_calories_54x46.png"},
+      {"type":"png","name":"IMAGE_ACTIVITY_TIME_54X46","file":"images/icons/54x46/activity-time/white_activity_time_54x46.png"},
+      {"type":"png","name":"IMAGE_SLEEP_SCORE_54X46","file":"images/icons/54x46/sleep-time/white_sleep_score_54x46.png"},
+      {"type":"png","name":"IMAGE_HEART_RATE_54X46","file":"images/icons/54x46/heart-rate/white_heart_rate_54x46.png"},
+      {"type":"png","name":"IMAGE_STEPS_54X46","file":"images/icons/54x46/steps/white_steps_54x46.png"},
+      {"type":"png","name":"IMAGE_DISTANCE_54X46","file":"images/icons/54x46/distance/white_distance_54x46.png"},
+
+      {"type":"png","name":"IMAGE_CALENDAR_64X64","file":"images/icons/64x64/calendar/white_calendar_64x64.png"},
+      {"type":"png","name":"IMAGE_WEATHER_PARTLY_CLOUDY_64X64","file":"images/icons/64x64/weather/white_weather_partly_cloudy_64x64.png"},
+      {"type":"png","name":"IMAGE_BATTERY_100_64X64","file":"images/icons/64x64/battery/white_battery_100_64x64.png"},
+      {"type":"png","name":"IMAGE_CALORIES_64X64","file":"images/icons/64x64/calories/white_calories_64x64.png"},
+      {"type":"png","name":"IMAGE_ACTIVITY_TIME_64X64","file":"images/icons/64x64/activity-time/white_activity_time_64x64.png"},
+      {"type":"png","name":"IMAGE_SLEEP_SCORE_64X64","file":"images/icons/64x64/sleep-time/white_sleep_score_64x64.png"},
+      {"type":"png","name":"IMAGE_HEART_RATE_64X64","file":"images/icons/64x64/heart-rate/white_heart_rate_64x64.png"},
+      {"type":"png","name":"IMAGE_STEPS_64X64","file":"images/icons/64x64/steps/white_steps_64x64.png"},
+      {"type":"png","name":"IMAGE_DISTANCE_64X64","file":"images/icons/64x64/distance/white_distance_64x64.png"}
     ]
   }
 }
