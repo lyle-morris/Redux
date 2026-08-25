@@ -19,9 +19,15 @@ static uint8_t valid_theme(void) {
   return g_redux_settings.theme < 10 ? g_redux_settings.theme : ReduxThemeOrange;
 }
 
+uint8_t redux_valid_metric(uint8_t metric, uint8_t fallback) {
+  return metric <= ReduxMetricNone ? metric : fallback;
+}
+
 void redux_settings_set_defaults(void) {
   g_redux_settings = (ReduxSettings) {
-    .theme_mode = 0, .theme = ReduxThemeOrange, .show_battery_indicator = true,
+    .theme_mode = 0, .theme = ReduxThemeOrange,
+    .slot_metric = {ReduxMetricCalendar, ReduxMetricWeather, ReduxMetricNone},
+    .show_battery_indicator = true,
     .show_leading_zero = true, .hour24 = false, .celsius = false,
     .show_bluetooth = false, .language = 0,
     .watchface_background = 0x000000, .box_background = 0xffffff,
@@ -37,16 +43,8 @@ GColor redux_color(uint32_t value) { return GColorFromHEX(value & 0xffffff); }
 
 GColor redux_preset_color(void) {
   static const uint32_t colors[] = {
-    0xff5500, // Orange
-    0x00aaff, // Blue
-    0x5500ff, // Purple
-    0xffaa00, // Yellow
-    0x55aa00, // Green
-    0xff0000, // Red
-    0xff0055, // Pink
-    0xaa5500, // Brown
-    0xffffff, // White
-    0x000000  // Black
+    0xff5500, 0x00aaff, 0x5500ff, 0xffaa00, 0x55aa00,
+    0xff0000, 0xff0055, 0xaa5500, 0xffffff, 0x000000
   };
   return redux_color(colors[valid_theme()]);
 }
@@ -65,9 +63,7 @@ GColor redux_preset_time_text_color(void) {
 
 GColor redux_preset_slot_text_color(void) {
   uint8_t theme = valid_theme();
-  return (theme == ReduxThemePurple || theme == ReduxThemeBlack)
-    ? GColorWhite
-    : GColorBlack;
+  return (theme == ReduxThemePurple || theme == ReduxThemeBlack) ? GColorWhite : GColorBlack;
 }
 
 GColor redux_preset_battery_color(void) {
