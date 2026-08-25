@@ -69,12 +69,16 @@ static void apply_layout(ReduxLayout layout) {
 }
 
 static void inbox_received_handler(DictionaryIterator *iterator, void *context) {
+  ReduxLayout requested_layout = s_layout;
   Tuple *layout_tuple = dict_find(iterator, MESSAGE_KEY_layout);
-  if(layout_tuple) apply_layout(valid_layout(layout_tuple->value->int32));
+  if(layout_tuple) requested_layout = valid_layout(layout_tuple->value->int32);
 
 #define READ_U8(key, field) do { Tuple *t = dict_find(iterator, MESSAGE_KEY_##key); if(t) g_redux_settings.field = (uint8_t)t->value->int32; } while(0)
 #define READ_BOOL(key, field) do { Tuple *t = dict_find(iterator, MESSAGE_KEY_##key); if(t) g_redux_settings.field = t->value->int32 != 0; } while(0)
 #define READ_COLOR(key, field) do { Tuple *t = dict_find(iterator, MESSAGE_KEY_##key); if(t) g_redux_settings.field = (uint32_t)t->value->int32; } while(0)
+  READ_U8(slot_1_metric, slot_metric[0]);
+  READ_U8(slot_2_metric, slot_metric[1]);
+  READ_U8(slot_3_metric, slot_metric[2]);
   READ_U8(theme_mode, theme_mode); READ_U8(theme, theme);
   READ_BOOL(show_battery_indicator, show_battery_indicator);
   READ_BOOL(show_leading_zero, show_leading_zero); READ_BOOL(hour24, hour24);
@@ -89,7 +93,13 @@ static void inbox_received_handler(DictionaryIterator *iterator, void *context) 
 #undef READ_BOOL
 #undef READ_COLOR
 
-  if(s_layout_loaded) {
+  g_redux_settings.slot_metric[0] = redux_valid_metric(g_redux_settings.slot_metric[0], ReduxMetricCalendar);
+  g_redux_settings.slot_metric[1] = redux_valid_metric(g_redux_settings.slot_metric[1], ReduxMetricWeather);
+  g_redux_settings.slot_metric[2] = redux_valid_metric(g_redux_settings.slot_metric[2], ReduxMetricNone);
+
+  if(requested_layout != s_layout) {
+    apply_layout(requested_layout);
+  } else if(s_layout_loaded) {
     unload_active_layout(s_main_window);
     load_active_layout(s_main_window);
   }
@@ -98,8 +108,11 @@ static void inbox_received_handler(DictionaryIterator *iterator, void *context) 
   Tuple *theme = dict_find(iterator, MESSAGE_KEY_theme);
   Tuple *battery = dict_find(iterator, MESSAGE_KEY_show_battery_indicator);
   APP_LOG(APP_LOG_LEVEL_INFO,
-          "Redux settings received: layout=%d theme_mode=%d theme=%d battery=%d",
+          "Redux settings received: layout=%d slots=%d/%d/%d theme_mode=%d theme=%d battery=%d",
           (int)s_layout,
+          (int)g_redux_settings.slot_metric[0],
+          (int)g_redux_settings.slot_metric[1],
+          (int)g_redux_settings.slot_metric[2],
           theme_mode ? (int)theme_mode->value->int32 : -1,
           theme ? (int)theme->value->int32 : -1,
           battery ? (int)battery->value->int32 : -1);
