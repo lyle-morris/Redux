@@ -10,6 +10,7 @@
 #define COLOR_TIME_PANEL (g_redux_settings.theme_mode ? redux_color(g_redux_settings.watchface_background) : redux_preset_time_panel_color())
 #define COLOR_TIME_TEXT (g_redux_settings.theme_mode ? redux_color(g_redux_settings.time_text) : redux_preset_time_text_color())
 #define COLOR_DATE_TEXT (g_redux_settings.theme_mode ? redux_color(g_redux_settings.date_text) : redux_preset_time_text_color())
+#define COLOR_CALENDAR_DAY GColorBlack
 
 static Layer *s_background_layer;
 static BitmapLayer *s_icon_layers[3];
@@ -198,7 +199,7 @@ static void create_metric_slot(Layer *root_layer, uint8_t index) {
       s_font_21,
       GTextAlignmentCenter,
       "",
-      color
+      COLOR_CALENDAR_DAY
     );
   }
 }
