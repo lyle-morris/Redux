@@ -12,7 +12,11 @@ typedef enum {
   ReduxLayoutVerticalTwo = 3,
 } ReduxLayout;
 
-enum { PersistKeyLayout = 100 };
+enum {
+  PersistKeyLayout = 100,
+  PersistKeyLanguage = 101,
+  PersistKeyWeekdayInsteadOfMonth = 102,
+};
 
 static Window *s_main_window;
 static ReduxLayout s_layout = ReduxLayoutHorizontalTwo;
@@ -82,7 +86,8 @@ static void inbox_received_handler(DictionaryIterator *iterator, void *context) 
   READ_U8(theme_mode, theme_mode); READ_U8(theme, theme);
   READ_BOOL(show_battery_indicator, show_battery_indicator);
   READ_BOOL(show_leading_zero, show_leading_zero); READ_BOOL(hour24, hour24);
-  READ_BOOL(celsius, celsius); READ_BOOL(show_bluetooth, show_bluetooth); READ_U8(language, language);
+  READ_BOOL(celsius, celsius); READ_BOOL(show_bluetooth, show_bluetooth);
+  READ_U8(language, language); READ_BOOL(weekday_instead_of_month, weekday_instead_of_month);
   READ_COLOR(watchface_background, watchface_background); READ_COLOR(box_background_color, box_background);
   READ_COLOR(box_top_border_color, box_top_border); READ_COLOR(box_bottom_border_color, box_bottom_border);
   READ_COLOR(tray_background_color, tray_background); READ_COLOR(divider_color, divider);
@@ -96,6 +101,9 @@ static void inbox_received_handler(DictionaryIterator *iterator, void *context) 
   g_redux_settings.slot_metric[0] = redux_valid_metric(g_redux_settings.slot_metric[0], ReduxMetricCalendar);
   g_redux_settings.slot_metric[1] = redux_valid_metric(g_redux_settings.slot_metric[1], ReduxMetricWeather);
   g_redux_settings.slot_metric[2] = redux_valid_metric(g_redux_settings.slot_metric[2], ReduxMetricNone);
+  g_redux_settings.language = redux_valid_language(g_redux_settings.language);
+  persist_write_int(PersistKeyLanguage, g_redux_settings.language);
+  persist_write_int(PersistKeyWeekdayInsteadOfMonth, g_redux_settings.weekday_instead_of_month ? 1 : 0);
 
   if(requested_layout != s_layout) {
     apply_layout(requested_layout);
@@ -108,14 +116,16 @@ static void inbox_received_handler(DictionaryIterator *iterator, void *context) 
   Tuple *theme = dict_find(iterator, MESSAGE_KEY_theme);
   Tuple *battery = dict_find(iterator, MESSAGE_KEY_show_battery_indicator);
   APP_LOG(APP_LOG_LEVEL_INFO,
-          "Redux settings received: layout=%d slots=%d/%d/%d theme_mode=%d theme=%d battery=%d",
+          "Redux settings received: layout=%d slots=%d/%d/%d theme_mode=%d theme=%d battery=%d language=%d weekday=%d",
           (int)s_layout,
           (int)g_redux_settings.slot_metric[0],
           (int)g_redux_settings.slot_metric[1],
           (int)g_redux_settings.slot_metric[2],
           theme_mode ? (int)theme_mode->value->int32 : -1,
           theme ? (int)theme->value->int32 : -1,
-          battery ? (int)battery->value->int32 : -1);
+          battery ? (int)battery->value->int32 : -1,
+          (int)g_redux_settings.language,
+          g_redux_settings.weekday_instead_of_month ? 1 : 0);
 }
 
 static void inbox_dropped_handler(AppMessageResult reason, void *context) {
@@ -129,6 +139,12 @@ static void init(void) {
   redux_settings_set_defaults();
   if(persist_exists(PersistKeyLayout)) {
     s_layout = valid_layout(persist_read_int(PersistKeyLayout));
+  }
+  if(persist_exists(PersistKeyLanguage)) {
+    g_redux_settings.language = redux_valid_language((uint8_t)persist_read_int(PersistKeyLanguage));
+  }
+  if(persist_exists(PersistKeyWeekdayInsteadOfMonth)) {
+    g_redux_settings.weekday_instead_of_month = persist_read_int(PersistKeyWeekdayInsteadOfMonth) == 1;
   }
   app_message_register_inbox_received(inbox_received_handler);
   app_message_register_inbox_dropped(inbox_dropped_handler);
