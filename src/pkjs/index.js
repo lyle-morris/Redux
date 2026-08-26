@@ -141,7 +141,8 @@ function buildPayload(settings) {
     22: settings.celsius ? 1 : 0,
     23: settings.showBluetooth ? 1 : 0,
     24: enumValue(settings.language, languages, 0),
-    25: settings.analyticsEnabled ? 1 : 0
+    25: settings.analyticsEnabled ? 1 : 0,
+    26: settings.weekdayInsteadOfMonth ? 1 : 0
   };
 }
 
