@@ -1,6 +1,7 @@
 #include <pebble.h>
 #include <stdio.h>
 
+#include "battery_assets.h"
 #include "battery_indicator.h"
 #include "layout_two_slot.h"
 #include "redux_settings.h"
@@ -17,8 +18,10 @@ static BitmapLayer *s_icon_layers[2];
 static TextLayer *s_value_layers[2];
 static TextLayer *s_calendar_day_layers[2];
 static GBitmap *s_bitmaps[2];
+static uint32_t s_icon_resource_ids[2];
 static BatteryIndicator *s_battery_indicator;
 static TextLayer *s_time_layer;
+static bool s_battery_service_subscribed;
 
 static GFont s_font_24;
 static GFont s_font_28;
@@ -37,7 +40,7 @@ static uint32_t metric_resource(uint8_t metric) {
   switch(metric) {
     case ReduxMetricCalendar: return RESOURCE_ID_IMAGE_CALENDAR_64X64;
     case ReduxMetricWeather: return RESOURCE_ID_IMAGE_WEATHER_PARTLY_CLOUDY_64X64;
-    case ReduxMetricBattery: return RESOURCE_ID_IMAGE_BATTERY_100_64X64;
+    case ReduxMetricBattery: return redux_battery_resource_64(battery_state_service_peek());
     case ReduxMetricCalories: return RESOURCE_ID_IMAGE_CALORIES_64X64;
     case ReduxMetricActivity: return RESOURCE_ID_IMAGE_ACTIVITY_TIME_64X64;
     case ReduxMetricSleep: return RESOURCE_ID_IMAGE_SLEEP_SCORE_64X64;
@@ -52,7 +55,10 @@ static void metric_value(uint8_t metric, struct tm *tick_time, char *buffer, siz
   switch(metric) {
     case ReduxMetricCalendar: strftime(buffer, size, "%b", tick_time); break;
     case ReduxMetricWeather: snprintf(buffer, size, "%s", g_redux_settings.celsius ? "22°" : "72°"); break;
-    case ReduxMetricBattery: snprintf(buffer, size, "100%%"); break;
+    case ReduxMetricBattery: {
+      redux_battery_format_label(battery_state_service_peek(), buffer, size);
+      break;
+    }
     case ReduxMetricCalories: snprintf(buffer, size, "9999"); break;
     case ReduxMetricActivity: snprintf(buffer, size, "99m"); break;
     case ReduxMetricSleep: snprintf(buffer, size, "99"); break;
@@ -73,6 +79,38 @@ static TextLayer *create_text_layer(Layer *parent, GRect frame, GFont font, GTex
   text_layer_set_text(layer, text);
   layer_add_child(parent, text_layer_get_layer(layer));
   return layer;
+}
+
+static void replace_slot_bitmap(uint8_t index, uint32_t resource_id) {
+  if (!s_icon_layers[index] || !resource_id || s_icon_resource_ids[index] == resource_id) return;
+
+  GBitmap *bitmap = gbitmap_create_with_resource(resource_id);
+  if (!bitmap) return;
+
+  bitmap_layer_set_bitmap(s_icon_layers[index], bitmap);
+  if (s_bitmaps[index]) gbitmap_destroy(s_bitmaps[index]);
+  s_bitmaps[index] = bitmap;
+  s_icon_resource_ids[index] = resource_id;
+}
+
+static bool has_battery_slot(void) {
+  return g_redux_settings.slot_metric[0] == ReduxMetricBattery ||
+         g_redux_settings.slot_metric[1] == ReduxMetricBattery;
+}
+
+static void battery_state_handler(BatteryChargeState state) {
+  if (s_battery_indicator) {
+    battery_indicator_set_percentage(s_battery_indicator, state.charge_percent);
+    battery_indicator_set_charging(s_battery_indicator, state.is_charging);
+  }
+
+  for (uint8_t i = 0; i < 2; ++i) {
+    if (g_redux_settings.slot_metric[i] != ReduxMetricBattery) continue;
+
+    redux_battery_format_label(state, s_value_buffers[i], sizeof(s_value_buffers[i]));
+    if (s_value_layers[i]) text_layer_set_text(s_value_layers[i], s_value_buffers[i]);
+    replace_slot_bitmap(i, redux_battery_resource_64(state));
+  }
 }
 
 static void update_slot_values(struct tm *tick_time) {
@@ -114,6 +152,7 @@ static void create_metric_slot(Layer *root_layer, uint8_t index, int16_t x) {
 
   if(resource_id) {
     s_bitmaps[index] = gbitmap_create_with_resource(resource_id);
+    s_icon_resource_ids[index] = resource_id;
     s_icon_layers[index] = bitmap_layer_create(GRect(x, TWO_SLOT_ICON_Y, TWO_SLOT_ICON_W, TWO_SLOT_ICON_H));
     bitmap_layer_set_bitmap(s_icon_layers[index], s_bitmaps[index]);
     bitmap_layer_set_background_color(s_icon_layers[index], GColorClear);
@@ -148,8 +187,9 @@ void two_slot_layout_load(Window *window) {
   GRect bounds = layer_get_bounds(root_layer);
   APP_LOG(APP_LOG_LEVEL_INFO, "Horizontal 2 QA canvas: %d x %d (geometry r%d) slots=%d/%d", bounds.size.w, bounds.size.h, TWO_SLOT_LAYOUT_LOCK_REVISION, (int)g_redux_settings.slot_metric[0], (int)g_redux_settings.slot_metric[1]);
 
+  s_battery_service_subscribed = false;
   for(uint8_t i = 0; i < 2; ++i) {
-    s_icon_layers[i] = NULL; s_value_layers[i] = NULL; s_calendar_day_layers[i] = NULL; s_bitmaps[i] = NULL;
+    s_icon_layers[i] = NULL; s_value_layers[i] = NULL; s_calendar_day_layers[i] = NULL; s_bitmaps[i] = NULL; s_icon_resource_ids[i] = 0;
   }
 
   s_font_24 = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_ROBOTO_FLEX_EXTRABOLD_24));
@@ -172,10 +212,20 @@ void two_slot_layout_load(Window *window) {
     battery_indicator_set_normal_color(s_battery_indicator, COLOR_BATTERY);
     layer_add_child(root_layer, battery_indicator_get_layer(s_battery_indicator));
   }
+
+  if (s_battery_indicator || has_battery_slot()) {
+    battery_state_service_subscribe(battery_state_handler);
+    s_battery_service_subscribed = true;
+    battery_state_handler(battery_state_service_peek());
+  }
 }
 
 void two_slot_layout_unload(Window *window) {
   tick_timer_service_unsubscribe();
+  if (s_battery_service_subscribed) {
+    battery_state_service_unsubscribe();
+    s_battery_service_subscribed = false;
+  }
   battery_indicator_destroy(s_battery_indicator);
   s_battery_indicator = NULL;
   text_layer_destroy(s_time_layer);
