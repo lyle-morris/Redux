@@ -12,11 +12,10 @@
 // metrics are slightly wider than the browser metrics used by Figma, so
 // the text frame overlaps the visual gap slightly. Right alignment keeps
 // values such as "100%" fully visible while matching the Figma placement.
-// Pebble's font baseline sits about 2 px lower than Figma's browser text,
-// so the label frame is shifted up 2 px for visual alignment. Final overlay
-// QA places the visible label best at X=144.
+// Final QA places the visible label best at X=144 and one pixel above the
+// component origin.
 #define BATTERY_INDICATOR_LABEL_X 144
-#define BATTERY_INDICATOR_LABEL_Y 0
+#define BATTERY_INDICATOR_LABEL_Y -1
 #define BATTERY_INDICATOR_LABEL_W 53
 #define BATTERY_INDICATOR_LABEL_H 16
 #define BATTERY_INDICATOR_ANIMATION_STEP_MS 350
