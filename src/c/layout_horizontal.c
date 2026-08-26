@@ -12,6 +12,7 @@
 #define COLOR_TIME_PANEL (g_redux_settings.theme_mode ? redux_color(g_redux_settings.box_background) : redux_preset_time_panel_color())
 #define COLOR_TIME_TEXT (g_redux_settings.theme_mode ? redux_color(g_redux_settings.time_text) : redux_preset_time_text_color())
 #define COLOR_BATTERY (g_redux_settings.theme_mode ? redux_color(g_redux_settings.battery_indicator) : redux_preset_battery_color())
+#define COLOR_CALENDAR_DAY GColorBlack
 
 static Layer *s_background_layer;
 static BitmapLayer *s_icon_layers[3];
@@ -178,7 +179,7 @@ static void create_metric_slot(Layer *root_layer, uint8_t index, int16_t x) {
       s_font_21,
       GTextAlignmentCenter,
       "",
-      color
+      COLOR_CALENDAR_DAY
     );
   }
 }
