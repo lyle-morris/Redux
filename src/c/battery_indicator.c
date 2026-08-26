@@ -36,13 +36,6 @@ struct BatteryIndicator {
   AppTimer *animation_timer;
   char label[5];
 };
-static BatteryIndicator *s_active_indicator;
-
-static void battery_state_handler(BatteryChargeState state) {
-  if(!s_active_indicator) return;
-  battery_indicator_set_percentage(s_active_indicator, state.charge_percent);
-  battery_indicator_set_charging(s_active_indicator, state.is_charging);
-}
 
 static uint8_t segment_count_for_percentage(uint8_t percentage) {
   if (percentage == 0) {
@@ -218,10 +211,12 @@ BatteryIndicator *battery_indicator_create(GRect frame) {
   BatteryIndicator **layer_indicator = layer_get_data(indicator->layer);
   *layer_indicator = indicator;
   layer_set_update_proc(indicator->layer, battery_indicator_update_proc);
-  s_active_indicator = indicator;
+
+  // The owning layout has the single battery-service subscription so the
+  // bottom indicator and any Battery metric slots receive the same event.
   BatteryChargeState state = battery_state_service_peek();
-  battery_state_handler(state);
-  battery_state_service_subscribe(battery_state_handler);
+  battery_indicator_set_percentage(indicator, state.charge_percent);
+  battery_indicator_set_charging(indicator, state.is_charging);
 
   return indicator;
 }
@@ -275,7 +270,6 @@ void battery_indicator_destroy(BatteryIndicator *indicator) {
   }
 
   cancel_animation(indicator);
-  if(s_active_indicator == indicator) { battery_state_service_unsubscribe(); s_active_indicator = NULL; }
   fonts_unload_custom_font(indicator->font);
   layer_destroy(indicator->layer);
   free(indicator);
