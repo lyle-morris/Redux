@@ -53,7 +53,8 @@
 
 #define HORIZONTAL_LABEL_Y 68
 #define HORIZONTAL_LABEL_W 54
-#define HORIZONTAL_LABEL_H 20
+// Give descenders such as the g in "Aug" room without moving the approved baseline.
+#define HORIZONTAL_LABEL_H 24
 
 // Figma 54x46 calendar day box: 15 px left/right, 14 px top,
 // 11 px bottom => 24 x 21 px. Pebble's generated 21 px font needs
