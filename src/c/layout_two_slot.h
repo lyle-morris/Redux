@@ -49,7 +49,8 @@
 // Initial Pebble renderer compensation for the custom 24 px font; tune by overlay.
 #define TWO_SLOT_LABEL_Y 73
 #define TWO_SLOT_LABEL_W 64
-#define TWO_SLOT_LABEL_H 24
+// Give descenders such as the g in "Aug" room without moving the approved baseline.
+#define TWO_SLOT_LABEL_H 28
 
 // Calendar day coordinates are local to the 64 x 64 custom icon layer.
 #define TWO_SLOT_FIGMA_CALENDAR_DAY_X 16
