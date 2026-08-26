@@ -1,5 +1,5 @@
-var CONFIG_URL = 'https://lyle-morris.github.io/Hosting/apps/redux/qa/app-config.html';
-var CONFIG_VERSION = 'redux-qa-v4';
+var CONFIG_URL = 'https://lyle-morris.github.io/Hosting/apps/redux/qa/app-config-v5.html';
+var CONFIG_VERSION = 'redux-qa-v5';
 var SETTINGS_KEY = 'redux_qa_settings_v2';
 
 var DEFAULTS = {
@@ -148,8 +148,10 @@ function buildPayload(settings) {
 
 function sendSettings(settings) {
   settings = normalize(settings);
+  var payload = buildPayload(settings);
   console.log('Redux sending settings: ' + JSON.stringify(settings));
-  Pebble.sendAppMessage(buildPayload(settings), function() {
+  console.log('Redux language payload: language=' + payload[24] + ' weekday=' + payload[26]);
+  Pebble.sendAppMessage(payload, function() {
     console.log('Redux settings sent');
   }, function(error) {
     console.log('Redux settings send failed: ' + JSON.stringify(error));
