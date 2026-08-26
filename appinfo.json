@@ -35,18 +35,19 @@
     "celsius": 22,
     "show_bluetooth": 23,
     "language": 24,
-    "analytics_enabled": 25
+    "analytics_enabled": 25,
+    "weekday_instead_of_month": 26
   },
   "resources": {
     "media": [
       {"type":"font","name":"FONT_ROBOTO_FLEX_EXTRABOLD_93","file":"fonts/RobotoFlex-ExtraBold-93.ttf","characterRegex":"[0-9]"},
       {"type":"font","name":"FONT_ROBOTO_FLEX_EXTRABOLD_88","file":"fonts/RobotoFlex-ExtraBold-93.ttf","characterRegex":"[0-9]"},
-      {"type":"font","name":"FONT_ROBOTO_FLEX_EXTRABOLD_18","file":"fonts/RobotoFlex-ExtraBold-18.ttf","characterRegex":"[0-9A-Za-z .,:;%°-]"},
+      {"type":"font","name":"FONT_ROBOTO_FLEX_EXTRABOLD_18","file":"fonts/RobotoFlex-ExtraBold-18.ttf","characterRegex":"[0-9A-Za-zÀ-žȘșȚțĦħĠġ .,:;%°-]"},
       {"type":"font","name":"FONT_ROBOTO_FLEX_EXTRABOLD_16","file":"fonts/RobotoFlex-ExtraBold-18.ttf","characterRegex":"[0-9%]"},
       {"type":"font","name":"FONT_ROBOTO_FLEX_EXTRABOLD_21","file":"fonts/RobotoFlex-ExtraBold-18.ttf","characterRegex":"[0-9]"},
       {"type":"font","name":"FONT_ROBOTO_FLEX_EXTRABOLD_62","file":"fonts/RobotoFlex-ExtraBold-62.ttf","characterRegex":"[0-9:]"},
-      {"type":"font","name":"FONT_ROBOTO_FLEX_BOLD_20","file":"fonts/RobotoFlex-ExtraBold-18.ttf","characterRegex":"[0-9A-Za-z%°.-]"},
-      {"type":"font","name":"FONT_ROBOTO_FLEX_EXTRABOLD_24","file":"fonts/RobotoFlex-ExtraBold-28.ttf","characterRegex":"[0-9A-Za-z%°.-]"},
+      {"type":"font","name":"FONT_ROBOTO_FLEX_BOLD_20","file":"fonts/RobotoFlex-ExtraBold-18.ttf","characterRegex":"[0-9A-Za-zÀ-žȘșȚțĦħĠġ%°.-]"},
+      {"type":"font","name":"FONT_ROBOTO_FLEX_EXTRABOLD_24","file":"fonts/RobotoFlex-ExtraBold-28.ttf","characterRegex":"[0-9A-Za-zÀ-žȘșȚțĦħĠġ%°.-]"},
       {"type":"font","name":"FONT_ROBOTO_FLEX_EXTRABOLD_28","file":"fonts/RobotoFlex-ExtraBold-28.ttf","characterRegex":"[0-9]"},
       {"type":"font","name":"FONT_ROBOTO_FLEX_EXTRABOLD_12","file":"fonts/RobotoFlex-ExtraBold-12.ttf","characterRegex":"[0-9%]"},
       {"type":"png","name":"IMAGE_CALENDAR_54X46","file":"images/icons/54x46/calendar/white_calendar_54x46.png"},
