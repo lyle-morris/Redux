@@ -63,7 +63,9 @@ GColor redux_preset_time_text_color(void) {
 
 GColor redux_preset_slot_text_color(void) {
   uint8_t theme = valid_theme();
-  return (theme == ReduxThemePurple || theme == ReduxThemeBlack) ? GColorWhite : GColorBlack;
+  return (theme == ReduxThemePurple || theme == ReduxThemeRed || theme == ReduxThemeBlack)
+    ? GColorWhite
+    : GColorBlack;
 }
 
 GColor redux_preset_battery_color(void) {
