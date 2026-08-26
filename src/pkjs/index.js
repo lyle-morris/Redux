@@ -1,5 +1,5 @@
-var CONFIG_URL = 'https://lyle-morris.github.io/Hosting/apps/redux/qa/app-config-v5.html';
-var CONFIG_VERSION = 'redux-qa-v5';
+var CONFIG_URL = 'https://lyle-morris.github.io/Hosting/apps/redux/qa/app-config-v6.html';
+var CONFIG_VERSION = 'redux-qa-v6';
 var SETTINGS_KEY = 'redux_qa_settings_v2';
 
 var DEFAULTS = {
@@ -11,7 +11,7 @@ var DEFAULTS = {
   manualLocation: false,
   manualPostalCode: '',
   manualCity: '',
-  manualCountry: 'US',
+  manualCountry: '',
   language: 'en',
   analyticsEnabled: true,
   verticalLayout: false,
@@ -63,7 +63,7 @@ function normalize(raw) {
     manualLocation: !!first(raw, 'manualLocation', 'manual_location', DEFAULTS.manualLocation),
     manualPostalCode: String(first(raw, 'manualPostalCode', 'manual_postal_code', DEFAULTS.manualPostalCode) || ''),
     manualCity: String(first(raw, 'manualCity', 'manual_city', DEFAULTS.manualCity) || ''),
-    manualCountry: String(first(raw, 'manualCountry', 'manual_country', DEFAULTS.manualCountry) || DEFAULTS.manualCountry),
+    manualCountry: String(first(raw, 'manualCountry', 'manual_country', DEFAULTS.manualCountry) || ''),
     language: first(raw, 'language', 'language', DEFAULTS.language),
     analyticsEnabled: !!first(raw, 'analyticsEnabled', 'analytics_enabled', DEFAULTS.analyticsEnabled),
     verticalLayout: layout === 'vertical_2' || layout === 'vertical_3',
