@@ -50,7 +50,8 @@
 
 #define VERTICAL_LABEL_X 10
 #define VERTICAL_LABEL_W 54
-#define VERTICAL_LABEL_H 20
+// Give descenders such as the g in "Aug" room without moving the approved baseline.
+#define VERTICAL_LABEL_H 24
 
 #define VERTICAL_TIME_CONTENT_X 90
 #define VERTICAL_TIME_CONTENT_W 104
