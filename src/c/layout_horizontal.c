@@ -53,7 +53,7 @@ static uint32_t metric_resource(uint8_t metric) {
 
 static void metric_value(uint8_t metric, struct tm *tick_time, char *buffer, size_t size) {
   switch(metric) {
-    case ReduxMetricCalendar: strftime(buffer, size, "%b", tick_time); break;
+    case ReduxMetricCalendar: redux_format_calendar_label(tick_time, buffer, size); break;
     case ReduxMetricWeather: snprintf(buffer, size, "%s", g_redux_settings.celsius ? "22°" : "72°"); break;
     case ReduxMetricBattery: {
       redux_battery_format_label(battery_state_service_peek(), buffer, size);
