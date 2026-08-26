@@ -46,7 +46,7 @@
       {"type":"font","name":"FONT_ROBOTO_FLEX_EXTRABOLD_21","file":"fonts/RobotoFlex-ExtraBold-18.ttf","characterRegex":"[0-9]"},
       {"type":"font","name":"FONT_ROBOTO_FLEX_EXTRABOLD_62","file":"fonts/RobotoFlex-ExtraBold-62.ttf","characterRegex":"[0-9:]"},
       {"type":"font","name":"FONT_ROBOTO_FLEX_BOLD_20","file":"fonts/RobotoFlex-ExtraBold-18.ttf","characterRegex":"[0-9A-Za-z%°.-]"},
-      {"type":"font","name":"FONT_ROBOTO_FLEX_EXTRABOLD_24","file":"fonts/RobotoFlex-ExtraBold-18.ttf","characterRegex":"[0-9A-Za-z%°.-]"},
+      {"type":"font","name":"FONT_ROBOTO_FLEX_EXTRABOLD_SLOT_24","file":"fonts/RobotoFlex-ExtraBold-18.ttf","characterRegex":"[0-9A-Za-z%°.-]"},
       {"type":"font","name":"FONT_ROBOTO_FLEX_EXTRABOLD_28","file":"fonts/RobotoFlex-ExtraBold-28.ttf","characterRegex":"[0-9]"},
       {"type":"font","name":"FONT_ROBOTO_FLEX_EXTRABOLD_12","file":"fonts/RobotoFlex-ExtraBold-12.ttf","characterRegex":"[0-9%]"},
       {"type":"png","name":"IMAGE_CALENDAR_54X46","file":"images/icons/54x46/calendar/white_calendar_54x46.png"},
