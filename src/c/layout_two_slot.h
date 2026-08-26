@@ -46,11 +46,12 @@
 
 // Figma tray stack: 10 px top + 64 px icon + 2 px gap + 24 px label + 10 px bottom.
 #define TWO_SLOT_FIGMA_LABEL_Y 76
-// Pebble places the visible 24 px Roboto Flex glyphs lower than Figma. Shift
-// the TextLayer up 2 px so descenders such as the g in "Aug" remain visible.
+// Pebble places the visible 24 px Roboto Flex glyphs lower than Figma. Keep
+// the approved visual Y compensation and give the TextLayer additional height
+// so descenders such as the g in "Aug" are not clipped by the layer bounds.
 #define TWO_SLOT_LABEL_Y 71
 #define TWO_SLOT_LABEL_W 64
-#define TWO_SLOT_LABEL_H 28
+#define TWO_SLOT_LABEL_H 32
 
 // Calendar day coordinates are local to the 64 x 64 custom icon layer.
 #define TWO_SLOT_FIGMA_CALENDAR_DAY_X 16
