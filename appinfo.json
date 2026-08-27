@@ -35,8 +35,7 @@
     "celsius": 22,
     "show_bluetooth": 23,
     "language": 24,
-    "analytics_enabled": 25,
-    "weekday_instead_of_month": 26
+    "analytics_enabled": 25
   },
   "resources": {
     "media": [
