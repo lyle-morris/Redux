@@ -68,7 +68,6 @@ typedef struct {
   bool hour24;
   bool celsius;
   bool show_bluetooth;
-  bool weekday_instead_of_month;
   uint8_t language;
   uint32_t watchface_background;
   uint32_t box_background;
