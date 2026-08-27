@@ -7,7 +7,6 @@ var DEFAULTS = {
   hour24: false,
   celsius: false,
   showBluetooth: false,
-  weekdayInsteadOfMonth: false,
   manualLocation: false,
   manualPostalCode: '',
   manualCity: '',
@@ -59,7 +58,6 @@ function normalize(raw) {
     hour24: !!first(raw, 'hour24', 'use_24_hour', DEFAULTS.hour24),
     celsius: !!first(raw, 'celsius', 'use_celsius', DEFAULTS.celsius),
     showBluetooth: !!first(raw, 'showBluetooth', 'show_bluetooth', DEFAULTS.showBluetooth),
-    weekdayInsteadOfMonth: !!first(raw, 'weekdayInsteadOfMonth', 'weekday_instead_of_month', DEFAULTS.weekdayInsteadOfMonth),
     manualLocation: !!first(raw, 'manualLocation', 'manual_location', DEFAULTS.manualLocation),
     manualPostalCode: String(first(raw, 'manualPostalCode', 'manual_postal_code', DEFAULTS.manualPostalCode) || ''),
     manualCity: String(first(raw, 'manualCity', 'manual_city', DEFAULTS.manualCity) || ''),
@@ -141,8 +139,7 @@ function buildPayload(settings) {
     22: settings.celsius ? 1 : 0,
     23: settings.showBluetooth ? 1 : 0,
     24: enumValue(settings.language, languages, 0),
-    25: settings.analyticsEnabled ? 1 : 0,
-    26: settings.weekdayInsteadOfMonth ? 1 : 0
+    25: settings.analyticsEnabled ? 1 : 0
   };
 }
 
@@ -150,7 +147,7 @@ function sendSettings(settings) {
   settings = normalize(settings);
   var payload = buildPayload(settings);
   console.log('Redux sending settings: ' + JSON.stringify(settings));
-  console.log('Redux language payload: language=' + payload[24] + ' weekday=' + payload[26]);
+  console.log('Redux language payload: language=' + payload[24]);
   Pebble.sendAppMessage(payload, function() {
     console.log('Redux settings sent');
   }, function(error) {
