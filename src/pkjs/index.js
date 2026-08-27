@@ -1,5 +1,5 @@
-var CONFIG_URL = 'https://lyle-morris.github.io/Hosting/apps/redux/qa/app-config-v8.html';
-var CONFIG_VERSION = 'redux-qa-v8';
+var CONFIG_URL = 'https://lyle-morris.github.io/Hosting/apps/redux/qa/app-config.html';
+var CONFIG_VERSION = 'redux-qa-v9';
 var SETTINGS_KEY = 'redux_qa_settings_v2';
 
 var DEFAULTS = {
