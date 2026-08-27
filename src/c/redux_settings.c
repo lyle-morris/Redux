@@ -100,7 +100,7 @@ void redux_settings_set_defaults(void) {
     .slot_metric = {ReduxMetricCalendar, ReduxMetricWeather, ReduxMetricNone},
     .show_battery_indicator = true,
     .show_leading_zero = true, .hour24 = false, .celsius = false,
-    .show_bluetooth = false, .weekday_instead_of_month = false,
+    .show_bluetooth = false,
     .language = ReduxLanguageEnglish,
     .watchface_background = 0x000000, .box_background = 0xffffff,
     .box_top_border = 0x000000, .box_bottom_border = 0x000000,
@@ -114,11 +114,8 @@ void redux_settings_set_defaults(void) {
 void redux_format_calendar_label(struct tm *tick_time, char *buffer, size_t size) {
   if (!tick_time || !buffer || size == 0) return;
   uint8_t language = redux_valid_language(g_redux_settings.language);
-  int index = g_redux_settings.weekday_instead_of_month ? tick_time->tm_wday : tick_time->tm_mon;
-  const char *label = g_redux_settings.weekday_instead_of_month
-    ? s_weekday_labels[language][index >= 0 && index < 7 ? index : 0]
-    : s_month_labels[language][index >= 0 && index < 12 ? index : 0];
-  snprintf(buffer, size, "%s", label);
+  int month = tick_time->tm_mon >= 0 && tick_time->tm_mon < 12 ? tick_time->tm_mon : 0;
+  snprintf(buffer, size, "%s", s_month_labels[language][month]);
 }
 
 void redux_format_localized_date(struct tm *tick_time, char *buffer, size_t size) {
