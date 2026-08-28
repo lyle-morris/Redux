@@ -3,7 +3,7 @@
   "shortName": "Redux",
   "longName": "Redux",
   "companyName": "Lyle Morris",
-  "versionLabel": "0.1.0",
+  "versionLabel": "0.1.1",
   "sdkVersion": "3",
   "enableMultiJS": false,
   "targetPlatforms": ["emery"],
