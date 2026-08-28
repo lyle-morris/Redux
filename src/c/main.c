@@ -42,7 +42,7 @@ static GRect bluetooth_frame_for_layout(void) {
     case ReduxLayoutVerticalTwo:
     case ReduxLayoutVerticalThree:
       return GRect(
-        VERTICAL_TIME_PANEL_X + VERTICAL_TIME_PANEL_W - BLUETOOTH_MARGIN - BLUETOOTH_SIZE,
+        VERTICAL_CANVAS_W - BLUETOOTH_MARGIN - BLUETOOTH_SIZE,
         VERTICAL_TIME_PANEL_Y + VERTICAL_TIME_PANEL_H - BLUETOOTH_MARGIN - BLUETOOTH_SIZE,
         BLUETOOTH_SIZE,
         BLUETOOTH_SIZE
