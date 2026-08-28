@@ -60,7 +60,9 @@ static void update_bluetooth_overlay(void) {
 
 static void raise_bluetooth_overlay(void) {
   if(!s_bluetooth_layer || !s_main_window) return;
-  layer_add_child(window_get_root_layer(s_main_window), bitmap_layer_get_layer(s_bluetooth_layer));
+  Layer *layer = bitmap_layer_get_layer(s_bluetooth_layer);
+  layer_remove_from_parent(layer);
+  layer_add_child(window_get_root_layer(s_main_window), layer);
   update_bluetooth_overlay();
 }
 
