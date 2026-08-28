@@ -1,4 +1,5 @@
 #include "redux_settings.h"
+#include "redux_weather.h"
 #include <stdio.h>
 
 ReduxSettings g_redux_settings;
@@ -54,6 +55,12 @@ static uint8_t valid_theme(void) {
   return g_redux_settings.theme < 10 ? g_redux_settings.theme : ReduxThemeOrange;
 }
 
+static struct tm *display_date_time(struct tm *tick_time) {
+  time_t now = time(NULL);
+  struct tm *display = redux_weather_display_time(now);
+  return display ? display : tick_time;
+}
+
 uint8_t redux_valid_metric(uint8_t metric, uint8_t fallback) {
   return metric <= ReduxMetricNone ? metric : fallback;
 }
@@ -81,6 +88,7 @@ void redux_settings_set_defaults(void) {
 
 void redux_format_calendar_label(struct tm *tick_time, char *buffer, size_t size) {
   if (!tick_time || !buffer || size == 0) return;
+  tick_time = display_date_time(tick_time);
   uint8_t language = redux_valid_language(g_redux_settings.language);
   int month = tick_time->tm_mon >= 0 && tick_time->tm_mon < 12 ? tick_time->tm_mon : 0;
   snprintf(buffer, size, "%s", s_month_labels[language][month]);
@@ -88,6 +96,7 @@ void redux_format_calendar_label(struct tm *tick_time, char *buffer, size_t size
 
 void redux_format_localized_date(struct tm *tick_time, char *buffer, size_t size) {
   if (!tick_time || !buffer || size == 0) return;
+  tick_time = display_date_time(tick_time);
   uint8_t language = redux_valid_language(g_redux_settings.language);
   int month = tick_time->tm_mon >= 0 && tick_time->tm_mon < 12 ? tick_time->tm_mon : 0;
   snprintf(buffer, size, "%s %d", s_month_labels[language][month], tick_time->tm_mday);
@@ -127,8 +136,7 @@ GColor redux_preset_battery_color(void) {
 }
 
 bool redux_preset_uses_reverse_icons(void) {
-  uint8_t theme = valid_theme();
-  return theme == ReduxThemePurple || theme == ReduxThemeBlack;
+  return valid_theme() == ReduxThemeBlack;
 }
 
 GColor redux_contrast_color(GColor color) {
