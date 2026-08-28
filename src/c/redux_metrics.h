@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include "battery_assets.h"
 #include "redux_settings.h"
+#include "redux_heart_rate.h"
 
 #define REDUX_METRIC_UNAVAILABLE "---"
 
@@ -79,12 +80,7 @@ static inline void redux_metric_value(uint8_t metric, struct tm *tick_time, char
       break;
     }
     case ReduxMetricHeart: {
-      time_t now = time(NULL);
-      HealthServiceAccessibilityMask accessibility = health_service_metric_accessible(HealthMetricHeartRateBPM, now, now);
-      HealthValue bpm = 0;
-      if(accessibility & HealthServiceAccessibilityMaskAvailable) {
-        bpm = health_service_peek_current_value(HealthMetricHeartRateBPM);
-      }
+      HealthValue bpm = redux_current_heart_rate();
       if(bpm > 0) snprintf(buffer, size, "%ld", (long)bpm);
       else snprintf(buffer, size, "%s", REDUX_METRIC_UNAVAILABLE);
       break;
