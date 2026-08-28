@@ -30,3 +30,9 @@ static inline void redux_format_clock_hour(struct tm *tick_time, char *buffer, s
   strftime(buffer, size, g_redux_settings.hour24 ? "%H" : "%I", display_time);
   if(!g_redux_settings.show_leading_zero) redux_strip_leading_zero(buffer);
 }
+
+static inline void redux_format_clock_minute(struct tm *tick_time, char *buffer, size_t size) {
+  if(!tick_time || !buffer || size == 0) return;
+  struct tm *display_time = redux_clock_display_time(tick_time);
+  strftime(buffer, size, "%M", display_time);
+}
