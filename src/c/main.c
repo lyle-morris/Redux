@@ -5,6 +5,7 @@
 #include "layout_vertical.h"
 #include "redux_settings.h"
 #include "redux_heart_rate.h"
+#include "redux_weather.h"
 
 typedef enum {
   ReduxLayoutHorizontalTwo = 0,
@@ -19,9 +20,8 @@ enum {
   PersistKeySettings = 102,
 };
 
-#define BLUETOOTH_X 180
-#define BLUETOOTH_Y 137
 #define BLUETOOTH_SIZE 14
+#define BLUETOOTH_MARGIN 4
 
 static Window *s_main_window;
 static ReduxLayout s_layout = ReduxLayoutHorizontalTwo;
@@ -35,6 +35,34 @@ static ReduxLayout valid_layout(int32_t value) {
     return ReduxLayoutHorizontalTwo;
   }
   return (ReduxLayout)value;
+}
+
+static GRect bluetooth_frame_for_layout(void) {
+  switch(s_layout) {
+    case ReduxLayoutVerticalTwo:
+    case ReduxLayoutVerticalThree:
+      return GRect(
+        VERTICAL_TIME_PANEL_X + VERTICAL_TIME_PANEL_W - BLUETOOTH_MARGIN - BLUETOOTH_SIZE,
+        VERTICAL_TIME_PANEL_Y + VERTICAL_TIME_PANEL_H - BLUETOOTH_MARGIN - BLUETOOTH_SIZE,
+        BLUETOOTH_SIZE,
+        BLUETOOTH_SIZE
+      );
+    case ReduxLayoutHorizontalTwo:
+      return GRect(
+        TWO_SLOT_TIME_PANEL_X + TWO_SLOT_TIME_PANEL_W - BLUETOOTH_MARGIN - BLUETOOTH_SIZE,
+        TWO_SLOT_TIME_PANEL_Y + TWO_SLOT_TIME_PANEL_H - BLUETOOTH_MARGIN - BLUETOOTH_SIZE,
+        BLUETOOTH_SIZE,
+        BLUETOOTH_SIZE
+      );
+    case ReduxLayoutHorizontalThree:
+    default:
+      return GRect(
+        HORIZONTAL_TIME_PANEL_X + HORIZONTAL_TIME_PANEL_W - BLUETOOTH_MARGIN - BLUETOOTH_SIZE,
+        HORIZONTAL_TIME_PANEL_Y + HORIZONTAL_TIME_PANEL_H - BLUETOOTH_MARGIN - BLUETOOTH_SIZE,
+        BLUETOOTH_SIZE,
+        BLUETOOTH_SIZE
+      );
+  }
 }
 
 static void sanitize_settings(void) {
@@ -62,6 +90,7 @@ static void update_bluetooth_overlay(void) {
 static void raise_bluetooth_overlay(void) {
   if(!s_bluetooth_layer || !s_main_window) return;
   Layer *layer = bitmap_layer_get_layer(s_bluetooth_layer);
+  layer_set_frame(layer, bluetooth_frame_for_layout());
   layer_remove_from_parent(layer);
   layer_add_child(window_get_root_layer(s_main_window), layer);
   update_bluetooth_overlay();
@@ -75,7 +104,7 @@ static void bluetooth_connection_handler(bool connected) {
 static void bluetooth_overlay_load(Window *window) {
   if(s_bluetooth_layer) return;
   s_bluetooth_bitmap = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_BLUETOOTH_CONNECTED);
-  s_bluetooth_layer = bitmap_layer_create(GRect(BLUETOOTH_X, BLUETOOTH_Y, BLUETOOTH_SIZE, BLUETOOTH_SIZE));
+  s_bluetooth_layer = bitmap_layer_create(bluetooth_frame_for_layout());
   bitmap_layer_set_background_color(s_bluetooth_layer, GColorClear);
   bitmap_layer_set_compositing_mode(s_bluetooth_layer, GCompOpSet);
   bitmap_layer_set_alignment(s_bluetooth_layer, GAlignCenter);
@@ -166,6 +195,7 @@ static void inbox_received_handler(DictionaryIterator *iterator, void *context) 
 #undef READ_BOOL
 #undef READ_COLOR
 
+  redux_weather_handle_message(iterator);
   sanitize_settings();
   persist_write_int(PersistKeyLanguage, g_redux_settings.language);
   persist_settings();
@@ -231,6 +261,7 @@ static void init(void) {
   app_message_register_inbox_received(inbox_received_handler);
   app_message_register_inbox_dropped(inbox_dropped_handler);
   app_message_open(512, 128);
+  redux_weather_init();
 
   s_main_window = window_create();
   window_set_background_color(s_main_window, GColorBlack);
@@ -242,6 +273,7 @@ static void init(void) {
 }
 
 static void deinit(void) {
+  redux_weather_deinit();
   redux_heart_rate_sampling_reset();
   connection_service_unsubscribe();
   app_message_deregister_callbacks();
