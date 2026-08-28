@@ -6,6 +6,7 @@
 #include "battery_assets.h"
 #include "redux_settings.h"
 #include "redux_heart_rate.h"
+#include "redux_weather.h"
 
 #define REDUX_METRIC_UNAVAILABLE "---"
 
@@ -59,7 +60,11 @@ static inline void redux_metric_value(uint8_t metric, struct tm *tick_time, char
       redux_format_calendar_label(tick_time, buffer, size);
       break;
     case ReduxMetricWeather:
-      snprintf(buffer, size, "%s", g_redux_settings.celsius ? "22°" : "72°");
+      if(redux_weather_temperature_available()) {
+        snprintf(buffer, size, "%d°", redux_weather_temperature());
+      } else {
+        snprintf(buffer, size, "%s", REDUX_METRIC_UNAVAILABLE);
+      }
       break;
     case ReduxMetricBattery:
       redux_battery_format_label(battery_state_service_peek(), buffer, size);
