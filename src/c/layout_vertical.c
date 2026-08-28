@@ -119,7 +119,7 @@ static void health_event_handler(HealthEventType event, void *context) {
 
 static void update_time(struct tm *tick_time) {
   redux_format_clock_hour(tick_time, s_hour_buffer, sizeof(s_hour_buffer));
-  strftime(s_minute_buffer, sizeof(s_minute_buffer), "%M", tick_time);
+  redux_format_clock_minute(tick_time, s_minute_buffer, sizeof(s_minute_buffer));
   redux_format_localized_date(tick_time, s_date_buffer, sizeof(s_date_buffer));
   text_layer_set_text(s_hour_layer, s_hour_buffer);
   text_layer_set_text(s_minute_layer, s_minute_buffer);
