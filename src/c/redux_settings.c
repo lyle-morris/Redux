@@ -16,39 +16,6 @@ enum {
   ReduxThemeBlack = 9,
 };
 
-static const char * const s_weekday_labels[ReduxLanguageCount][7] = {
-  { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" },
-  { "Dom", "Lun", "Mar", "Mie", "Jue", "Vie", "Sab" },
-  { "Dim", "Lun", "Mar", "Mer", "Jeu", "Ven", "Sam" },
-  { "So", "Mo", "Di", "Mi", "Do", "Fr", "Sa" },
-  { "Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sab" },
-  { "Dom", "Lun", "Mar", "Mer", "Gio", "Ven", "Sab" },
-  { "Zo", "Ma", "Di", "Wo", "Do", "Vr", "Za" },
-  { "Søn", "Man", "Tir", "Ons", "Tor", "Fre", "Lør" },
-  { "Søn", "Man", "Tir", "Ons", "Tor", "Fre", "Lør" },
-  { "Sön", "Mån", "Tis", "Ons", "Tor", "Fre", "Lör" },
-  { "Su", "Ma", "Ti", "Ke", "To", "Pe", "La" },
-  { "Sun", "Mán", "Þri", "Mið", "Fim", "Fös", "Lau" },
-  { "Dg", "Dl", "Dt", "Dc", "Dj", "Dv", "Ds" },
-  { "Iga", "Alh", "Ast", "Azk", "Ost", "Ort", "Lar" },
-  { "Dom", "Lun", "Mar", "Mér", "Xov", "Ven", "Sáb" },
-  { "Nd", "Pn", "Wt", "Śr", "Czw", "Pt", "Sob" },
-  { "Ne", "Po", "Út", "St", "Čt", "Pá", "So" },
-  { "Ne", "Po", "Ut", "St", "Št", "Pi", "So" },
-  { "Ned", "Pon", "Tor", "Sre", "Čet", "Pet", "Sob" },
-  { "Ned", "Pon", "Uto", "Sri", "Čet", "Pet", "Sub" },
-  { "Ned", "Pon", "Uto", "Sri", "Čet", "Pet", "Sub" },
-  { "Ned", "Pon", "Uto", "Sre", "Čet", "Pet", "Sub" },
-  { "Dum", "Lun", "Mar", "Mie", "Joi", "Vin", "Sâm" },
-  { "Vas", "Hét", "Ked", "Sze", "Csü", "Pén", "Szo" },
-  { "Püh", "Esm", "Tei", "Kol", "Nel", "Ree", "Lau" },
-  { "Sv", "Pr", "Ot", "Tr", "Ce", "Pk", "Se" },
-  { "Sk", "Pr", "An", "Tr", "Kt", "Pn", "Št" },
-  { "Paz", "Pzt", "Sal", "Çar", "Per", "Cum", "Cmt" },
-  { "Die", "Hën", "Mar", "Mër", "Enj", "Pre", "Sht" },
-  { "Had", "Tne", "Tli", "Erb", "Ham", "Gim", "Sib" }
-};
-
 static const char * const s_month_labels[ReduxLanguageCount][12] = {
   { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" },
   { "Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic" },
@@ -83,6 +50,7 @@ static const char * const s_month_labels[ReduxLanguageCount][12] = {
 };
 
 static uint8_t valid_theme(void) {
+  if(g_redux_settings.theme == ReduxThemePink) return ReduxThemeRed;
   return g_redux_settings.theme < 10 ? g_redux_settings.theme : ReduxThemeOrange;
 }
 
@@ -122,11 +90,7 @@ void redux_format_localized_date(struct tm *tick_time, char *buffer, size_t size
   if (!tick_time || !buffer || size == 0) return;
   uint8_t language = redux_valid_language(g_redux_settings.language);
   int month = tick_time->tm_mon >= 0 && tick_time->tm_mon < 12 ? tick_time->tm_mon : 0;
-  int weekday = tick_time->tm_wday >= 0 && tick_time->tm_wday < 7 ? tick_time->tm_wday : 0;
-  snprintf(buffer, size, "%s %d %s",
-           s_month_labels[language][month],
-           tick_time->tm_mday,
-           s_weekday_labels[language][weekday]);
+  snprintf(buffer, size, "%s %d", s_month_labels[language][month], tick_time->tm_mday);
 }
 
 GColor redux_color(uint32_t value) { return GColorFromHEX(value & 0xffffff); }
