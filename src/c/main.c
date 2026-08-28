@@ -15,17 +15,81 @@ typedef enum {
 enum {
   PersistKeyLayout = 100,
   PersistKeyLanguage = 101,
+  PersistKeySettings = 102,
 };
+
+#define BLUETOOTH_X 180
+#define BLUETOOTH_Y 137
+#define BLUETOOTH_SIZE 14
 
 static Window *s_main_window;
 static ReduxLayout s_layout = ReduxLayoutHorizontalTwo;
 static bool s_layout_loaded;
+static BitmapLayer *s_bluetooth_layer;
+static GBitmap *s_bluetooth_bitmap;
+static bool s_phone_connected;
 
 static ReduxLayout valid_layout(int32_t value) {
   if(value < ReduxLayoutHorizontalTwo || value > ReduxLayoutVerticalTwo) {
     return ReduxLayoutHorizontalTwo;
   }
   return (ReduxLayout)value;
+}
+
+static void sanitize_settings(void) {
+  g_redux_settings.slot_metric[0] = redux_valid_metric(g_redux_settings.slot_metric[0], ReduxMetricCalendar);
+  g_redux_settings.slot_metric[1] = redux_valid_metric(g_redux_settings.slot_metric[1], ReduxMetricWeather);
+  g_redux_settings.slot_metric[2] = redux_valid_metric(g_redux_settings.slot_metric[2], ReduxMetricNone);
+  g_redux_settings.language = redux_valid_language(g_redux_settings.language);
+  g_redux_settings.theme_mode = g_redux_settings.theme_mode ? 1 : 0;
+  if(g_redux_settings.theme > 9) g_redux_settings.theme = 0;
+  if(g_redux_settings.theme == 6) g_redux_settings.theme = 5;
+}
+
+static void persist_settings(void) {
+  persist_write_data(PersistKeySettings, &g_redux_settings, sizeof(g_redux_settings));
+}
+
+static void update_bluetooth_overlay(void) {
+  if(!s_bluetooth_layer) return;
+  layer_set_hidden(
+    bitmap_layer_get_layer(s_bluetooth_layer),
+    !g_redux_settings.show_bluetooth || !s_phone_connected
+  );
+}
+
+static void raise_bluetooth_overlay(void) {
+  if(!s_bluetooth_layer || !s_main_window) return;
+  layer_add_child(window_get_root_layer(s_main_window), bitmap_layer_get_layer(s_bluetooth_layer));
+  update_bluetooth_overlay();
+}
+
+static void bluetooth_connection_handler(bool connected) {
+  s_phone_connected = connected;
+  update_bluetooth_overlay();
+}
+
+static void bluetooth_overlay_load(Window *window) {
+  if(s_bluetooth_layer) return;
+  s_bluetooth_bitmap = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_BLUETOOTH_CONNECTED);
+  s_bluetooth_layer = bitmap_layer_create(GRect(BLUETOOTH_X, BLUETOOTH_Y, BLUETOOTH_SIZE, BLUETOOTH_SIZE));
+  bitmap_layer_set_background_color(s_bluetooth_layer, GColorClear);
+  bitmap_layer_set_compositing_mode(s_bluetooth_layer, GCompOpSet);
+  bitmap_layer_set_alignment(s_bluetooth_layer, GAlignCenter);
+  bitmap_layer_set_bitmap(s_bluetooth_layer, s_bluetooth_bitmap);
+  layer_add_child(window_get_root_layer(window), bitmap_layer_get_layer(s_bluetooth_layer));
+  update_bluetooth_overlay();
+}
+
+static void bluetooth_overlay_unload(void) {
+  if(s_bluetooth_layer) {
+    bitmap_layer_destroy(s_bluetooth_layer);
+    s_bluetooth_layer = NULL;
+  }
+  if(s_bluetooth_bitmap) {
+    gbitmap_destroy(s_bluetooth_bitmap);
+    s_bluetooth_bitmap = NULL;
+  }
 }
 
 static void load_active_layout(Window *window) {
@@ -49,6 +113,7 @@ static void load_active_layout(Window *window) {
       break;
   }
   s_layout_loaded = true;
+  raise_bluetooth_overlay();
 }
 
 static void unload_active_layout(Window *window) {
@@ -97,11 +162,9 @@ static void inbox_received_handler(DictionaryIterator *iterator, void *context) 
 #undef READ_BOOL
 #undef READ_COLOR
 
-  g_redux_settings.slot_metric[0] = redux_valid_metric(g_redux_settings.slot_metric[0], ReduxMetricCalendar);
-  g_redux_settings.slot_metric[1] = redux_valid_metric(g_redux_settings.slot_metric[1], ReduxMetricWeather);
-  g_redux_settings.slot_metric[2] = redux_valid_metric(g_redux_settings.slot_metric[2], ReduxMetricNone);
-  g_redux_settings.language = redux_valid_language(g_redux_settings.language);
+  sanitize_settings();
   persist_write_int(PersistKeyLanguage, g_redux_settings.language);
+  persist_settings();
 
   if(requested_layout != s_layout) {
     apply_layout(requested_layout);
@@ -109,12 +172,13 @@ static void inbox_received_handler(DictionaryIterator *iterator, void *context) 
     unload_active_layout(s_main_window);
     load_active_layout(s_main_window);
   }
+  update_bluetooth_overlay();
 
   Tuple *theme_mode = dict_find(iterator, MESSAGE_KEY_theme_mode);
   Tuple *theme = dict_find(iterator, MESSAGE_KEY_theme);
   Tuple *battery = dict_find(iterator, MESSAGE_KEY_show_battery_indicator);
   APP_LOG(APP_LOG_LEVEL_INFO,
-          "Redux settings received: layout=%d slots=%d/%d/%d theme_mode=%d theme=%d battery=%d language=%d",
+          "Redux settings received: layout=%d slots=%d/%d/%d theme_mode=%d theme=%d battery=%d bluetooth=%d language=%d",
           (int)s_layout,
           (int)g_redux_settings.slot_metric[0],
           (int)g_redux_settings.slot_metric[1],
@@ -122,6 +186,7 @@ static void inbox_received_handler(DictionaryIterator *iterator, void *context) 
           theme_mode ? (int)theme_mode->value->int32 : -1,
           theme ? (int)theme->value->int32 : -1,
           battery ? (int)battery->value->int32 : -1,
+          g_redux_settings.show_bluetooth ? 1 : 0,
           (int)g_redux_settings.language);
 }
 
@@ -129,17 +194,36 @@ static void inbox_dropped_handler(AppMessageResult reason, void *context) {
   APP_LOG(APP_LOG_LEVEL_ERROR, "Redux settings dropped: %d", (int)reason);
 }
 
-static void main_window_load(Window *window) { load_active_layout(window); }
-static void main_window_unload(Window *window) { unload_active_layout(window); }
+static void main_window_load(Window *window) {
+  load_active_layout(window);
+  bluetooth_overlay_load(window);
+  raise_bluetooth_overlay();
+}
+
+static void main_window_unload(Window *window) {
+  bluetooth_overlay_unload();
+  unload_active_layout(window);
+}
 
 static void init(void) {
   redux_settings_set_defaults();
+
+  if(persist_exists(PersistKeySettings) && persist_get_size(PersistKeySettings) == (int)sizeof(g_redux_settings)) {
+    persist_read_data(PersistKeySettings, &g_redux_settings, sizeof(g_redux_settings));
+    sanitize_settings();
+  }
   if(persist_exists(PersistKeyLayout)) {
     s_layout = valid_layout(persist_read_int(PersistKeyLayout));
   }
   if(persist_exists(PersistKeyLanguage)) {
     g_redux_settings.language = redux_valid_language((uint8_t)persist_read_int(PersistKeyLanguage));
   }
+
+  s_phone_connected = connection_service_peek_pebble_app_connection();
+  connection_service_subscribe((ConnectionHandlers) {
+    .pebble_app_connection_handler = bluetooth_connection_handler
+  });
+
   app_message_register_inbox_received(inbox_received_handler);
   app_message_register_inbox_dropped(inbox_dropped_handler);
   app_message_open(512, 128);
@@ -154,6 +238,7 @@ static void init(void) {
 }
 
 static void deinit(void) {
+  connection_service_unsubscribe();
   app_message_deregister_callbacks();
   window_destroy(s_main_window);
 }
