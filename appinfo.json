@@ -3,7 +3,7 @@
   "shortName": "Redux",
   "longName": "Redux",
   "companyName": "Lyle Morris",
-  "versionLabel": "0.1.2",
+  "versionLabel": "0.1.3",
   "sdkVersion": "3",
   "enableMultiJS": false,
   "targetPlatforms": ["emery"],
@@ -35,7 +35,11 @@
     "celsius": 22,
     "show_bluetooth": 23,
     "language": 24,
-    "analytics_enabled": 25
+    "analytics_enabled": 25,
+    "weather_temp": 26,
+    "location_time_offset": 27,
+    "use_location_time": 28,
+    "request_weather": 29
   },
   "resources": {
     "media": [
