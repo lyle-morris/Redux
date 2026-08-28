@@ -2,16 +2,6 @@
 #include <pebble.h>
 #include <stddef.h>
 
-// QA isolation: keep preset reverse-icon code paths compiling while the
-// reverse PNG resources are reintroduced one at a time. These aliases point
-// to the already-proven white assets and can be removed once the offending
-// CloudPebble resource is identified.
-#define RESOURCE_ID_IMAGE_REVERSE_CALENDAR_54X46 RESOURCE_ID_IMAGE_CALENDAR_54X46
-#define RESOURCE_ID_IMAGE_REVERSE_BATTERY_100_54X46 RESOURCE_ID_IMAGE_BATTERY_100_54X46
-#define RESOURCE_ID_IMAGE_REVERSE_STEPS_54X46 RESOURCE_ID_IMAGE_STEPS_54X46
-#define RESOURCE_ID_IMAGE_REVERSE_CALENDAR_64X64 RESOURCE_ID_IMAGE_CALENDAR_64X64
-#define RESOURCE_ID_IMAGE_REVERSE_WEATHER_PARTLY_CLOUDY_64X64 RESOURCE_ID_IMAGE_WEATHER_PARTLY_CLOUDY_64X64
-
 typedef enum {
   ReduxMetricCalendar = 0,
   ReduxMetricWeather = 1,
