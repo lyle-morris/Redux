@@ -5,7 +5,7 @@
 // Redux 2.1.0 vertical layout geometry. The renderer supports both two-slot
 // and three-slot tray states without a separate compilation unit.
 
-#define VERTICAL_LAYOUT_LOCK_REVISION 3
+#define VERTICAL_LAYOUT_LOCK_REVISION 4
 
 #define VERTICAL_CANVAS_W 200
 #define VERTICAL_CANVAS_H 228
@@ -50,23 +50,24 @@
 
 #define VERTICAL_LABEL_X 10
 #define VERTICAL_LABEL_W 54
-// Give descenders such as the g in "Aug" room without moving the approved baseline.
 #define VERTICAL_LABEL_H 24
 
-#define VERTICAL_TIME_CONTENT_X 90
+// Shift the entire time/date content 2px left from the approved r3 geometry.
+#define VERTICAL_TIME_CONTENT_X 88
 #define VERTICAL_TIME_CONTENT_W 104
 #define VERTICAL_TIME_LAYER_H 90
 #define VERTICAL_TIME_HOUR_Y 8
 #define VERTICAL_TIME_MINUTE_Y 83
 
-#define VERTICAL_DATE_X 90
-#define VERTICAL_DATE_Y 174
+#define VERTICAL_DATE_X 88
+// Minute layer ends at y=173; date starts 12px later.
+#define VERTICAL_DATE_Y 185
 #define VERTICAL_DATE_W 104
-#define VERTICAL_DATE_H 22
+#define VERTICAL_DATE_H 26
 
 #define VERTICAL_LABEL_FONT_SIZE 20
 #define VERTICAL_CALENDAR_FONT_SIZE 21
-#define VERTICAL_DATE_FONT_SIZE 17
+#define VERTICAL_DATE_FONT_SIZE 20
 #define VERTICAL_TIME_FONT_SIZE 88
 
 void vertical_layout_load(Window *window);
