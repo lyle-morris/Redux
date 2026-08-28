@@ -3,6 +3,8 @@
 #include <pebble.h>
 #include <stddef.h>
 #include <stdio.h>
+#include "battery_assets.h"
+#include "redux_settings.h"
 
 #define REDUX_METRIC_UNAVAILABLE "---"
 
