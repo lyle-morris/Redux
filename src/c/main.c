@@ -4,6 +4,7 @@
 #include "layout_two_slot.h"
 #include "layout_vertical.h"
 #include "redux_settings.h"
+#include "redux_heart_rate.h"
 
 typedef enum {
   ReduxLayoutHorizontalTwo = 0,
@@ -120,6 +121,7 @@ static void load_active_layout(Window *window) {
 
 static void unload_active_layout(Window *window) {
   if(!s_layout_loaded) return;
+  redux_heart_rate_sampling_reset();
   switch(s_layout) {
     case ReduxLayoutHorizontalTwo: two_slot_layout_unload(window); break;
     case ReduxLayoutHorizontalThree: horizontal_layout_unload(window); break;
@@ -240,6 +242,7 @@ static void init(void) {
 }
 
 static void deinit(void) {
+  redux_heart_rate_sampling_reset();
   connection_service_unsubscribe();
   app_message_deregister_callbacks();
   window_destroy(s_main_window);
