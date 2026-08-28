@@ -28,6 +28,7 @@ static bool s_health_service_subscribed;
 
 static GFont s_font_21;
 static GFont s_font_label;
+static GFont s_font_date;
 static GFont s_font_88;
 static uint8_t s_slot_count;
 static char s_hour_buffer[4];
@@ -197,6 +198,7 @@ void vertical_layout_load(Window *window) {
 
   s_font_21 = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_ROBOTO_FLEX_EXTRABOLD_21));
   s_font_label = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_ROBOTO_FLEX_BOLD_20));
+  s_font_date = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_ROBOTO_FLEX_BOLD_DATE_20));
   s_font_88 = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_ROBOTO_FLEX_EXTRABOLD_88));
 
   s_background_layer = layer_create(GRect(0, 0, VERTICAL_CANVAS_W, VERTICAL_CANVAS_H));
@@ -207,7 +209,7 @@ void vertical_layout_load(Window *window) {
 
   s_hour_layer = create_text_layer(root_layer, GRect(VERTICAL_TIME_CONTENT_X, VERTICAL_TIME_HOUR_Y, VERTICAL_TIME_CONTENT_W, VERTICAL_TIME_LAYER_H), s_font_88, GTextAlignmentRight, "23", COLOR_TIME_TEXT);
   s_minute_layer = create_text_layer(root_layer, GRect(VERTICAL_TIME_CONTENT_X, VERTICAL_TIME_MINUTE_Y, VERTICAL_TIME_CONTENT_W, VERTICAL_TIME_LAYER_H), s_font_88, GTextAlignmentRight, "59", COLOR_TIME_TEXT);
-  s_date_layer = create_text_layer(root_layer, GRect(VERTICAL_DATE_X, VERTICAL_DATE_Y, VERTICAL_DATE_W, VERTICAL_DATE_H), s_font_label, GTextAlignmentCenter, "Aug 24", COLOR_DATE_TEXT);
+  s_date_layer = create_text_layer(root_layer, GRect(VERTICAL_DATE_X, VERTICAL_DATE_Y, VERTICAL_DATE_W, VERTICAL_DATE_H), s_font_date, GTextAlignmentCenter, "Aug 24", COLOR_DATE_TEXT);
 
   time_t now = time(NULL); update_time(localtime(&now));
   tick_timer_service_subscribe(MINUTE_UNIT, tick_handler);
@@ -246,6 +248,7 @@ void vertical_layout_unload(Window *window) {
   }
   layer_destroy(s_background_layer);
   fonts_unload_custom_font(s_font_88);
+  fonts_unload_custom_font(s_font_date);
   fonts_unload_custom_font(s_font_label);
   fonts_unload_custom_font(s_font_21);
 }
