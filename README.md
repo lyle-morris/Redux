@@ -1,40 +1,51 @@
 # Redux
 
-Pebble Time 2 watchface project for the Redux layouts.
+Redux is a Pebble Time 2 watchface for the native 200 × 228 Emery canvas.
 
-## Current build
+## Current release
 
-The `vertical_3`, `horizontal_3`, and standard `horizontal_2` layouts are all
-approved and geometry locked at revision 1. The active static build remains on
-`horizontal_2` for the next integration phase.
+**Redux 2.1.2** is the current production release.
 
-The locked contracts are documented in
-[`docs/vertical-3-layout.md`](docs/vertical-3-layout.md),
-[`docs/horizontal-3-layout.md`](docs/horizontal-3-layout.md), and
-[`docs/horizontal-2-layout.md`](docs/horizontal-2-layout.md).
+- Store UUID: `7d9c2cc1-24e3-4e4e-9693-5c0f8e4b1e10`
+- Target platform: `emery`
+- Capabilities: configurable, health
+- Source of truth: `main`
+- Production app-config: `lyle-morris/Hosting/apps/redux/`
 
-The Figma battery indicator is approved and design locked at revision 1 in the
-existing 200 × 20 px reserved strip for both horizontal layouts. Its behavior,
-charging animation, and theme rules are documented in
-[`docs/battery-indicator.md`](docs/battery-indicator.md).
+Release documentation:
 
-## Target layouts
+- [`docs/release-2.1.2-handoff.md`](docs/release-2.1.2-handoff.md)
+- [`docs/release-2.1.2-notes.md`](docs/release-2.1.2-notes.md)
+
+## Layouts
+
+Redux supports four layouts:
 
 - `horizontal_2`
 - `horizontal_3`
+- `vertical_2`
 - `vertical_3`
 
-All variants render on the native 200 x 228 px Pebble Time 2 canvas.
+The established geometry contracts are documented in:
 
-## Working branch
+- [`docs/horizontal-2-layout.md`](docs/horizontal-2-layout.md)
+- [`docs/horizontal-3-layout.md`](docs/horizontal-3-layout.md)
+- [`docs/vertical-3-layout.md`](docs/vertical-3-layout.md)
 
-Pixel-perfect layout development is performed on `dev/pixel-perfect-layouts`.
+The battery indicator design and behavior are documented in [`docs/battery-indicator.md`](docs/battery-indicator.md).
 
-## Icon uploads
+## Configuration
+
+The companion opens the versioned production configuration endpoint hosted in the `lyle-morris/Hosting` repository. Production config files, assets, localization, and Analytics are owned under `apps/redux/`.
+
+The persisted companion settings key remains `redux_qa_settings_v2` intentionally for settings continuity/migration. Do not rename it casually.
+
+## Assets
 
 Production icons live under `resources/images/icons/`, grouped by canvas size and metric. Redux uses paired `white_` and `reverse_` monochrome artwork; panel color comes from the theme.
 
-- `52x44/` is shared by the vertical and horizontal three-slot layouts.
-- `64x64/` is used by the horizontal two-slot layout.
-
 Vector masters belong in `assets/icons/source/`.
+
+## Development
+
+Create a new feature or release branch from `main` for future work. Do not continue development on retired 2.1.x QA/backup branches.
