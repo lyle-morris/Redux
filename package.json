@@ -14,9 +14,5 @@
     "emery",
     "pebble-time-2",
     "redux"
-  ],
-  "pebble": {
-    "enableMultiJS": false
-  }
+  ]
 }
-
