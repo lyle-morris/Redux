@@ -71,6 +71,8 @@ static void sanitize_settings(void) {
   g_redux_settings.slot_metric[2] = redux_valid_metric(g_redux_settings.slot_metric[2], ReduxMetricNone);
   g_redux_settings.language = redux_valid_language(g_redux_settings.language);
   g_redux_settings.theme_mode = g_redux_settings.theme_mode ? 1 : 0;
+  g_redux_settings.show_battery_indicator = g_redux_settings.show_battery_indicator ? true : false;
+  g_redux_settings.show_battery_percentage = g_redux_settings.show_battery_percentage ? true : false;
   if(g_redux_settings.theme > 9) g_redux_settings.theme = 0;
   if(g_redux_settings.theme == 6) g_redux_settings.theme = 5;
 }
@@ -182,6 +184,7 @@ static void inbox_received_handler(DictionaryIterator *iterator, void *context) 
   READ_U8(slot_3_metric, slot_metric[2]);
   READ_U8(theme_mode, theme_mode); READ_U8(theme, theme);
   READ_BOOL(show_battery_indicator, show_battery_indicator);
+  READ_BOOL(show_battery_percentage, show_battery_percentage);
   READ_BOOL(show_leading_zero, show_leading_zero); READ_BOOL(hour24, hour24);
   READ_BOOL(celsius, celsius); READ_BOOL(show_bluetooth, show_bluetooth);
   READ_U8(language, language);
@@ -211,8 +214,9 @@ static void inbox_received_handler(DictionaryIterator *iterator, void *context) 
   Tuple *theme_mode = dict_find(iterator, MESSAGE_KEY_theme_mode);
   Tuple *theme = dict_find(iterator, MESSAGE_KEY_theme);
   Tuple *battery = dict_find(iterator, MESSAGE_KEY_show_battery_indicator);
+  Tuple *battery_pct = dict_find(iterator, MESSAGE_KEY_show_battery_percentage);
   APP_LOG(APP_LOG_LEVEL_INFO,
-          "Redux settings received: layout=%d slots=%d/%d/%d theme_mode=%d theme=%d battery=%d bluetooth=%d language=%d",
+          "Redux settings received: layout=%d slots=%d/%d/%d theme_mode=%d theme=%d battery=%d battery_pct=%d bluetooth=%d language=%d",
           (int)s_layout,
           (int)g_redux_settings.slot_metric[0],
           (int)g_redux_settings.slot_metric[1],
@@ -220,6 +224,7 @@ static void inbox_received_handler(DictionaryIterator *iterator, void *context) 
           theme_mode ? (int)theme_mode->value->int32 : -1,
           theme ? (int)theme->value->int32 : -1,
           battery ? (int)battery->value->int32 : -1,
+          battery_pct ? (int)battery_pct->value->int32 : -1,
           g_redux_settings.show_bluetooth ? 1 : 0,
           (int)g_redux_settings.language);
 }
@@ -242,8 +247,10 @@ static void main_window_unload(Window *window) {
 static void init(void) {
   redux_settings_set_defaults();
 
-  if(persist_exists(PersistKeySettings) && persist_get_size(PersistKeySettings) == (int)sizeof(g_redux_settings)) {
-    persist_read_data(PersistKeySettings, &g_redux_settings, sizeof(g_redux_settings));
+  if(persist_exists(PersistKeySettings)) {
+    int stored_size = persist_get_size(PersistKeySettings);
+    int read_size = stored_size < (int)sizeof(g_redux_settings) ? stored_size : (int)sizeof(g_redux_settings);
+    if(read_size > 0) persist_read_data(PersistKeySettings, &g_redux_settings, read_size);
     sanitize_settings();
   }
   if(persist_exists(PersistKeyLayout)) {

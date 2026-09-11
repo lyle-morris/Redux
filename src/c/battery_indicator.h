@@ -29,5 +29,9 @@ void battery_indicator_set_normal_color(
   BatteryIndicator *indicator,
   GColor color
 );
+void battery_indicator_set_show_percentage(
+  BatteryIndicator *indicator,
+  bool show_percentage
+);
 
 void battery_indicator_destroy(BatteryIndicator *indicator);

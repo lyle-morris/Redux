@@ -39,7 +39,8 @@
     "weather_temp": 26,
     "location_time_offset": 27,
     "use_location_time": 28,
-    "request_weather": 29
+    "request_weather": 29,
+    "show_battery_percentage": 30
   },
   "resources": {
     "media": [

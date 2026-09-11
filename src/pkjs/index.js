@@ -1,11 +1,12 @@
 var CONFIG_URL = 'https://lyle-morris.github.io/Hosting/apps/redux/app-config-2.1.2.html';
-var CONFIG_VERSION = 'redux-2.1.2-config-20260828d';
+var CONFIG_VERSION = 'redux-2.1.2-config-20260911a';
 var SETTINGS_KEY = 'redux_qa_settings_v2';
 
 var WEATHER_TEMP_KEY = 26;
 var LOCATION_TIME_OFFSET_KEY = 27;
 var USE_LOCATION_TIME_KEY = 28;
 var REQUEST_WEATHER_KEY = 29;
+var SHOW_BATTERY_PERCENTAGE_KEY = 30;
 var WEATHER_REFRESH_DEBOUNCE_MS = 60000;
 var WEATHER_CACHE_ID = 'redux_weather_cache_id';
 var WEATHER_TEMP_STORAGE = 'redux_weather_temp';
@@ -35,6 +36,7 @@ var DEFAULTS = {
   themeMode: 'preset',
   theme: 'orange',
   showBatteryIndicator: true,
+  showBatteryPercentage: true,
   watchfaceBackground: '#000000',
   boxBackgroundColor: '#ffffff',
   boxTopBorderColor: '#000000',
@@ -46,7 +48,30 @@ var DEFAULTS = {
   slot1TextColor: '#000000',
   slot2TextColor: '#000000',
   slot3TextColor: '#000000',
-  batteryIndicatorColor: '#ff5500'
+  batteryIndicatorColor: '#ff5500',
+  customTheme: {
+    horizontal: {
+      background: '#ff5500',
+      boxBackground: '#ffffff',
+      boxTopBorder: '#000000',
+      boxBottomBorder: '#000000',
+      timeText: '#000000',
+      slot1Text: '#000000',
+      slot2Text: '#000000',
+      slot3Text: '#000000',
+      batteryIndicator: '#ff5500'
+    },
+    vertical: {
+      background: '#ffffff',
+      trayBackground: '#ff5500',
+      divider: '#000000',
+      timeText: '#000000',
+      dateText: '#000000',
+      slot1Text: '#000000',
+      slot2Text: '#000000',
+      slot3Text: '#000000'
+    }
+  }
 };
 
 function first(settings, camel, snake, fallback) {
@@ -57,6 +82,19 @@ function first(settings, camel, snake, fallback) {
 
 function clean(value) {
   return value === undefined || value === null ? '' : String(value).replace(/^\s+|\s+$/g, '');
+}
+
+function validColor(value, fallback) {
+  return /^#[0-9a-f]{6}$/i.test(String(value)) ? String(value).toLowerCase() : fallback;
+}
+
+function normalizeThemeGroup(source, defaults) {
+  source = source || {};
+  var result = {};
+  Object.keys(defaults).forEach(function(key) {
+    result[key] = validColor(source[key], defaults[key]);
+  });
+  return result;
 }
 
 function normalize(raw) {
@@ -77,6 +115,34 @@ function normalize(raw) {
   }
   if(theme === 'pink') theme = 'red';
 
+  var custom = raw.customTheme || raw.custom_theme || {};
+  var hasCustomTheme = !!(custom.horizontal || custom.vertical);
+  var horizontal = normalizeThemeGroup(custom.horizontal, DEFAULTS.customTheme.horizontal);
+  var verticalTheme = normalizeThemeGroup(custom.vertical, DEFAULTS.customTheme.vertical);
+  var isVertical = layout === 'vertical_2' || layout === 'vertical_3';
+  if(!hasCustomTheme) {
+    var activeBackground = first(raw, 'watchfaceBackground', 'watchface_background');
+    if(activeBackground !== undefined) {
+      if(isVertical) verticalTheme.background = validColor(activeBackground, verticalTheme.background);
+      else horizontal.background = validColor(activeBackground, horizontal.background);
+    }
+    horizontal.boxBackground = validColor(first(raw, 'boxBackgroundColor', 'box_background_color', horizontal.boxBackground), horizontal.boxBackground);
+    horizontal.boxTopBorder = validColor(first(raw, 'boxTopBorderColor', 'box_top_border_color', horizontal.boxTopBorder), horizontal.boxTopBorder);
+    horizontal.boxBottomBorder = validColor(first(raw, 'boxBottomBorderColor', 'box_bottom_border_color', horizontal.boxBottomBorder), horizontal.boxBottomBorder);
+    horizontal.batteryIndicator = validColor(first(raw, 'batteryIndicatorColor', 'battery_indicator_color', horizontal.batteryIndicator), horizontal.batteryIndicator);
+    verticalTheme.trayBackground = validColor(first(raw, 'trayBackgroundColor', 'tray_background_color', verticalTheme.trayBackground), verticalTheme.trayBackground);
+    verticalTheme.divider = validColor(first(raw, 'dividerColor', 'divider_color', verticalTheme.divider), verticalTheme.divider);
+    verticalTheme.dateText = validColor(first(raw, 'dateTextColor', 'date_text_color', verticalTheme.dateText), verticalTheme.dateText);
+  }
+
+  var activeTheme = isVertical ? verticalTheme : horizontal;
+  if(!hasCustomTheme) {
+    activeTheme.timeText = validColor(first(raw, 'timeTextColor', 'time_text_color', activeTheme.timeText), activeTheme.timeText);
+    activeTheme.slot1Text = validColor(first(raw, 'slot1TextColor', 'slot_1_text_color', activeTheme.slot1Text), activeTheme.slot1Text);
+    activeTheme.slot2Text = validColor(first(raw, 'slot2TextColor', 'slot_2_text_color', activeTheme.slot2Text), activeTheme.slot2Text);
+    activeTheme.slot3Text = validColor(first(raw, 'slot3TextColor', 'slot_3_text_color', activeTheme.slot3Text), activeTheme.slot3Text);
+  }
+
   return {
     showLeadingZero: !!first(raw, 'showLeadingZero', 'show_leading_zero', DEFAULTS.showLeadingZero),
     hour24: !!first(raw, 'hour24', 'use_24_hour', DEFAULTS.hour24),
@@ -88,7 +154,7 @@ function normalize(raw) {
     manualCountry: country,
     language: first(raw, 'language', 'language', DEFAULTS.language),
     analyticsEnabled: !!first(raw, 'analyticsEnabled', 'analytics_enabled', DEFAULTS.analyticsEnabled),
-    verticalLayout: layout === 'vertical_2' || layout === 'vertical_3',
+    verticalLayout: isVertical,
     layout: layout,
     slot1Metric: first(raw, 'slot1Metric', 'slot_1_metric', DEFAULTS.slot1Metric),
     slot2Metric: first(raw, 'slot2Metric', 'slot_2_metric', DEFAULTS.slot2Metric),
@@ -96,18 +162,23 @@ function normalize(raw) {
     themeMode: first(raw, 'themeMode', 'theme_mode', DEFAULTS.themeMode),
     theme: theme,
     showBatteryIndicator: !!first(raw, 'showBatteryIndicator', 'show_battery_indicator', DEFAULTS.showBatteryIndicator),
-    watchfaceBackground: first(raw, 'watchfaceBackground', 'watchface_background', DEFAULTS.watchfaceBackground),
-    boxBackgroundColor: first(raw, 'boxBackgroundColor', 'box_background_color', DEFAULTS.boxBackgroundColor),
-    boxTopBorderColor: first(raw, 'boxTopBorderColor', 'box_top_border_color', DEFAULTS.boxTopBorderColor),
-    boxBottomBorderColor: first(raw, 'boxBottomBorderColor', 'box_bottom_border_color', DEFAULTS.boxBottomBorderColor),
-    trayBackgroundColor: first(raw, 'trayBackgroundColor', 'tray_background_color', DEFAULTS.trayBackgroundColor),
-    dividerColor: first(raw, 'dividerColor', 'divider_color', DEFAULTS.dividerColor),
-    timeTextColor: first(raw, 'timeTextColor', 'time_text_color', DEFAULTS.timeTextColor),
-    dateTextColor: first(raw, 'dateTextColor', 'date_text_color', DEFAULTS.dateTextColor),
-    slot1TextColor: first(raw, 'slot1TextColor', 'slot_1_text_color', DEFAULTS.slot1TextColor),
-    slot2TextColor: first(raw, 'slot2TextColor', 'slot_2_text_color', DEFAULTS.slot2TextColor),
-    slot3TextColor: first(raw, 'slot3TextColor', 'slot_3_text_color', DEFAULTS.slot3TextColor),
-    batteryIndicatorColor: first(raw, 'batteryIndicatorColor', 'battery_indicator_color', DEFAULTS.batteryIndicatorColor)
+    showBatteryPercentage: !!first(raw, 'showBatteryPercentage', 'show_battery_percentage', DEFAULTS.showBatteryPercentage),
+    watchfaceBackground: activeTheme.background,
+    boxBackgroundColor: horizontal.boxBackground,
+    boxTopBorderColor: horizontal.boxTopBorder,
+    boxBottomBorderColor: horizontal.boxBottomBorder,
+    trayBackgroundColor: verticalTheme.trayBackground,
+    dividerColor: verticalTheme.divider,
+    timeTextColor: activeTheme.timeText,
+    dateTextColor: verticalTheme.dateText,
+    slot1TextColor: activeTheme.slot1Text,
+    slot2TextColor: activeTheme.slot2Text,
+    slot3TextColor: activeTheme.slot3Text,
+    batteryIndicatorColor: horizontal.batteryIndicator,
+    customTheme: {
+      horizontal: horizontal,
+      vertical: verticalTheme
+    }
   };
 }
 
@@ -209,6 +280,7 @@ function buildPayload(settings) {
     25: settings.analyticsEnabled ? 1 : 0,
     28: settings.manualLocation && typeof weatherState.offset === 'number' ? 1 : 0
   };
+  payload[SHOW_BATTERY_PERCENTAGE_KEY] = settings.showBatteryPercentage ? 1 : 0;
   if(typeof weatherState.temp === 'number') payload[WEATHER_TEMP_KEY] = weatherState.temp;
   if(settings.manualLocation && typeof weatherState.offset === 'number') payload[LOCATION_TIME_OFFSET_KEY] = weatherState.offset;
   return payload;

@@ -192,6 +192,7 @@ void two_slot_layout_load(Window *window) {
   s_battery_indicator = g_redux_settings.show_battery_indicator ? battery_indicator_create(GRect(TWO_SLOT_BOTTOM_STRIP_X, TWO_SLOT_BOTTOM_STRIP_Y, TWO_SLOT_BOTTOM_STRIP_W, TWO_SLOT_BOTTOM_STRIP_H)) : NULL;
   if(s_battery_indicator) {
     battery_indicator_set_normal_color(s_battery_indicator, COLOR_BATTERY);
+    battery_indicator_set_show_percentage(s_battery_indicator, g_redux_settings.show_battery_percentage);
     layer_add_child(root_layer, battery_indicator_get_layer(s_battery_indicator));
   }
 

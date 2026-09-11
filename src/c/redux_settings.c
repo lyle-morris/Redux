@@ -82,7 +82,8 @@ void redux_settings_set_defaults(void) {
     .tray_background = 0xff5500, .divider = 0x000000,
     .time_text = 0x000000, .date_text = 0x000000,
     .slot_text = {0x000000, 0x000000, 0x000000},
-    .battery_indicator = 0xff5500
+    .battery_indicator = 0xff5500,
+    .show_battery_percentage = true
   };
 }
 
