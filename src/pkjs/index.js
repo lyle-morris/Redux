@@ -1,5 +1,5 @@
 var CONFIG_URL = 'https://lyle-morris.github.io/Hosting/apps/redux/app-config-2.1.2.html';
-var CONFIG_VERSION = 'redux-2.1.2-config-20260911a';
+var CONFIG_VERSION = 'redux-2.1.2-config-20260913a';
 var SETTINGS_KEY = 'redux_qa_settings_v2';
 
 var WEATHER_TEMP_KEY = 26;
