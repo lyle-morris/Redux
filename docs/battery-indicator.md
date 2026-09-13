@@ -14,6 +14,8 @@ instance, node `334:8182`.
 The indicator is a styling addition inside the 200 × 20 px bottom strip that
 already exists in the locked horizontal two-slot and three-slot layouts. No
 locked layout coordinate, panel dimension, font size, or icon canvas changed.
+The numeric percentage label can be hidden by the `show_battery_percentage`
+setting without changing the strip, live battery level, or charging animation.
 
 ## Geometry
 
@@ -38,14 +40,16 @@ locked layout coordinate, panel dimension, font size, or icon canvas changed.
 | Charging | Green `#00FF00` | Green `#00FF00` |
 
 The normal segment color is configurable so production themes can override the
-blue without changing indicator geometry.
+blue without changing indicator geometry. When a Custom theme is moved from a
+vertical layout back to a horizontal layout, the horizontal battery indicator
+uses the same Pebble background color carried into the horizontal strip.
 
 ## Charging animation
 
 While charging below 100%, the blocks progressively fill from the actual
 battery level to all nine blocks. Each additional block appears every 350 ms.
 The full scale holds for 700 ms, then resets to the actual level and repeats.
-The percentage label always shows the real battery value.
+When visible, the percentage label always shows the real battery value.
 
 At 100%, all nine blocks remain steadily illuminated. The timer is cancelled
 when charging stops or the indicator is destroyed, so the animation cannot
@@ -74,7 +78,15 @@ always displays the actual percentage.
 
 - `horizontal_2`: enabled in the reserved bottom strip
 - `horizontal_3`: enabled in the reserved bottom strip
+- `vertical_2`: not included; that layout has no 200 × 20 indicator strip
 - `vertical_3`: not included; that layout has no 200 × 20 indicator strip
+
+## Settings
+
+- `show_battery_indicator`: controls the horizontal indicator strip.
+- `show_battery_percentage`: controls only the horizontal numeric percentage
+  label. It defaults to on for existing behavior, is ignored by vertical
+  layouts, and must not remove or disable the strip itself.
 
 ## Lock contract
 

@@ -10,6 +10,7 @@ Redux 2.1.2 is a Pebble Time 2 release focused on the completed Redux layout sys
 - Manual location support for weather and location-aware time
 - 12/24-hour time and leading-zero controls
 - Bluetooth and battery indicators
+- Horizontal battery percentage label toggle
 - Preset themes and full Custom theme color controls
 - Expanded language support
 - Pebble Health integration
@@ -33,14 +34,24 @@ Redux 2.1.2 is a Pebble Time 2 release focused on the completed Redux layout sys
 - Added `theme_used` reporting for preset and Custom themes
 - Added actual Custom Pebble color values to Analytics
 - Fixed a Custom-theme round-trip bug that could reset Time box or slot text colors after changing an unrelated setting
+- Fixed Custom theme layout switching so color choices remain active when moving between vertical and horizontal layouts, including the horizontal battery indicator color
+- Added `Show battery percentage` for horizontal layouts; it defaults on and hides only the numeric `100%` label when off
 
 ## Hosted 2.1.2 hotfix state
 
-The production app-config may receive hosted fixes without a PBW rebuild. Current production build token at closeout:
+The production app-config may receive hosted fixes without a PBW rebuild when the
+installed companion contract remains compatible. Current production build token:
 
-`redux-2.1.2-prod-20260829h`
+`redux-2.1.2-prod-20260913a`
 
-The final Custom-theme persistence hotfix was deployed through Hosting and confirmed by QA.
+The September 13 maintenance update requires both repositories:
+
+1. Deploy `lyle-morris/Hosting` first so GitHub Pages serves the updated
+   `apps/redux/` config.
+2. Publish the Redux PBW built from the production companion URL:
+   `https://lyle-morris.github.io/Hosting/apps/redux/app-config-2.1.2.html`.
+
+Do not publish QA builds that point at temporary raw.githack URLs.
 
 ## Known non-blocking items
 
