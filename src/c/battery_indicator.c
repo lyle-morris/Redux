@@ -32,6 +32,7 @@ struct BatteryIndicator {
   uint8_t percentage;
   uint8_t animated_segment_count;
   bool charging;
+  bool show_percentage;
   GColor normal_color;
   AppTimer *animation_timer;
   char label[5];
@@ -161,26 +162,28 @@ static void battery_indicator_update_proc(Layer *layer, GContext *ctx) {
     );
   }
 
-  graphics_context_set_text_color(
-    ctx,
-    indicator->charging
-      ? BATTERY_INDICATOR_COLOR_CHARGING
-      : BATTERY_INDICATOR_COLOR_LABEL
-  );
-  graphics_draw_text(
-    ctx,
-    indicator->label,
-    indicator->font,
-    GRect(
-      BATTERY_INDICATOR_LABEL_X,
-      BATTERY_INDICATOR_LABEL_Y,
-      BATTERY_INDICATOR_LABEL_W,
-      BATTERY_INDICATOR_LABEL_H
-    ),
-    GTextOverflowModeFill,
-    GTextAlignmentRight,
-    NULL
-  );
+  if (indicator->show_percentage) {
+    graphics_context_set_text_color(
+      ctx,
+      indicator->charging
+        ? BATTERY_INDICATOR_COLOR_CHARGING
+        : BATTERY_INDICATOR_COLOR_LABEL
+    );
+    graphics_draw_text(
+      ctx,
+      indicator->label,
+      indicator->font,
+      GRect(
+        BATTERY_INDICATOR_LABEL_X,
+        BATTERY_INDICATOR_LABEL_Y,
+        BATTERY_INDICATOR_LABEL_W,
+        BATTERY_INDICATOR_LABEL_H
+      ),
+      GTextOverflowModeFill,
+      GTextAlignmentRight,
+      NULL
+    );
+  }
 }
 
 BatteryIndicator *battery_indicator_create(GRect frame) {
@@ -204,6 +207,7 @@ BatteryIndicator *battery_indicator_create(GRect frame) {
   indicator->percentage = 100;
   indicator->animated_segment_count = BATTERY_INDICATOR_MAX_SEGMENTS;
   indicator->charging = false;
+  indicator->show_percentage = true;
   indicator->normal_color = BATTERY_INDICATOR_COLOR_NORMAL;
   indicator->animation_timer = NULL;
   update_label(indicator);
@@ -261,6 +265,18 @@ void battery_indicator_set_normal_color(
   }
 
   indicator->normal_color = color;
+  layer_mark_dirty(indicator->layer);
+}
+
+void battery_indicator_set_show_percentage(
+  BatteryIndicator *indicator,
+  bool show_percentage
+) {
+  if (!indicator) {
+    return;
+  }
+
+  indicator->show_percentage = show_percentage;
   layer_mark_dirty(indicator->layer);
 }
 

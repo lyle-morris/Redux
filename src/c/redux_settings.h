@@ -69,6 +69,7 @@ typedef struct {
   uint32_t date_text;
   uint32_t slot_text[3];
   uint32_t battery_indicator;
+  bool show_battery_percentage;
 } ReduxSettings;
 
 extern ReduxSettings g_redux_settings;

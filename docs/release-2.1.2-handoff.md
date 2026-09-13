@@ -1,12 +1,14 @@
 # Redux 2.1.2 Release Handoff
 
-Updated: August 29, 2026
+Updated: September 13, 2026
 
 ## Release status
 
 Redux 2.1.2 is the production release for Pebble Time 2 / Emery. Watchface and companion source are on `main`. The final watch/companion release source was validated at commit `a3da435e1cfb0a61a9e5a852dd61a9605a212077`; documentation-only commits follow that commit on `main`.
 
-Production app-config is hosted separately in `lyle-morris/Hosting` under `apps/redux/` and can receive hosted fixes without rebuilding the PBW, provided the versioned entrypoint remains compatible with the installed companion.
+Production app-config is hosted separately in `lyle-morris/Hosting` under `apps/redux/`.
+The September 13 maintenance update adds a companion setting, so deploy Hosting
+first, then publish the rebuilt Redux PBW.
 
 ## Repository boundaries
 
@@ -33,7 +35,7 @@ Production app-config is hosted separately in `lyle-morris/Hosting` under `apps/
 - Production Analytics: `apps/redux/app-config-analytics.js`
 - Production localization snapshot: `apps/redux/app-config-i18n-source.html`
 - Production images: `apps/redux/images/`
-- Current hosted build token: `redux-2.1.2-prod-20260829h`
+- Current hosted build token: `redux-2.1.2-prod-20260913a`
 
 The companion opens `app-config-2.1.2.html`; that entrypoint redirects into the production loader with a cache-busting build parameter.
 
@@ -52,6 +54,17 @@ Known build notices were accepted as non-blocking:
 - `enableMultiJS` disabled notice
 - ELF LOAD segment with RWX permissions
 - Pebble Tool update notice (tooling update only)
+
+September 13 maintenance deploy build:
+
+- CloudPebble project: `Redux 2.1.2 QA`
+- CloudPebble build: `233245`
+- Artifact: `redux-2.1.2-deploy-20260913a.pbw`
+- Target: Emery / Pebble Time 2
+- Status: succeeded
+- Production config URL:
+  `https://lyle-morris.github.io/Hosting/apps/redux/app-config-2.1.2.html`
+- Companion config token: `redux-2.1.2-config-20260913a`
 
 ## Runtime configuration
 
@@ -108,6 +121,7 @@ The current 2.1.2 runtime/config source resolves to:
 - Celsius: off
 - Bluetooth indicator: off
 - Battery indicator: on
+- Battery percentage label: on
 - Language: English
 - Analytics: enabled
 
@@ -147,8 +161,12 @@ If product defaults are changed in a future release, update both companion defau
 | 27 | location_time_offset |
 | 28 | use_location_time |
 | 29 | request_weather |
+| 30 | show_battery_percentage |
 
 Key 26 was reused from the old weekday-toggle contract and now carries weather temperature.
+Key 30 controls only the numeric percentage label for the horizontal battery
+indicator strip. The strip, battery level behavior, and charging animation remain
+controlled by `show_battery_indicator` and the live battery state.
 
 ## Settings persistence
 
@@ -237,7 +255,7 @@ User report: changing another setting while using a Custom theme could reset the
 
 Root cause: the companion persisted active custom colors as flattened settings (`timeTextColor`, `slot1TextColor`, etc.), but the hosted config's `normalize()` function rebuilt `state.customTheme` without rehydrating those flattened fields. Reopening Settings and saving an unrelated change could therefore write default text colors back over the user's custom values.
 
-Resolution: production loader now rehydrates active orientation Time/slot text colors into `customTheme` before the base config normalizes/render/saves them. Current hosted build token: `redux-2.1.2-prod-20260829h`.
+Resolution: production loader now rehydrates active orientation Time/slot text colors into `customTheme` before the base config normalizes/render/saves them. Hosted build token at that time: `redux-2.1.2-prod-20260829h`.
 
 QA confirmation: custom Time box text color persisted after reopening Settings, changing an unrelated option, saving, and reopening again.
 
@@ -270,6 +288,36 @@ QA found and corrected multiple hosted config issues including:
 - Language support/default ordering
 - Battery indicator/color-row inconsistencies
 - Theme tab/panel corner radii and separator polish
+
+### 13. September 13 layout/color and battery-label maintenance — pending deploy
+
+User reports showed two regressions in the maintenance branch:
+
+- App Config was missing the horizontal `Show battery percentage` option when the
+  emulator loaded the old production Hosting page.
+- A Custom vertical Pebble background color could carry back to the horizontal
+  Pebble background while leaving the horizontal battery indicator strip on the
+  previous preset color.
+
+Resolution:
+
+- Added `show_battery_percentage` to the companion, AppMessage contract, native
+  settings, and horizontal battery indicator drawing path.
+- Exposed `Show battery percentage` only for horizontal layouts and only when the
+  horizontal battery indicator is enabled.
+- Preserved the setting while switching to vertical and back.
+- Updated hosted config layout switching so Custom colors carry between vertical
+  and horizontal layouts, including the horizontal battery indicator color.
+- Bumped companion and hosted cache tokens to the September 13 deploy tokens.
+
+Deployment order:
+
+1. Merge/deploy `lyle-morris/Hosting` PR #8.
+2. Wait for GitHub Pages to serve `redux-2.1.2-prod-20260913a`.
+3. Publish the production Redux PBW from CloudPebble build `233245`.
+
+Do not publish QA builds whose companion URL points at `raw.githack.com`; those
+were temporary emulator-test builds only.
 
 ## Production app-config architecture warning
 
